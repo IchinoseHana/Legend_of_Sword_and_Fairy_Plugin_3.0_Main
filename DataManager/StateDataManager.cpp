@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "StateDataManager.h"
 
-RoleDataManager::RoleDataManager()
+StateDataManager::StateDataManager()
 {
-
+	
 }
 
-RoleDataManager::~RoleDataManager()
+StateDataManager::~StateDataManager()
 {
 
 }
