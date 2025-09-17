@@ -10,3 +10,11 @@ StateDataManager::~StateDataManager()
 {
 
 }
+
+StateDataManager& StateDataManager::sharedInstance()
+{
+	static StateDataManager instance;
+	return instance;
+}
+
+
