@@ -1,19 +1,20 @@
 #ifndef _PAL3_SUSTAINABLESTATEDATAINSTANCE_H_
 #define _PAL3_SUSTAINABLESTATEDATAINSTANCE_H_
 
+#pragma once
+
 #include <string>
 
-const static int stateMaximumEffectIdentifier = 10; // The maximum size of the effect identifier
+const static int stateMaximumEffectIdentifier = 10; // The maximum size of the effect identifier.
+
+// Use a list of external files to manage datas.
+// The default value is 0 or false. Use a negative value to achieve the contrast effect.
 
 // MARK: Status slot 1 and 2
 struct SustainableStateDataInstance
-{
-	// Use a list of external files to manage datas.
-	// The default value is 0 or false. Use a negative value to achieve the contrast effect.
-
+{	
 public:
 
-	// If the state is used to hurt enemies, it will not disrupt the current action of the target.
 	unsigned identifier; // The ID of the state.
 	std::string name; // The name of the state.
 	std::string description; // The description of the state.
@@ -23,7 +24,7 @@ public:
 	unsigned int step; // The step of the value. After being triggered, the value will be added by this value.
 	unsigned int delay; // The count before the state taking effect.
 	unsigned int slot; // The slot of the state. Slot 1: states from enemies and items. If the target is a role of the player, it cannot be removed except waiting for elimination natually or using some special items.
-	bool isForAllPertner; // If the state can apply its effect to all pertners.
+	bool isForAllPartner; // If the state can apply its effect to all pertners.
 	unsigned short *currentStateModificationPosibility; // Size: 8. The posibility to set the state included in {state1}.
 	unsigned short *basicStateModificationPosibility; // Size: 7. The posibility to set the state included in {state2}.
 	unsigned short *temporaryStateModificationPosibility; // Size: 24. The posibility to set the state included in {state3}.

@@ -12,7 +12,7 @@ SustainableStateDataInstance::SustainableStateDataInstance()
 	step = 0;
 	delay = 0;
 	slot = 0;
-	isForAllPertner = false;
+	isForAllPartner = false;
 	currentStateModificationPosibility = new unsigned short[8]();
 	basicStateModificationPosibility = new unsigned short[7]();
 	temporaryStateModificationPosibility = new unsigned short[24]();

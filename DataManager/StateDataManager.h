@@ -1,19 +1,22 @@
 #ifndef _PAL3_STATEDATAMANAGER_H_
 #define _PAL3_STATEDATAMANAGER_H_
 
-enum StateDataManagerCustomizedTriggerType
-{
-	StateDataManagerCustomizedTriggerTypeNone, // Triggered: None
-	StateDataManagerCustomizedTriggerTypeByRound, // Triggered: At the start of each round
-	StateDataManagerCustomizedTriggerTypeAfterNormalAttack, // Triggered: After doing a normal attack
-	StateDataManagerCustomizedTriggerTypeAfterSkill, // Triggered: After casting a skill
-	StateDataManagerCustomizedTriggerTypeAfterMagic, // Triggered: After casting a magic
-	StateDataManagerCustomizedTriggerTypeAfterItem, // Triggered: After using an item
-	StateDataManagerCustomizedTriggerTypeAfterDefense, // Triggered: After defending
-	StateDataManagerCustomizedTriggerTypeAfterRecievingDamage // Triggered: After receiving damage
-};
-
 #pragma once
+
+#include "SustainableStateDataInstance.h"
+#include <sstream>
+
+using std::stringstream;
+using std::string;
+
+// File path
+static const string sustainableStateDataFilePath = ".\\PLUGIN_3.0\\BaseData\\sustainableStateDataInstance.txt";
+
+// Data size
+const int maxSustainableStateDataSize = 300;
+
+// Size of the buffer used to transform a number to a string
+const int maxBufferSizeForNumberToString = 128;
 
 // MARK: The manager of state data, singleton
 class StateDataManager
@@ -22,6 +25,27 @@ public:
 
 	~StateDataManager();
 	static StateDataManager& sharedInstance();
+
+	// Data
+	SustainableStateDataInstance *sustainableStateData; // Status slot 1 and 2
+
+	// Function
+	// Load status slot 1 and 2 from the specific file.
+	bool loadData();
+	
+	// Utility
+	// Get a fixed name for a status, including the layer information
+    //std::wstring getFixedName(StateDataRunningInfo *info);
+	// Get the state instance for a specific running information.
+	//SustainableStateDataInstance* stateInstanceForRunningInfo:(StateDataRunningInfo *info);
+	// Generate a default description for status slot 1 and 2.
+	static string generateDescriptionForSustainableState(SustainableStateDataInstance *instance);
+	// Get the description for a specific custom trigger type
+	static string getDescriptionForCustomTriggerType(int index);
+	
+	// Basic function
+	// Tfansform a number to a string
+	static string numberToString(int num);
 
 private:
 	
