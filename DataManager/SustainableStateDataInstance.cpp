@@ -27,8 +27,8 @@ SustainableStateDataInstance::SustainableStateDataInstance()
 	basicStateModificationFixed = new int[7]();
 	basicStateModificationByPercent = new int[7]();
 	consumptionModificationByPercent = new int[3]();
-	actionTakesNoEffect = new int[7]();
-	receivedActionTakesNoEffect = new int[7]();
+	actionTakesNoEffect = new bool[7]();
+	receivedActionTakesNoEffect = new bool[7]();
 	actionForbid = new int[8]();
 	receivedDamageReboundByPercent = new int[7]();
 	receivedDamageAbsorbByPercent = new int[7]();

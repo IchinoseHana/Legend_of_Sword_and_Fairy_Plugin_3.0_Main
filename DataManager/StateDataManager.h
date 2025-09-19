@@ -3,6 +3,8 @@
 
 #pragma once
 
+#define n2s(x) StateDataManager::numberToString(x)
+
 #include "SustainableStateDataInstance.h"
 #include <sstream>
 
@@ -42,6 +44,14 @@ public:
 	static string generateDescriptionForSustainableState(SustainableStateDataInstance *instance);
 	// Get the description for a specific custom trigger type
 	static string getDescriptionForCustomTriggerType(int index);
+	// Get the description for a specific attack type
+	static string getDescriptionForAttackType(int index);
+	// Get the description for a specific magic property
+	static string getDescriptionForMagicProperty(int index);
+	// Get the description for a basic state
+	static string getDescriptionForBasicState(int index);
+	// Get the description for a consumption type
+	static string getDescriptionForConsumptionType(int index);
 	
 	// Basic function
 	// Tfansform a number to a string

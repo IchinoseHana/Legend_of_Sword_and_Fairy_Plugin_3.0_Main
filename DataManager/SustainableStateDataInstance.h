@@ -50,8 +50,8 @@ public:
 	int *basicStateModificationFixed; // Size: 7. {state2} + v.
 	int *basicStateModificationByPercent; // Size: 7. {state2} + v%.
 	int *consumptionModificationByPercent; // Size: 3. {type2} cost when casting skill or magic + v%.
-	int *actionTakesNoEffect; // Size: 7. {type1} based action takes no effect.
-	int *receivedActionTakesNoEffect; // Size: 7. Received {type1} based action takes no effect.
+	bool *actionTakesNoEffect; // Size: 7. {type1} based action takes no effect.
+	bool *receivedActionTakesNoEffect; // Size: 7. Received {type1} based action takes no effect.
 	int *actionForbid; // Size: 8. Cannot execute {type3} based action.
 	int *receivedDamageReboundByPercent; // Size: 7. Rebound received {type1} damage + v%. The source of the damage takes v% of the damage, while the target takes the remaining 1 - v% damage.
 	int *receivedDamageAbsorbByPercent; // Size: 7. Absorb received {type1} damage + v%. The damage takes no effect, then the target revovers the state by v% of the damage.
