@@ -1,13 +1,9 @@
 #include "stdafx.h"
 #include "StateDataManager.h"
-#include <sstream>
-
-using std::stringstream;
-using std::string;
 
 StateDataManager::StateDataManager()
 {
-	dataSize = 0;
+	sustainableStateDataSize = 0;
 }
 
 StateDataManager::~StateDataManager()
@@ -15,9 +11,9 @@ StateDataManager::~StateDataManager()
 	if (this->sustainableStateData) delete[] sustainableStateData;
 }
 
+StateDataManager* StateDataManager::initialInstance = new StateDataManager();
 StateDataManager* StateDataManager::sharedInstance()
 {
-	StateDataManager *initialInstance = new StateDataManager();
 	return initialInstance;
 }
 
@@ -38,8 +34,8 @@ bool StateDataManager::loadData()
 	
 	if ( fpcsv == NULL )
 	{
-		ASSERT(0 && "Load SustainableStateDataInstance -> Failed\n");
-		throw EXCEPTION("Load SustainableStateDataInstance -> Failed");
+		ASSERT(0 && "StateDataManager -> Load SustainableStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> Load SustainableStateDataInstance failed");
 		return false;
 	}
 	
@@ -107,13 +103,13 @@ bool StateDataManager::loadData()
 		}
 
 		// Overwrite the description
-		e->description = StateDataManager::generateDescriptionForSustainableState(e);
+		e->description = StateDataManager::generateDescriptionForSustainableState(e, this->ss);
 
 		indexArraySize++;
 	}
 
 	this->sustainableStateData = data;
-	this->dataSize = indexArraySize;
+	this->sustainableStateDataSize = indexArraySize;
 
 	fclose(fpcsv);
 
@@ -125,159 +121,156 @@ bool StateDataManager::loadData()
 {
 	if (!instance) return "";
 
-	std::ostringstream tempRes;
+	std::ostringstream ss;
 
-	tempRes << instance.name;
-	tempRes << "(";
-	tempRes << 
+	ss << instance.name;
+	ss << "(";
+	ss << 
 	return 
 }*/
 
-string StateDataManager::generateDescriptionForSustainableState(SustainableStateDataInstance *instance)
+string StateDataManager::generateDescriptionForSustainableState(SustainableStateDataInstance *instance, stringstream ss)
 {
 	if (!instance) return "";
 	
 	// Customized description
 	if (instance->description.size() > 1) return instance->description;
 
-	stringstream tempRes;
-	tempRes.str("");
-    tempRes.clear();
+	ss.str("");
+    ss.clear();
 	int index;
 
 	// MARK: Basic information
 	// Layer
-	if (instance->layer > 1) tempRes << "最大" << n2s(instance->layer) << "层 ";
+	if (instance->layer > 1) ss << "最大" << n2s(instance->layer) << "层 ";
 	
 	// Delay
-	if (instance->delay > 0) tempRes << n2s(instance->delay) << "回合后发动 ";
+	if (instance->delay > 0) ss << n2s(instance->delay) << "回合后发动 ";
 	
 	// Is for all partner
-    if (instance->isForAllPartner) tempRes << "全体 ";
+    if (instance->isForAllPartner) ss << "全体 ";
 
 	// Step
-    if (instance->step > 0) tempRes << "发动后威力增加" << n2s(instance->step) << " ";
+    if (instance->step > 0) ss << "发动后威力增加" << n2s(instance->step) << " ";
 	
 	// MARK: Triggered: Always
 	// Dealed damage modification
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->dealedDamageModificationByPercent[index] != 0) tempRes << StateDataManager::getDescriptionForAttackType(index) << "伤害" << (instance->dealedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->dealedDamageModificationByPercent[index]) << "% ";
+		if (instance->dealedDamageModificationByPercent[index] != 0) ss << StateDataManager::getDescriptionForAttackType(index) << "伤害" << (instance->dealedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->dealedDamageModificationByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 5; ++index)
 	{
-		if (instance->dealedMagicDamageModificationByPercentWithProperty[index] != 0) tempRes << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术伤害" << (instance->dealedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->dealedMagicDamageModificationByPercentWithProperty[index]) << "% ";
+		if (instance->dealedMagicDamageModificationByPercentWithProperty[index] != 0) ss << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术伤害" << (instance->dealedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->dealedMagicDamageModificationByPercentWithProperty[index]) << "% ";
 	}
 	
 	// Received damage modification
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->receivedDamageModificationByPercent[index] != 0) tempRes << "受" << StateDataManager::getDescriptionForAttackType(index) << "伤害" << (instance->receivedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageModificationByPercent[index]) << "% ";
+		if (instance->receivedDamageModificationByPercent[index] != 0) ss << "受" << StateDataManager::getDescriptionForAttackType(index) << "伤害" << (instance->receivedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageModificationByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 5; ++index)
 	{
-		if (instance->receivedMagicDamageModificationByPercentWithProperty[index] != 0) tempRes << "受" << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术伤害" << (instance->receivedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->receivedMagicDamageModificationByPercentWithProperty[index]) << "% ";
+		if (instance->receivedMagicDamageModificationByPercentWithProperty[index] != 0) ss << "受" << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术伤害" << (instance->receivedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->receivedMagicDamageModificationByPercentWithProperty[index]) << "% ";
 	}
 	
 	// Basic state modification
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationFixed[index] != 0) tempRes << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationFixed[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationFixed[index]) << " ";
+		if (instance->basicStateModificationFixed[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationFixed[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationFixed[index]) << " ";
 	}
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationByPercent[index] != 0) tempRes << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationByPercent[index]) << "% ";
+		if (instance->basicStateModificationByPercent[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationByPercent[index]) << "% ";
 	}
 
 	// Consumption modification
 	for (index = 0; index < 3; ++index)
 	{
-		if (instance->consumptionModificationByPercent[index] != 0) tempRes << StateDataManager::getDescriptionForConsumptionType(index) << (instance->consumptionModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->consumptionModificationByPercent[index]) << "% ";
+		if (instance->consumptionModificationByPercent[index] != 0) ss << StateDataManager::getDescriptionForConsumptionType(index) << (instance->consumptionModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->consumptionModificationByPercent[index]) << "% ";
 	}
 	
 	// Action takes no effect
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->actionTakesNoEffect[index]) tempRes << StateDataManager::getDescriptionForAttackType(index) << (index == 6 ? "动作" : "") << "无法生效 ";
+		if (instance->actionTakesNoEffect[index]) ss << StateDataManager::getDescriptionForAttackType(index) << (index == 6 ? "动作" : "") << "无法生效 ";
 	}
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->receivedActionTakesNoEffect[index]) tempRes << "对" << StateDataManager::getDescriptionForAttackType(index) << (index == 6 ? "动作" : "") << "免疫 ";
+		if (instance->receivedActionTakesNoEffect[index]) ss << "对" << StateDataManager::getDescriptionForAttackType(index) << (index == 6 ? "动作" : "") << "免疫 ";
 	}
 
 	// Action forbid
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->actionForbid[index]) tempRes << "无法" << StateDataManager::getDescriptionForBasicAction(index) << "";
+		if (instance->actionForbid[index]) ss << "无法" << StateDataManager::getDescriptionForBasicAction(index) << "";
 	}
 	
 	// Received damage rebound
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->receivedDamageReboundByPercent[index] != 0) tempRes << StateDataManager::getDescriptionForAttackType(index) << "伤害反弹" << (instance->receivedDamageReboundByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageReboundByPercent[index]) << "% ";
+		if (instance->receivedDamageReboundByPercent[index] != 0) ss << StateDataManager::getDescriptionForAttackType(index) << "伤害反弹" << (instance->receivedDamageReboundByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageReboundByPercent[index]) << "% ";
 	}
 	
 	// Received damage absorb
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->receivedDamageAbsorbByPercent[index] != 0) tempRes << StateDataManager::getDescriptionForAttackType(index) << "伤害吸收" << (instance->receivedDamageAbsorbByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageAbsorbByPercent[index]) << "% ";
+		if (instance->receivedDamageAbsorbByPercent[index] != 0) ss << StateDataManager::getDescriptionForAttackType(index) << "伤害吸收" << (instance->receivedDamageAbsorbByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageAbsorbByPercent[index]) << "% ";
 	}
 	
 	// MARK: Triggered: By customizing
 	// Customized trigger type
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->customizedTriggerType[index]) tempRes << StateDataManager::getDescriptionForCustomTriggerType(index) << " ";
+		if (instance->customizedTriggerType[index]) ss << StateDataManager::getDescriptionForCustomTriggerType(index) << " ";
 	}
 	
 	// Current state modification
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->currentStateModificationPosibility[index] < 100) tempRes << n2s(instance->currentStateModificationPosibility[index]) << "："; 
-		if (instance->currentStateModificationWhenTriggeredFixed[index] != 0) tempRes << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredFixed[index]) << " ";
+		if (instance->currentStateModificationPosibility[index] < 100) ss << n2s(instance->currentStateModificationPosibility[index]) << "："; 
+		if (instance->currentStateModificationWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredFixed[index]) << " ";
 	}
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->currentStateModificationPosibility[index] < 100) tempRes << n2s(instance->currentStateModificationPosibility[index]) << "："; 
-		if (instance->currentStateModificationWhenTriggeredByPercent[index] != 0) tempRes << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredByPercent[index]) << "% ";
+		if (instance->currentStateModificationPosibility[index] < 100) ss << n2s(instance->currentStateModificationPosibility[index]) << "："; 
+		if (instance->currentStateModificationWhenTriggeredByPercent[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->currentStateModificationPosibility[index] < 100) tempRes << n2s(instance->currentStateModificationPosibility[index]) << "："; 
-		if (instance->currentStateModificationWhenTriggeredLevelBased[index] != 0) tempRes << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->currentStateModificationWhenTriggeredLevelBased[index]) << "] ";
+		if (instance->currentStateModificationPosibility[index] < 100) ss << n2s(instance->currentStateModificationPosibility[index]) << "："; 
+		if (instance->currentStateModificationWhenTriggeredLevelBased[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->currentStateModificationWhenTriggeredLevelBased[index]) << "] ";
 	}
 	// Basic state modification
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationPosibility[index] < 100) tempRes << n2s(instance->basicStateModificationPosibility[index]) << "："; 
-		if (instance->basicStateModificationWhenTriggeredFixed[index] != 0) tempRes << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredFixed[index]) << " ";
+		if (instance->basicStateModificationPosibility[index] < 100) ss << n2s(instance->basicStateModificationPosibility[index]) << "："; 
+		if (instance->basicStateModificationWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredFixed[index]) << " ";
 	}
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationPosibility[index] < 100) tempRes << n2s(instance->basicStateModificationPosibility[index]) << "："; 
-		if (instance->basicStateModificationWhenTriggeredByPercent[index] != 0) tempRes << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredByPercent[index]) << "% ";
+		if (instance->basicStateModificationPosibility[index] < 100) ss << n2s(instance->basicStateModificationPosibility[index]) << "："; 
+		if (instance->basicStateModificationWhenTriggeredByPercent[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationPosibility[index] < 100) tempRes << n2s(instance->basicStateModificationPosibility[index]) << "："; 
-		if (instance->basicStateModificationWhenTriggeredLevelBased[index] != 0) tempRes << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->basicStateModificationWhenTriggeredLevelBased[index]) << "] ";
+		if (instance->basicStateModificationPosibility[index] < 100) ss << n2s(instance->basicStateModificationPosibility[index]) << "："; 
+		if (instance->basicStateModificationWhenTriggeredLevelBased[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->basicStateModificationWhenTriggeredLevelBased[index]) << "] ";
 	}
 	
 	// Temporary state modification
 	for (index = 0; index < 24; ++index)
 	{
-		if (instance->temporaryStateSetPosibility[index] < 100) tempRes << n2s(instance->temporaryStateSetPosibility[index]) << "："; 
-		if (instance->temporaryStateSetWhenTriggeredFixed[index] != 0) tempRes << StateDataManager::getDescriptionForTemporaryState(index) << "(" << n2s(instance->temporaryStateSetWhenTriggeredFixed[index]) << ") ";
+		if (instance->temporaryStateSetPosibility[index] < 100) ss << n2s(instance->temporaryStateSetPosibility[index]) << "："; 
+		if (instance->temporaryStateSetWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForTemporaryState(index) << "(" << n2s(instance->temporaryStateSetWhenTriggeredFixed[index]) << ") ";
 	}
 	
 	// MARK: Other information
 	// Is interrupt current action
-	if (!instance->isInterruptCurrentAction[0]) tempRes << "不触发己方受伤动作 ";
-	if (!instance->isInterruptCurrentAction[1]) tempRes << "不触发敌方受伤动作 ";
+	if (!instance->isInterruptCurrentAction[0]) ss << "不触发己方受伤动作 ";
+	if (!instance->isInterruptCurrentAction[1]) ss << "不触发敌方受伤动作 ";
 
-	tempRes.str("");
-    tempRes.clear();
-	return tempRes.str();
+	return ss.str();
 }
 
 string StateDataManager::getDescriptionForCustomTriggerType(int index)
@@ -574,22 +567,15 @@ switch (index)
 	return "";
 }
 
-
-// Basic function
-string StateDataManager::numberToString(int num)
+// Debug
+string StateDataManager::printData()
 {
-	char buffer[maxBufferSizeForNumberToString];
-    _itoa(num, buffer, 10);
-	string temp = buffer;
-	return temp;
-}
+	string tempStr = "";
+	for (int index = 0; index < this->sustainableStateDataSize; ++index)
+	{
+		SustainableStateDataInstance *e = &(this->sustainableStateData[index]);
+		tempStr += e->printData(this->ss);
+	}
 
-int StateDataManager::stringToNumber(const string& str)
-{
-	return atoi(str.c_str());
-}
-
-bool StateDataManager::stringToBool(const string& str)
-{
-	return str == "0" ? false : true;
+	return tempStr;
 }

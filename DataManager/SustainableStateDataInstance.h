@@ -3,7 +3,12 @@
 
 #pragma once
 
+#include "PluginUtility.h"
 #include <string>
+#include <sstream>
+
+using std::string;
+using std::stringstream;
 
 // Use a list of external files to manage datas.
 // The default value is 0 or false. Use a negative value to achieve the contrast effect.
@@ -68,13 +73,12 @@ public:
 	~SustainableStateDataInstance();
 
 	// Debug
-	void printData();
+	string printData(stringstream ss);
 
 private:
 
 	SustainableStateDataInstance(const SustainableStateDataInstance&);
 	SustainableStateDataInstance& operator = (const SustainableStateDataInstance&);
-
 };
 
 struct StateDataRunningInfo

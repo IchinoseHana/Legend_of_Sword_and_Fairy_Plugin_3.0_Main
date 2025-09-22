@@ -3,15 +3,13 @@
 
 #pragma once
 
-#define n2s(x) StateDataManager::numberToString(x)
-#define s2n(x) StateDataManager::stringToNumber(x)
-#define s2b(x) StateDataManager::stringToBool(x)
-
 #include "SustainableStateDataInstance.h"
+#include "PluginUtility.h"
+#include <string>
 #include <sstream>
 
-using std::stringstream;
 using std::string;
+using std::stringstream;
 
 class StateDataManager;
 
@@ -24,9 +22,6 @@ const int maxSustainableStateDataSize = 300;
 // Size of the buffer used to load the file data.
 const int maxBufferSizeForLoadingData = 4096;
 
-// Size of the buffer used to transform a number to a string.
-const int maxBufferSizeForNumberToString = 128;
-
 // MARK: The manager of state data, singleton
 class StateDataManager
 {
@@ -37,7 +32,7 @@ public:
 
 	// Data
 	SustainableStateDataInstance *sustainableStateData; // Status slot 1 and 2
-	unsigned int dataSize;
+	unsigned int sustainableStateDataSize;
 
 	// Function
 	// Load status slot 1 and 2 from the specific file.
@@ -49,7 +44,7 @@ public:
 	// Get the state instance for a specific running information.
 	// SustainableStateDataInstance* stateInstanceForRunningInfo:(StateDataRunningInfo *info);
 	// Generate a default description for status slot 1 and 2. If the size of the member "description" is greater than 1, this function will return it as a customized description instead of the default one.
-	static string generateDescriptionForSustainableState(SustainableStateDataInstance *instance);
+	static string generateDescriptionForSustainableState(SustainableStateDataInstance *instance, stringstream ss);
 	// Get the description for a specific custom trigger type.
 	static string getDescriptionForCustomTriggerType(int index);
 	// Get the description for a specific attack type.
@@ -66,20 +61,17 @@ public:
 	static string getDescriptionForCurrentState(int index);
 	// Get the description for a temporary state.
 	static string getDescriptionForTemporaryState(int index);
-	
-	// Basic function
-	// Transform a number to a string.
-	static string numberToString(int num);
-	// Transform a string to a number.
-	static int stringToNumber(const string& str);
-	// Transform a string to a bool. "0" -> false, other -> true.
-	static bool stringToBool(const string& str);
+
+	// Debug
+	string printData();
 
 private:
 	
 	StateDataManager();
 	StateDataManager(const StateDataManager&);
 	StateDataManager& operator = (const StateDataManager&);
+
+	stringstream ss;
 
 	PAL3HOOK_VERIFIED_DATAVAR static StateDataManager *initialInstance;
 };
