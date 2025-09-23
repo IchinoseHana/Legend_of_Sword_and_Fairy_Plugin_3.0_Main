@@ -16,5 +16,5 @@ int PluginUtility::stringToNumber(const string& str)
 
 bool PluginUtility::stringToBool(const string& str)
 {
-	return str == "0" ? false : true;
+	return str == "1" ? true : false;
 }

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "StateDataManager.h"
+#include <algorithm>
 
 StateDataManager::StateDataManager()
 {
@@ -9,6 +10,7 @@ StateDataManager::StateDataManager()
 StateDataManager::~StateDataManager()
 {
 	if (this->sustainableStateData) delete[] sustainableStateData;
+	if (this->sustainableStateIdentifierData) delete[] sustainableStateIdentifierData;
 }
 
 StateDataManager* StateDataManager::initialInstance = new StateDataManager();
@@ -29,13 +31,14 @@ bool StateDataManager::loadData()
 
 	// MARK: Status slot 1 & 2
 	SustainableStateDataInstance *data = new SustainableStateDataInstance[maxSustainableStateDataSize];
+	unsigned int *identifierData = new unsigned int[maxSustainableStateDataSize]();
 
 	fpcsv = fopen(sustainableStateDataFilePath.c_str(), "r");
 	
 	if ( fpcsv == NULL )
 	{
-		ASSERT(0 && "StateDataManager -> Load SustainableStateDataInstance failed");
-		throw EXCEPTION("StateDataManager -> Load SustainableStateDataInstance failed");
+		ASSERT(0 && "StateDataManager -> loadData: Load SustainableStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> loadData: Load SustainableStateDataInstance failed");
 		return false;
 	}
 	
@@ -84,7 +87,7 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 83 && indexstr <= 89) e->dealedDamageModificationByPercent[indexstr - 83] = s2n(tempstr);
 			else if (indexstr >= 90 && indexstr <= 94) e->dealedMagicDamageModificationByPercentWithProperty[indexstr - 90] = s2n(tempstr);
 			else if (indexstr >= 95 && indexstr <= 101) e->receivedDamageModificationByPercent[indexstr - 95] = s2n(tempstr);
-			else if (indexstr >= 102 && indexstr <= 106) e->receivedMagicDamageModificationByPercentWithProperty[indexstr - 90] = s2n(tempstr);
+			else if (indexstr >= 102 && indexstr <= 106) e->receivedMagicDamageModificationByPercentWithProperty[indexstr - 102] = s2n(tempstr);
 			else if (indexstr >= 107 && indexstr <= 118) e->basicStateModificationFixed[indexstr - 107] = s2n(tempstr);
 			else if (indexstr >= 119 && indexstr <= 130) e->basicStateModificationByPercent[indexstr - 119] = s2n(tempstr);
 			else if (indexstr >= 131 && indexstr <= 133) e->consumptionModificationByPercent[indexstr - 131] = s2n(tempstr);
@@ -102,6 +105,9 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 230 && indexstr <= 253) e->temporaryStateSetWhenTriggeredFixed[indexstr - 230] = static_cast<unsigned short>(s2n(tempstr));
 		}
 
+		// Current identifier
+		identifierData[indexArraySize] = e->identifier;
+
 		// Overwrite the description
 		e->description = StateDataManager::generateDescriptionForSustainableState(e, this->ss);
 
@@ -109,11 +115,47 @@ bool StateDataManager::loadData()
 	}
 
 	this->sustainableStateData = data;
+	this->sustainableStateIdentifierData = identifierData;
 	this->sustainableStateDataSize = indexArraySize;
 
 	fclose(fpcsv);
 
 	return true;
+}
+
+SustainableStateDataInstance* StateDataManager::instanceForIdentifier(unsigned int identifier)
+{
+	// Using binary search firstly
+	unsigned int value = *(std::lower_bound(this->sustainableStateIdentifierData, this->sustainableStateIdentifierData + this->sustainableStateDataSize, identifier));
+	
+
+	// If failed, using linear search to find the index
+	if (value != identifier)
+	{
+		value = -1;
+
+		for (int index = 0; index < this->sustainableStateDataSize; ++index)
+		{
+			if (this->sustainableStateData[index].identifier == identifier)
+			{
+				// Find the value, break
+				value = index;
+				break;
+			}
+		}
+	}
+
+	if (value != -1)
+	{
+		return &(this->sustainableStateData[value]);
+	}
+	else
+	{
+		ASSERT(0 && "StateDataManager -> instanceForIdentifier: Find SustainableStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find SustainableStateDataInstance failed");
+		// For the error case, return the first value
+		return &(this->sustainableStateData[0]);
+	}
 }
 
 // Utility
@@ -203,7 +245,7 @@ string StateDataManager::generateDescriptionForSustainableState(SustainableState
 	// Action forbid
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->actionForbid[index]) ss << "无法" << StateDataManager::getDescriptionForBasicAction(index) << "";
+		if (instance->actionForbid[index]) ss << "无法" << StateDataManager::getDescriptionForBasicAction(index) << " ";
 	}
 	
 	// Received damage rebound
@@ -228,40 +270,40 @@ string StateDataManager::generateDescriptionForSustainableState(SustainableState
 	// Current state modification
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->currentStateModificationPosibility[index] < 100) ss << n2s(instance->currentStateModificationPosibility[index]) << "："; 
+		if (instance->currentStateModificationPosibility[index] < 100 && instance->currentStateModificationPosibility[index] > 0) ss << n2s(instance->currentStateModificationPosibility[index]) << "%："; 
 		if (instance->currentStateModificationWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredFixed[index]) << " ";
 	}
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->currentStateModificationPosibility[index] < 100) ss << n2s(instance->currentStateModificationPosibility[index]) << "："; 
+		if (instance->currentStateModificationPosibility[index] < 100 && instance->currentStateModificationPosibility[index] > 0) ss << n2s(instance->currentStateModificationPosibility[index]) << "%："; 
 		if (instance->currentStateModificationWhenTriggeredByPercent[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 8; ++index)
 	{
-		if (instance->currentStateModificationPosibility[index] < 100) ss << n2s(instance->currentStateModificationPosibility[index]) << "："; 
+		if (instance->currentStateModificationPosibility[index] < 100 && instance->currentStateModificationPosibility[index] > 0) ss << n2s(instance->currentStateModificationPosibility[index]) << "%："; 
 		if (instance->currentStateModificationWhenTriggeredLevelBased[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->currentStateModificationWhenTriggeredLevelBased[index]) << "] ";
 	}
 	// Basic state modification
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationPosibility[index] < 100) ss << n2s(instance->basicStateModificationPosibility[index]) << "："; 
+		if (instance->basicStateModificationPosibility[index] < 100 && instance->basicStateModificationPosibility[index] > 0) ss << n2s(instance->basicStateModificationPosibility[index]) << "%："; 
 		if (instance->basicStateModificationWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredFixed[index]) << " ";
 	}
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationPosibility[index] < 100) ss << n2s(instance->basicStateModificationPosibility[index]) << "："; 
+		if (instance->basicStateModificationPosibility[index] < 100 && instance->basicStateModificationPosibility[index] > 0) ss << n2s(instance->basicStateModificationPosibility[index]) << "%：";  
 		if (instance->basicStateModificationWhenTriggeredByPercent[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 12; ++index)
 	{
-		if (instance->basicStateModificationPosibility[index] < 100) ss << n2s(instance->basicStateModificationPosibility[index]) << "："; 
+		if (instance->basicStateModificationPosibility[index] < 100 && instance->basicStateModificationPosibility[index] > 0) ss << n2s(instance->basicStateModificationPosibility[index]) << "%：";  
 		if (instance->basicStateModificationWhenTriggeredLevelBased[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->basicStateModificationWhenTriggeredLevelBased[index]) << "] ";
 	}
 	
 	// Temporary state modification
 	for (index = 0; index < 24; ++index)
 	{
-		if (instance->temporaryStateSetPosibility[index] < 100) ss << n2s(instance->temporaryStateSetPosibility[index]) << "："; 
+		if (instance->temporaryStateSetPosibility[index] < 100 && instance->temporaryStateSetPosibility[index] > 0) ss << n2s(instance->temporaryStateSetPosibility[index]) << "%：";  
 		if (instance->temporaryStateSetWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForTemporaryState(index) << "(" << n2s(instance->temporaryStateSetWhenTriggeredFixed[index]) << ") ";
 	}
 	

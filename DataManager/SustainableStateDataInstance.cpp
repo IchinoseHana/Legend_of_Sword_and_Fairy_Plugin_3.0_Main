@@ -87,13 +87,13 @@ string SustainableStateDataInstance::printData(stringstream ss)
 	ss << "effectIdentifier: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(effectIdentifier[index]);
+		ss << n2s(effectIdentifier[index]) << " ";
 	}
 	ss << "\n";
 	ss << "isCenteringEffectPosition: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(isCenteringEffectPosition[index]);
+		ss << n2s(isCenteringEffectPosition[index]) << " ";
 	}
 	ss << "\n";
 	ss << "layer: " << n2s(layer) << "\n";
@@ -104,146 +104,146 @@ string SustainableStateDataInstance::printData(stringstream ss)
 	ss << "currentStateModificationPosibility: ";
 	for (index = 0; index < 8; ++index)
 	{
-		ss << n2s(currentStateModificationPosibility[index]);
+		ss << n2s(currentStateModificationPosibility[index]) << " ";
 	}
 	ss << "\n";
 	ss << "basicStateModificationPosibility: ";
 	for (index = 0; index < 12; ++index)
 	{
-		ss << n2s(basicStateModificationPosibility[index]);
+		ss << n2s(basicStateModificationPosibility[index]) << " ";
 	}
 	ss << "\n";
 	ss << "temporaryStateSetPosibility: ";
 	for (index = 0; index < 24; ++index)
 	{
-		ss << n2s(temporaryStateSetPosibility[index]);
+		ss << n2s(temporaryStateSetPosibility[index]) << " ";
 	}
 	ss << "\n";
 	ss << "isInterruptCurrentAction: ";
 	for (index = 0; index < 2; ++index)
 	{
-		ss << n2s(isInterruptCurrentAction[index]);
+		ss << n2s(isInterruptCurrentAction[index]) << " ";
 	}
 	ss << "\n";
 	ss << "specificEffectIdentifier: " << n2s(specificEffectIdentifier) << "\n";
 	ss << "customizedTriggerType: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(customizedTriggerType[index]);
+		ss << n2s(customizedTriggerType[index]) << " ";
 	}
 	ss << "\n";
 	ss << "dealedDamageModificationByPercent: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(dealedDamageModificationByPercent[index]);
+		ss << n2s(dealedDamageModificationByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "dealedMagicDamageModificationByPercentWithProperty: ";
 	for (index = 0; index < 5; ++index)
 	{
-		ss << n2s(dealedMagicDamageModificationByPercentWithProperty[index]);
+		ss << n2s(dealedMagicDamageModificationByPercentWithProperty[index]) << " ";
 	}
 	ss << "\n";
 	ss << "receivedDamageModificationByPercent: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(receivedDamageModificationByPercent[index]);
+		ss << n2s(receivedDamageModificationByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "receivedMagicDamageModificationByPercentWithProperty: ";
 	for (index = 0; index < 5; ++index)
 	{
-		ss << n2s(receivedMagicDamageModificationByPercentWithProperty[index]);
+		ss << n2s(receivedMagicDamageModificationByPercentWithProperty[index]) << " ";
 	}
 	ss << "\n";
 	ss << "basicStateModificationFixed: ";
 	for (index = 0; index < 12; ++index)
 	{
-		ss << n2s(basicStateModificationFixed[index]);
+		ss << n2s(basicStateModificationFixed[index]) << " ";
 	}
 	ss << "\n";
 	ss << "basicStateModificationByPercent: ";
 	for (index = 0; index < 12; ++index)
 	{
-		ss << n2s(basicStateModificationByPercent[index]);
+		ss << n2s(basicStateModificationByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "consumptionModificationByPercent: ";
 	for (index = 0; index < 3; ++index)
 	{
-		ss << n2s(consumptionModificationByPercent[index]);
+		ss << n2s(consumptionModificationByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "actionTakesNoEffect: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(actionTakesNoEffect[index]);
+		ss << n2s(actionTakesNoEffect[index]) << " ";
 	}
 	ss << "\n";
 	ss << "receivedActionTakesNoEffect: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(receivedActionTakesNoEffect[index]);
+		ss << n2s(receivedActionTakesNoEffect[index]) << " ";
 	}
 	ss << "\n";
 	ss << "actionForbid: ";
 	for (index = 0; index < 8; ++index)
 	{
-		ss << n2s(actionForbid[index]);
+		ss << n2s(actionForbid[index]) << " ";
 	}
 	ss << "\n";
 	ss << "receivedDamageReboundByPercent: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(receivedDamageReboundByPercent[index]);
+		ss << n2s(receivedDamageReboundByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "receivedDamageAbsorbByPercent: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(receivedDamageAbsorbByPercent[index]);
+		ss << n2s(receivedDamageAbsorbByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "currentStateModificationWhenTriggeredFixed: ";
 	for (index = 0; index < 8; ++index)
 	{
-		ss << n2s(currentStateModificationWhenTriggeredFixed[index]);
+		ss << n2s(currentStateModificationWhenTriggeredFixed[index]) << " ";
 	}
 	ss << "\n";
 	ss << "currentStateModificationWhenTriggeredByPercent: ";
 	for (index = 0; index < 8; ++index)
 	{
-		ss << n2s(currentStateModificationWhenTriggeredByPercent[index]);
+		ss << n2s(currentStateModificationWhenTriggeredByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "currentStateModificationWhenTriggeredLevelBased: ";
 	for (index = 0; index < 8; ++index)
 	{
-		ss << n2s(currentStateModificationWhenTriggeredLevelBased[index]);
+		ss << n2s(currentStateModificationWhenTriggeredLevelBased[index]) << " ";
 	}
 	ss << "\n";
 	ss << "basicStateModificationWhenTriggeredFixed: ";
 	for (index = 0; index < 12; ++index)
 	{
-		ss << n2s(basicStateModificationWhenTriggeredFixed[index]);
+		ss << n2s(basicStateModificationWhenTriggeredFixed[index]) << " ";
 	}
 	ss << "\n";
 	ss << "basicStateModificationWhenTriggeredByPercent: ";
 	for (index = 0; index < 12; ++index)
 	{
-		ss << n2s(basicStateModificationWhenTriggeredByPercent[index]);
+		ss << n2s(basicStateModificationWhenTriggeredByPercent[index]) << " ";
 	}
 	ss << "\n";
 	ss << "basicStateModificationWhenTriggeredLevelBased: ";
 	for (index = 0; index < 12; ++index)
 	{
-		ss << n2s(basicStateModificationWhenTriggeredLevelBased[index]);
+		ss << n2s(basicStateModificationWhenTriggeredLevelBased[index]) << " ";
 	}
 	ss << "\n";
 	ss << "temporaryStateSetWhenTriggeredFixed: ";
 	for (index = 0; index < 24; ++index)
 	{
-		ss << n2s(temporaryStateSetWhenTriggeredFixed[index]);
+		ss << n2s(temporaryStateSetWhenTriggeredFixed[index]) << " ";
 	}
 	ss << "\n";
 	ss << "-----SustainableStateDataInstance Print End-----\n";

@@ -18,7 +18,7 @@ struct SustainableStateDataInstance
 {	
 public:
 
-	unsigned identifier; // The ID of the state.
+	unsigned int identifier; // The ID of the state.
 	std::string name; // The name of the state.
 	std::string description; // The description of the state.
 	unsigned int *effectIdentifier; // Size: 10. The effect identifier when triggered.
@@ -28,9 +28,9 @@ public:
 	unsigned int delay; // The count before the state taking effect.
 	unsigned int slot; // The slot of the state. Slot 1: states from enemies and items. If the target is a role of the player, it cannot be removed except waiting for elimination natually or using some special items.
 	bool isForAllPartner; // If the state can apply its effect to all pertners.
-	unsigned short *currentStateModificationPosibility; // Size: 8. The posibility to modify the state included in {state1}.
-	unsigned short *basicStateModificationPosibility; // Size: 12. The posibility to modify the state included in {state2}.
-	unsigned short *temporaryStateSetPosibility; // Size: 24. The posibility to set the state included in {state3}.
+	unsigned short *currentStateModificationPosibility; // Size: 8. The posibility to modify the state included in {state1}. The default value 0 is the same as 100. 
+	unsigned short *basicStateModificationPosibility; // Size: 12. The posibility to modify the state included in {state2}. The default value 0 is the same as 100. 
+	unsigned short *temporaryStateSetPosibility; // Size: 24. The posibility to set the state included in {state3}. The default value 0 is the same as 100. 
 	bool *isInterruptCurrentAction; // Size: 2. If the effect can interrupt the current action of {object}.
 	unsigned int specificEffectIdentifier; // Specific effect which cannot be descripted by this framwork easily.
     bool *customizedTriggerType; // Size: 7. If using the corresponding custom trigger. 
