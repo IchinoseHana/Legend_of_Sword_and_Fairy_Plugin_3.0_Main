@@ -32,11 +32,11 @@ void PluginLogging::log(string str)
 	{
 		if (!ReportEvent(EventResourceHandle, EVENTLOG_INFORMATION_TYPE, 0, 0, NULL, 1, 0, &ErrorEventStr, NULL))
 		{
-			printf("PluginLogging -> Could not report the event.");
+			printf("PluginLogging -> log: Could not report the event.");
 		}
 		DeregisterEventSource( EventResourceHandle );
 	}
-	printf("PluginLogging -> Could not register the event source.");;
+	printf("PluginLogging -> log: Could not register the event source.");
 	
 	#endif
 }
