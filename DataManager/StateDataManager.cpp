@@ -5,12 +5,15 @@
 StateDataManager::StateDataManager()
 {
 	sustainableStateDataSize = 0;
+	temporaryStateDataSize = 0;
 }
 
 StateDataManager::~StateDataManager()
 {
 	if (this->sustainableStateData) delete[] sustainableStateData;
 	if (this->sustainableStateIdentifierData) delete[] sustainableStateIdentifierData;
+	if (this->temporaryStateData) delete[] temporaryStateData;
+	if (this->temporaryStateIdentifierData) delete[] temporaryStateIdentifierData;
 }
 
 StateDataManager* StateDataManager::initialInstance = new StateDataManager();
@@ -23,15 +26,15 @@ StateDataManager* StateDataManager::sharedInstance()
 bool StateDataManager::loadData()
 {
 	// Public variables
-	int indexArraySize=0;
-	int indexstr=0;
+	int indexArraySize = 0;
+	int indexstr = 0;
 	char templine[maxBufferSizeForLoadingData];
 	char *tempstrraw;
 	FILE *fpcsv;
 
 	// MARK: Status slot 1 & 2
-	SustainableStateDataInstance *data = new SustainableStateDataInstance[maxSustainableStateDataSize];
-	unsigned int *identifierData = new unsigned int[maxSustainableStateDataSize]();
+	SustainableStateDataInstance *dataS = new SustainableStateDataInstance[maxSustainableStateDataSize];
+	unsigned int *identifierDataS = new unsigned int[maxSustainableStateDataSize]();
 
 	fpcsv = fopen(sustainableStateDataFilePath.c_str(), "r");
 	
@@ -49,7 +52,7 @@ bool StateDataManager::loadData()
 		fgets(templine, maxBufferSizeForLoadingData, fpcsv);
 		
 		// Current data instance
-		SustainableStateDataInstance *e = &(data[indexArraySize]);
+		SustainableStateDataInstance *e = &(dataS[indexArraySize]);
 
 		// Current index 
 		indexstr = 0;
@@ -106,7 +109,7 @@ bool StateDataManager::loadData()
 		}
 
 		// Current identifier
-		identifierData[indexArraySize] = e->identifier;
+		identifierDataS[indexArraySize] = e->identifier;
 
 		// Overwrite the description
 		e->description = StateDataManager::generateDescriptionForSustainableState(e, this->ss);
@@ -114,16 +117,93 @@ bool StateDataManager::loadData()
 		indexArraySize++;
 	}
 
-	this->sustainableStateData = data;
-	this->sustainableStateIdentifierData = identifierData;
+	this->sustainableStateData = dataS;
+	this->sustainableStateIdentifierData = identifierDataS;
 	this->sustainableStateDataSize = indexArraySize;
+
+	fclose(fpcsv);
+
+	// MARK: Status slot 3 & 4
+	TemporaryStateDataInstance *dataT = new TemporaryStateDataInstance[maxTemporaryStateDataSize];
+	unsigned int *identifierDataT = new unsigned int[maxTemporaryStateDataSize]();
+
+	fpcsv = fopen(temporaryStateDataFilePath.c_str(), "r");
+	
+	if ( fpcsv == NULL )
+	{
+		ASSERT(0 && "StateDataManager -> loadData: Load TemporaryStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> loadData: Load TemporaryStateDataInstance failed");
+		return false;
+	}
+	
+	indexArraySize = 0;
+	while(!feof(fpcsv))
+	{
+		// Read a line
+		fgets(templine, maxBufferSizeForLoadingData, fpcsv);
+		
+		// Current data instance
+		TemporaryStateDataInstance *e = &(dataT[indexArraySize]);
+
+		// Current index 
+		indexstr = 0;
+		
+		// Handle the data in the lineData processing
+		tempstrraw = strtok(templine, "\t");
+		string tempstr = tempstrraw;
+		e->identifier = static_cast<unsigned int>(s2n(tempstr));
+		
+		// Remaining data processing
+		while(tempstrraw = strtok(NULL, "\t"))
+		{
+			++indexstr;
+			tempstr = tempstrraw;
+
+			// Remove the char '\n'
+			if (indexstr == 170 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
+			
+			if (indexstr == 1) e->name = tempstr;
+			else if (indexstr == 2) e->description = tempstr;
+			else if (indexstr == 3) ; // Comment, drop
+			else if (indexstr >= 4 && indexstr <= 13) e->effectIdentifier[indexstr - 4] = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 14 && indexstr <= 23) e->isCenteringEffectPosition[indexstr - 14] = s2b(tempstr);
+			else if (indexstr == 24) e->slot = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 25) e->isForAllPartner = s2b(tempstr);
+			else if (indexstr >= 26 && indexstr <= 33) e->currentStateModificationPosibility[indexstr - 26] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 34 && indexstr <= 45) e->basicStateModificationPosibility[indexstr - 34] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 46 && indexstr <= 69) e->temporaryStateSetPosibility[indexstr - 46] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 70 && indexstr <= 71) e->isInterruptCurrentAction[indexstr - 70] = s2b(tempstr);
+			else if (indexstr == 72) e->specificEffectIdentifier = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 73 && indexstr <= 79) e->customizedTriggerType[indexstr - 73] = s2b(tempstr);
+			else if (indexstr >= 80 && indexstr <= 86) e->cancelSourceEffect[indexstr - 80] = s2b(tempstr);
+			else if (indexstr >= 87 && indexstr <= 94) e->currentStateModificationWhenTriggeredFixed[indexstr - 87] = s2n(tempstr);
+			else if (indexstr >= 95 && indexstr <= 102) e->currentStateModificationWhenTriggeredByPercent[indexstr - 95] = s2n(tempstr);
+			else if (indexstr >= 103 && indexstr <= 110) e->currentStateModificationWhenTriggeredLevelBased[indexstr - 103] = s2n(tempstr);
+			else if (indexstr >= 111 && indexstr <= 122) e->basicStateModificationWhenTriggeredFixed[indexstr - 111] = s2n(tempstr);
+			else if (indexstr >= 123 && indexstr <= 134) e->basicStateModificationWhenTriggeredByPercent[indexstr - 123] = s2n(tempstr);
+			else if (indexstr >= 135 && indexstr <= 146) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 135] = s2n(tempstr);
+			else if (indexstr >= 147 && indexstr <= 170) e->temporaryStateSetWhenTriggeredFixed[indexstr - 147] = static_cast<unsigned short>(s2n(tempstr));
+		}
+
+		// Current identifier
+		identifierDataT[indexArraySize] = e->identifier;
+
+		// Overwrite the description
+		e->description = StateDataManager::generateDescriptionForTemporaryState(e, this->ss);
+
+		indexArraySize++;
+	}
+
+	this->temporaryStateData = dataT;
+	this->temporaryStateIdentifierData = identifierDataT;
+	this->temporaryStateDataSize = indexArraySize;
 
 	fclose(fpcsv);
 
 	return true;
 }
 
-SustainableStateDataInstance* StateDataManager::instanceForIdentifier(unsigned int identifier)
+SustainableStateDataInstance* StateDataManager::sustainableInstanceForIdentifier(unsigned int identifier)
 {
 	// Using binary search firstly
 	unsigned int value = *(std::lower_bound(this->sustainableStateIdentifierData, this->sustainableStateIdentifierData + this->sustainableStateDataSize, identifier));
@@ -155,6 +235,41 @@ SustainableStateDataInstance* StateDataManager::instanceForIdentifier(unsigned i
 		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find SustainableStateDataInstance failed");
 		// For the error case, return the first value
 		return &(this->sustainableStateData[0]);
+	}
+}
+
+TemporaryStateDataInstance* StateDataManager::temporaryInstanceForIdentifier(unsigned int identifier)
+{
+	// Using binary search firstly
+	unsigned int value = *(std::lower_bound(this->temporaryStateIdentifierData, this->temporaryStateIdentifierData + this->temporaryStateDataSize, identifier));
+	
+
+	// If failed, using linear search to find the index
+	if (value != identifier)
+	{
+		value = -1;
+
+		for (int index = 0; index < this->temporaryStateDataSize; ++index)
+		{
+			if (this->temporaryStateData[index].identifier == identifier)
+			{
+				// Find the value, break
+				value = index;
+				break;
+			}
+		}
+	}
+
+	if (value != -1)
+	{
+		return &(this->temporaryStateData[value]);
+	}
+	else
+	{
+		ASSERT(0 && "StateDataManager -> instanceForIdentifier: Find TemporaryStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find TemporaryStateDataInstance failed");
+		// For the error case, return the first value
+		return &(this->temporaryStateData[0]);
 	}
 }
 
@@ -258,6 +373,82 @@ string StateDataManager::generateDescriptionForSustainableState(SustainableState
 	for (index = 0; index < 7; ++index)
 	{
 		if (instance->receivedDamageAbsorbByPercent[index] != 0) ss << StateDataManager::getDescriptionForAttackType(index) << "伤害吸收" << (instance->receivedDamageAbsorbByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageAbsorbByPercent[index]) << "% ";
+	}
+	
+	// MARK: Triggered: By customizing
+	// Customized trigger type
+	for (index = 0; index < 7; ++index)
+	{
+		if (instance->customizedTriggerType[index]) ss << StateDataManager::getDescriptionForCustomTriggerType(index) << " ";
+	}
+	
+	// Current state modification
+	for (index = 0; index < 8; ++index)
+	{
+		if (instance->currentStateModificationPosibility[index] < 100 && instance->currentStateModificationPosibility[index] > 0) ss << n2s(instance->currentStateModificationPosibility[index]) << "%："; 
+		if (instance->currentStateModificationWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredFixed[index]) << " ";
+	}
+	for (index = 0; index < 8; ++index)
+	{
+		if (instance->currentStateModificationPosibility[index] < 100 && instance->currentStateModificationPosibility[index] > 0) ss << n2s(instance->currentStateModificationPosibility[index]) << "%："; 
+		if (instance->currentStateModificationWhenTriggeredByPercent[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->currentStateModificationWhenTriggeredByPercent[index]) << "% ";
+	}
+	for (index = 0; index < 8; ++index)
+	{
+		if (instance->currentStateModificationPosibility[index] < 100 && instance->currentStateModificationPosibility[index] > 0) ss << n2s(instance->currentStateModificationPosibility[index]) << "%："; 
+		if (instance->currentStateModificationWhenTriggeredLevelBased[index] != 0) ss << StateDataManager::getDescriptionForCurrentState(index) << (instance->currentStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->currentStateModificationWhenTriggeredLevelBased[index]) << "] ";
+	}
+	// Basic state modification
+	for (index = 0; index < 12; ++index)
+	{
+		if (instance->basicStateModificationPosibility[index] < 100 && instance->basicStateModificationPosibility[index] > 0) ss << n2s(instance->basicStateModificationPosibility[index]) << "%："; 
+		if (instance->basicStateModificationWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredFixed[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredFixed[index]) << " ";
+	}
+	for (index = 0; index < 12; ++index)
+	{
+		if (instance->basicStateModificationPosibility[index] < 100 && instance->basicStateModificationPosibility[index] > 0) ss << n2s(instance->basicStateModificationPosibility[index]) << "%：";  
+		if (instance->basicStateModificationWhenTriggeredByPercent[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredByPercent[index] > 0 ? "+" : "-") << n2s(instance->basicStateModificationWhenTriggeredByPercent[index]) << "% ";
+	}
+	for (index = 0; index < 12; ++index)
+	{
+		if (instance->basicStateModificationPosibility[index] < 100 && instance->basicStateModificationPosibility[index] > 0) ss << n2s(instance->basicStateModificationPosibility[index]) << "%：";  
+		if (instance->basicStateModificationWhenTriggeredLevelBased[index] != 0) ss << StateDataManager::getDescriptionForBasicState(index) << (instance->basicStateModificationWhenTriggeredLevelBased[index] > 0 ? "+" : "-") << "[" <<n2s(instance->basicStateModificationWhenTriggeredLevelBased[index]) << "] ";
+	}
+	
+	// Temporary state modification
+	for (index = 0; index < 24; ++index)
+	{
+		if (instance->temporaryStateSetPosibility[index] < 100 && instance->temporaryStateSetPosibility[index] > 0) ss << n2s(instance->temporaryStateSetPosibility[index]) << "%：";  
+		if (instance->temporaryStateSetWhenTriggeredFixed[index] != 0) ss << StateDataManager::getDescriptionForTemporaryState(index) << "(" << n2s(instance->temporaryStateSetWhenTriggeredFixed[index]) << ") ";
+	}
+	
+	// MARK: Other information
+	// Is interrupt current action
+	if (!instance->isInterruptCurrentAction[0]) ss << "不触发己方受伤动作 ";
+	if (!instance->isInterruptCurrentAction[1]) ss << "不触发敌方受伤动作 ";
+
+	return ss.str();
+}
+
+string StateDataManager::generateDescriptionForTemporaryState(TemporaryStateDataInstance *instance, stringstream ss)
+{
+	if (!instance) return "";
+	
+	// Customized description
+	if (instance->description.size() > 1) return instance->description;
+
+	ss.str("");
+    ss.clear();
+	int index;
+
+	// MARK: Basic information
+	// Is for all partner
+    if (instance->isForAllPartner) ss << "全体 ";
+
+	// Cancel source effect
+	for (index = 0; index < 7; ++index)
+	{
+		if (instance->cancelSourceEffect[index]) ss << "免疫" << StateDataManager::getDescriptionForAttackType(index) << "效果 ";
 	}
 	
 	// MARK: Triggered: By customizing
@@ -613,9 +804,15 @@ switch (index)
 string StateDataManager::printData()
 {
 	string tempStr = "";
-	for (int index = 0; index < this->sustainableStateDataSize; ++index)
+	int index = 0;
+	for (index = 0; index < this->sustainableStateDataSize; ++index)
 	{
 		SustainableStateDataInstance *e = &(this->sustainableStateData[index]);
+		tempStr += e->printData(this->ss);
+	}
+	for (index = 0; index < this->temporaryStateDataSize; ++index)
+	{
+		TemporaryStateDataInstance *e = &(this->temporaryStateData[index]);
 		tempStr += e->printData(this->ss);
 	}
 
