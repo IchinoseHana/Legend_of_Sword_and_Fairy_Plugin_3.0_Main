@@ -1,16 +1,13 @@
 #include "stdafx.h"
-#include "SustainableStateDataInstance.h"
+#include "TemporaryStateDataInstance.h"
 
-SustainableStateDataInstance::SustainableStateDataInstance()
+TemporaryStateDataInstance::TemporaryStateDataInstance()
 {
 	identifier = 0;
 	name = "";
 	description = "";
 	effectIdentifier = new unsigned int[10]();
 	isCenteringEffectPosition = new bool[10]();
-	layer = 0;
-	step = 0;
-	delay = 0;
 	slot = 0;
 	isForAllPartner = false;
 	currentStateModificationPosibility = new unsigned short[8]();
@@ -19,20 +16,7 @@ SustainableStateDataInstance::SustainableStateDataInstance()
 	isInterruptCurrentAction = new bool[2]();
 	specificEffectIdentifier = 0;
 	customizedTriggerType = new bool[7]();
-	damageType = new bool[3]();
-
-	dealedDamageModificationByPercent = new int[7]();
-	dealedMagicDamageModificationByPercentWithProperty = new int[5]();
-	receivedDamageModificationByPercent = new int[7]();
-	receivedMagicDamageModificationByPercentWithProperty = new int[5]();
-	basicStateModificationFixed = new int[12]();
-	basicStateModificationByPercent = new int[12]();
-	consumptionModificationByPercent = new int[3]();
-	actionTakesNoEffect = new bool[7]();
-	receivedActionTakesNoEffect = new bool[7]();
-	actionForbid = new bool[8]();
-	receivedDamageReboundByPercent = new unsigned int[7]();
-	receivedDamageAbsorbByPercent = new unsigned int[7]();
+	cancelSourceEffect = new bool[7]();
 
 	currentStateModificationWhenTriggeredFixed = new int[8]();
 	currentStateModificationWhenTriggeredByPercent = new int[8]();
@@ -43,7 +27,7 @@ SustainableStateDataInstance::SustainableStateDataInstance()
 	temporaryStateSetWhenTriggeredFixed = new unsigned int[24]();
 }
 
-SustainableStateDataInstance::~SustainableStateDataInstance()
+TemporaryStateDataInstance::~TemporaryStateDataInstance()
 {
 	delete[] effectIdentifier;
 	delete[] isCenteringEffectPosition;
@@ -52,20 +36,7 @@ SustainableStateDataInstance::~SustainableStateDataInstance()
 	delete[] temporaryStateSetPosibility;
 	delete[] isInterruptCurrentAction;
 	delete[] customizedTriggerType;
-	delete[] damageType;
-
-	delete[] dealedDamageModificationByPercent;
-	delete[] dealedMagicDamageModificationByPercentWithProperty;
-	delete[] receivedDamageModificationByPercent;
-	delete[] receivedMagicDamageModificationByPercentWithProperty;
-	delete[] basicStateModificationFixed;
-	delete[] basicStateModificationByPercent;
-	delete[] consumptionModificationByPercent;
-	delete[] actionTakesNoEffect;
-	delete[] receivedActionTakesNoEffect;
-	delete[] actionForbid;
-	delete[] receivedDamageReboundByPercent;
-	delete[] receivedDamageAbsorbByPercent;
+	delete[] cancelSourceEffect;
 
 	delete[] currentStateModificationWhenTriggeredFixed;
 	delete[] currentStateModificationWhenTriggeredByPercent;
@@ -76,13 +47,13 @@ SustainableStateDataInstance::~SustainableStateDataInstance()
 	delete[] temporaryStateSetWhenTriggeredFixed;
 }
 
-string SustainableStateDataInstance::printData(stringstream ss)
+string TemporaryStateDataInstance::printData(stringstream ss)
 {
 	ss.str("");
     ss.clear();
 
 	int index = 0;
-	ss << "-----SustainableStateDataInstance Print Begin-----\n";
+	ss << "-----TemporaryStateDataInstance Print Begin-----\n";
 	ss << "identifier: " << n2s(identifier) << "\n";
 	ss << "name: " << name << "\n";
 	ss << "description: " << description << "\n";
@@ -98,9 +69,6 @@ string SustainableStateDataInstance::printData(stringstream ss)
 		ss << n2s(isCenteringEffectPosition[index]) << " ";
 	}
 	ss << "\n";
-	ss << "layer: " << n2s(layer) << "\n";
-	ss << "step: " << n2s(step) << "\n";
-	ss << "delay: " << n2s(delay) << "\n";
 	ss << "slot: " << n2s(slot) << "\n";
 	ss << "isForAllPartner: " << n2s(isForAllPartner) << "\n";
 	ss << "currentStateModificationPosibility: ";
@@ -134,82 +102,10 @@ string SustainableStateDataInstance::printData(stringstream ss)
 		ss << n2s(customizedTriggerType[index]) << " ";
 	}
 	ss << "\n";
-	ss << "damageType: ";
-	for (index = 0; index < 3; ++index)
-	{
-		ss << n2s(damageType[index]) << " ";
-	}
-	ss << "\n";
-	ss << "dealedDamageModificationByPercent: ";
+	ss << "cancelSourceEffect: ";
 	for (index = 0; index < 7; ++index)
 	{
-		ss << n2s(dealedDamageModificationByPercent[index]) << " ";
-	}
-	ss << "\n";
-	ss << "dealedMagicDamageModificationByPercentWithProperty: ";
-	for (index = 0; index < 5; ++index)
-	{
-		ss << n2s(dealedMagicDamageModificationByPercentWithProperty[index]) << " ";
-	}
-	ss << "\n";
-	ss << "receivedDamageModificationByPercent: ";
-	for (index = 0; index < 7; ++index)
-	{
-		ss << n2s(receivedDamageModificationByPercent[index]) << " ";
-	}
-	ss << "\n";
-	ss << "receivedMagicDamageModificationByPercentWithProperty: ";
-	for (index = 0; index < 5; ++index)
-	{
-		ss << n2s(receivedMagicDamageModificationByPercentWithProperty[index]) << " ";
-	}
-	ss << "\n";
-	ss << "basicStateModificationFixed: ";
-	for (index = 0; index < 12; ++index)
-	{
-		ss << n2s(basicStateModificationFixed[index]) << " ";
-	}
-	ss << "\n";
-	ss << "basicStateModificationByPercent: ";
-	for (index = 0; index < 12; ++index)
-	{
-		ss << n2s(basicStateModificationByPercent[index]) << " ";
-	}
-	ss << "\n";
-	ss << "consumptionModificationByPercent: ";
-	for (index = 0; index < 3; ++index)
-	{
-		ss << n2s(consumptionModificationByPercent[index]) << " ";
-	}
-	ss << "\n";
-	ss << "actionTakesNoEffect: ";
-	for (index = 0; index < 7; ++index)
-	{
-		ss << n2s(actionTakesNoEffect[index]) << " ";
-	}
-	ss << "\n";
-	ss << "receivedActionTakesNoEffect: ";
-	for (index = 0; index < 7; ++index)
-	{
-		ss << n2s(receivedActionTakesNoEffect[index]) << " ";
-	}
-	ss << "\n";
-	ss << "actionForbid: ";
-	for (index = 0; index < 8; ++index)
-	{
-		ss << n2s(actionForbid[index]) << " ";
-	}
-	ss << "\n";
-	ss << "receivedDamageReboundByPercent: ";
-	for (index = 0; index < 7; ++index)
-	{
-		ss << n2s(receivedDamageReboundByPercent[index]) << " ";
-	}
-	ss << "\n";
-	ss << "receivedDamageAbsorbByPercent: ";
-	for (index = 0; index < 7; ++index)
-	{
-		ss << n2s(receivedDamageAbsorbByPercent[index]) << " ";
+		ss << n2s(cancelSourceEffect[index]) << " ";
 	}
 	ss << "\n";
 	ss << "currentStateModificationWhenTriggeredFixed: ";
@@ -254,7 +150,7 @@ string SustainableStateDataInstance::printData(stringstream ss)
 		ss << n2s(temporaryStateSetWhenTriggeredFixed[index]) << " ";
 	}
 	ss << "\n";
-	ss << "-----SustainableStateDataInstance Print End-----\n";
+	ss << "-----TemporaryStateDataInstance Print End-----\n";
 
 	return ss.str();
 }

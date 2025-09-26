@@ -10,7 +10,7 @@
 using std::string;
 using std::stringstream;
 
-// Use a list of external files to manage datas.
+// Use an external file to manage datas.
 // The default value is 0 or false. Use a negative value to achieve the contrast effect.
 
 // MARK: Status slot 1 and 2
@@ -35,12 +35,14 @@ public:
 	bool *isInterruptCurrentAction; // Size: 2. If the effect can interrupt the current action of {object}.
 	unsigned int specificEffectIdentifier; // Specific effect which cannot be descripted by this framwork easily.
     bool *customizedTriggerType; // Size: 7. If using the corresponding custom trigger.
+	bool *damageType; // Size: 3. The damage type is {type4}. Just influence "dealedDamageModificationByPercent", "dealedMagicDamageModificationByPercentWithProperty", "receivedDamageModificationByPercent" and "receivedMagicDamageModificationByPercentWithProperty". The type "damage" gains the highest priority.
 	
 	// MARK: Detailed effects
 	// {object} -> players, enermies
 	// {type1} -> normal attack, skill, magic, item, sword skill, cooperated attack, all
 	// {type2} -> HP, SP, MP
 	// {type3} -> normal attack, skill, magic, item, sword skill, defend, escape, repeat the last action
+	// {type4} -> damage, recoverage, all
     // {property} -> water, fire, wind, thunder, earth
 	// {state1} -> current HP, current SP, current MP, money, the progress of attack sequence, skill soul, magic soul, sword skill point
 	// {state2} -> HP, SP, MP, attack, defense, speed, luck, water property point, fire property point, wind property point, thunder property point, earth property point

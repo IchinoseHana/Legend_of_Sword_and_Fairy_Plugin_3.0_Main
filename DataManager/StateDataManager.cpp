@@ -87,25 +87,26 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 73 && indexstr <= 74) e->isInterruptCurrentAction[indexstr - 73] = s2b(tempstr);
 			else if (indexstr == 75) e->specificEffectIdentifier = static_cast<unsigned int>(s2n(tempstr));
 			else if (indexstr >= 76 && indexstr <= 82) e->customizedTriggerType[indexstr - 76] = s2b(tempstr);
-			else if (indexstr >= 83 && indexstr <= 89) e->dealedDamageModificationByPercent[indexstr - 83] = s2n(tempstr);
-			else if (indexstr >= 90 && indexstr <= 94) e->dealedMagicDamageModificationByPercentWithProperty[indexstr - 90] = s2n(tempstr);
-			else if (indexstr >= 95 && indexstr <= 101) e->receivedDamageModificationByPercent[indexstr - 95] = s2n(tempstr);
-			else if (indexstr >= 102 && indexstr <= 106) e->receivedMagicDamageModificationByPercentWithProperty[indexstr - 102] = s2n(tempstr);
-			else if (indexstr >= 107 && indexstr <= 118) e->basicStateModificationFixed[indexstr - 107] = s2n(tempstr);
-			else if (indexstr >= 119 && indexstr <= 130) e->basicStateModificationByPercent[indexstr - 119] = s2n(tempstr);
-			else if (indexstr >= 131 && indexstr <= 133) e->consumptionModificationByPercent[indexstr - 131] = s2n(tempstr);
-			else if (indexstr >= 134 && indexstr <= 140) e->actionTakesNoEffect[indexstr - 134] = s2b(tempstr);
-			else if (indexstr >= 141 && indexstr <= 147) e->receivedActionTakesNoEffect[indexstr - 141] = s2b(tempstr);
-			else if (indexstr >= 148 && indexstr <= 155) e->actionForbid[indexstr - 148] = s2b(tempstr);
-			else if (indexstr >= 156 && indexstr <= 162) e->receivedDamageReboundByPercent[indexstr - 156] = static_cast<unsigned short>(s2n(tempstr));
-			else if (indexstr >= 163 && indexstr <= 169) e->receivedDamageAbsorbByPercent[indexstr - 163] = static_cast<unsigned short>(s2n(tempstr));
-			else if (indexstr >= 170 && indexstr <= 177) e->currentStateModificationWhenTriggeredFixed[indexstr - 170] = s2n(tempstr);
-			else if (indexstr >= 178 && indexstr <= 185) e->currentStateModificationWhenTriggeredByPercent[indexstr - 178] = s2n(tempstr);
-			else if (indexstr >= 186 && indexstr <= 193) e->currentStateModificationWhenTriggeredLevelBased[indexstr - 186] = s2n(tempstr);
-			else if (indexstr >= 194 && indexstr <= 205) e->basicStateModificationWhenTriggeredFixed[indexstr - 194] = s2n(tempstr);
-			else if (indexstr >= 206 && indexstr <= 217) e->basicStateModificationWhenTriggeredByPercent[indexstr - 206] = s2n(tempstr);
-			else if (indexstr >= 218 && indexstr <= 229) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 218] = s2n(tempstr);
-			else if (indexstr >= 230 && indexstr <= 253) e->temporaryStateSetWhenTriggeredFixed[indexstr - 230] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 83 && indexstr <= 85) e->damageType[indexstr - 83] = s2b(tempstr);
+			else if (indexstr >= 86 && indexstr <= 92) e->dealedDamageModificationByPercent[indexstr - 86] = s2n(tempstr);
+			else if (indexstr >= 93 && indexstr <= 97) e->dealedMagicDamageModificationByPercentWithProperty[indexstr - 93] = s2n(tempstr);
+			else if (indexstr >= 98 && indexstr <= 104) e->receivedDamageModificationByPercent[indexstr - 98] = s2n(tempstr);
+			else if (indexstr >= 105 && indexstr <= 109) e->receivedMagicDamageModificationByPercentWithProperty[indexstr - 105] = s2n(tempstr);
+			else if (indexstr >= 110 && indexstr <= 121) e->basicStateModificationFixed[indexstr - 110] = s2n(tempstr);
+			else if (indexstr >= 122 && indexstr <= 133) e->basicStateModificationByPercent[indexstr - 122] = s2n(tempstr);
+			else if (indexstr >= 134 && indexstr <= 136) e->consumptionModificationByPercent[indexstr - 134] = s2n(tempstr);
+			else if (indexstr >= 137 && indexstr <= 143) e->actionTakesNoEffect[indexstr - 137] = s2b(tempstr);
+			else if (indexstr >= 144 && indexstr <= 150) e->receivedActionTakesNoEffect[indexstr - 144] = s2b(tempstr);
+			else if (indexstr >= 151 && indexstr <= 158) e->actionForbid[indexstr - 151] = s2b(tempstr);
+			else if (indexstr >= 159 && indexstr <= 165) e->receivedDamageReboundByPercent[indexstr - 159] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 166 && indexstr <= 172) e->receivedDamageAbsorbByPercent[indexstr - 166] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 173 && indexstr <= 180) e->currentStateModificationWhenTriggeredFixed[indexstr - 173] = s2n(tempstr);
+			else if (indexstr >= 181 && indexstr <= 188) e->currentStateModificationWhenTriggeredByPercent[indexstr - 181] = s2n(tempstr);
+			else if (indexstr >= 189 && indexstr <= 196) e->currentStateModificationWhenTriggeredLevelBased[indexstr - 189] = s2n(tempstr);
+			else if (indexstr >= 197 && indexstr <= 208) e->basicStateModificationWhenTriggeredFixed[indexstr - 197] = s2n(tempstr);
+			else if (indexstr >= 209 && indexstr <= 220) e->basicStateModificationWhenTriggeredByPercent[indexstr - 209] = s2n(tempstr);
+			else if (indexstr >= 221 && indexstr <= 232) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 221] = s2n(tempstr);
+			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned short>(s2n(tempstr));
 		}
 
 		// Current identifier
@@ -311,24 +312,31 @@ string StateDataManager::generateDescriptionForSustainableState(SustainableState
     if (instance->step > 0) ss << "发动后威力增加" << n2s(instance->step) << " ";
 	
 	// MARK: Triggered: Always
+	// Damage description
+	string damageDescription = "";
+	if (instance->damageType[0] == 1) damageDescription = "伤害";
+	else if (instance->damageType[1] == 1) damageDescription = "恢复";
+	else if (instance->damageType[2] == 1) damageDescription = "效果";
+	else damageDescription = "伤害";
+
 	// Dealed damage modification
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->dealedDamageModificationByPercent[index] != 0) ss << StateDataManager::getDescriptionForAttackType(index) << "伤害" << (instance->dealedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->dealedDamageModificationByPercent[index]) << "% ";
+		if (instance->dealedDamageModificationByPercent[index] != 0) ss << StateDataManager::getDescriptionForAttackType(index) << damageDescription << (instance->dealedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->dealedDamageModificationByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 5; ++index)
 	{
-		if (instance->dealedMagicDamageModificationByPercentWithProperty[index] != 0) ss << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术伤害" << (instance->dealedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->dealedMagicDamageModificationByPercentWithProperty[index]) << "% ";
+		if (instance->dealedMagicDamageModificationByPercentWithProperty[index] != 0) ss << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术" << damageDescription << (instance->dealedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->dealedMagicDamageModificationByPercentWithProperty[index]) << "% ";
 	}
 	
 	// Received damage modification
 	for (index = 0; index < 7; ++index)
 	{
-		if (instance->receivedDamageModificationByPercent[index] != 0) ss << "受" << StateDataManager::getDescriptionForAttackType(index) << "伤害" << (instance->receivedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageModificationByPercent[index]) << "% ";
+		if (instance->receivedDamageModificationByPercent[index] != 0) ss << "受" << StateDataManager::getDescriptionForAttackType(index) << damageDescription << (instance->receivedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageModificationByPercent[index]) << "% ";
 	}
 	for (index = 0; index < 5; ++index)
 	{
-		if (instance->receivedMagicDamageModificationByPercentWithProperty[index] != 0) ss << "受" << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术伤害" << (instance->receivedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->receivedMagicDamageModificationByPercentWithProperty[index]) << "% ";
+		if (instance->receivedMagicDamageModificationByPercentWithProperty[index] != 0) ss << "受" << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术" << damageDescription << (instance->receivedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->receivedMagicDamageModificationByPercentWithProperty[index]) << "% ";
 	}
 	
 	// Basic state modification

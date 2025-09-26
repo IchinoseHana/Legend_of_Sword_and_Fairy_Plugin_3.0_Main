@@ -10,7 +10,7 @@
 using std::string;
 using std::stringstream;
 
-// Use a list of external files to manage datas.
+// Use an external file to manage datas.
 // The default value is 0 or false. Use a negative value to achieve the contrast effect.
 
 // MARK: Status slot 3 and 4
