@@ -22,6 +22,10 @@ public:
 
 	// MARK: Additional properties
 	bool *targetType; // Size: 2. The effect can be applied to {object}.
+	bool hasmask; // If the combat environment can generate a mask.
+	PluginColorInstance *maskColor; // The color of the mask.
+	
+
 
 	
 	// MARK: Detailed effects

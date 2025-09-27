@@ -1,33 +1,14 @@
 #include "stdafx.h"
-#include "TemporaryStateDataInstance.h"
+#include "CombatEnvironmentDataInstance.h"
 
-TemporaryStateDataInstance::TemporaryStateDataInstance()
+CombatEnvironmentDataInstance::SustainableStateDataInstance()
 {
-	identifier = 0;
-	name = "";
-	description = "";
-	effectIdentifier = new unsigned int[10]();
-	isCenteringEffectPosition = new bool[10]();
-	slot = 0;
-	isForAllPartner = false;
-	currentStateModificationPosibility = new unsigned short[8]();
-	basicStateModificationPosibility = new unsigned short[12]();
-	temporaryStateSetPosibility = new unsigned short[24]();
-	isInterruptCurrentAction = new bool[2]();
-	specificEffectIdentifier = 0;
-	customizedTriggerType = new bool[7]();
-	cancelSourceEffect = new bool[7]();
-
-	currentStateModificationWhenTriggeredFixed = new int[8]();
-	currentStateModificationWhenTriggeredByPercent = new int[8]();
-	currentStateModificationWhenTriggeredLevelBased = new int[8]();
-	basicStateModificationWhenTriggeredFixed = new int[12]();
-	basicStateModificationWhenTriggeredByPercent = new int[12]();
-	basicStateModificationWhenTriggeredLevelBased = new int[12]();
-	temporaryStateSetWhenTriggeredFixed = new unsigned int[24]();
+	targetType = new bool[2]();
+	hasmask = false;
+	maskColor = new PluginColorInstance;
 }
 
-TemporaryStateDataInstance::~TemporaryStateDataInstance()
+CombatEnvironmentDataInstance::~SustainableStateDataInstance()
 {
 	delete[] effectIdentifier;
 	delete[] isCenteringEffectPosition;

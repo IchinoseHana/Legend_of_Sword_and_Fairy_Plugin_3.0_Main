@@ -34,4 +34,24 @@ private:
 	~PluginUtility();
 };
 
+// The struct of color
+struct PluginColorInstance
+{	
+public:
+	unsigned short red;
+	unsigned short green;
+	unsigned short blue;
+	unsigned short alpha;
+
+	// Constructor & destructor
+	PluginColorInstance();
+	PluginColorInstance(unsigned short red, unsigned short green, unsigned short blue, unsigned short alpha);
+	~PluginColorInstance();
+
+private:
+
+	PluginColorInstance(const PluginColorInstance&);
+	PluginColorInstance& operator = (const PluginColorInstance&);
+};
+
 #endif
