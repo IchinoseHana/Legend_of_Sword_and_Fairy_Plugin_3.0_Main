@@ -24,12 +24,27 @@ public:
 	bool *targetType; // Size: 2. The effect can be applied to {object}.
 	bool hasmask; // If the combat environment can generate a mask.
 	PluginColorInstance *maskColor; // The color of the mask.
-	
+	unsigned short magicChangingPosibility; // The posibility to change the magic to a specific one.
+	unsigned int magicChangingTargetIdentifier; // The identifier of the target magic that the original magic will be transformed into.
+	unsigned int *itemNotBeConsumedPosibility; // Size: 2. The posibility that {type5} items will not be consumed.
+	unsigned int *itemNotBeConsumedUpperBoundWithPrice; // Size: 2. The maximum of the purchase price that {type5} items will not be consumed.
+	int *dealedDamageModificationDirectly; // Size: 7. Dealed {type1} damage = v. This gains the higher priority compared to other damage modification variables.
+	int *dealedMagicDamageModificationDirectlyWithProperty; // Size: 5. Dealed {property} magic damage = v. This gains the higher priority compared to other damage modification variables.
+	int *receivedDamageModificationDirectly; // Size: 7. Recieved {type1} damage = v. This gains the higher priority compared to other damage modification variables.
+	int *receivedMagicDamageModificationDirectlyWithProperty; // Size: 5. Recieved {property} magic damage = v. This gains the higher priority compared to other damage modification variables.
+	bool usingRealTimeTrigger; // If using the real-time based trigger. Effective for variables related to customized triggers.
+	double realTimeBasedStateModificationInterval; // The time interval if using real-time based state modification.
+	unsigned short *sustainableStateSetPosibility; // Size: 10. The posibility to set the state of SustainableStateDataInstance. The default value 0 is the same as 100.
+	unsigned short *temporaryStateSetPosibility; // Size: 10. The posibility to set the state of TemporaryStateDataInstance. The default value 0 is the same as 100.
 
-
+	// Triggered: By customizing
+	unsigned int *sustainableStateSetWhenTriggeredFixed; // Size: 10. Triggered:  a specific state from SustainableStateDataInstance = v.
+	unsigned int *temporaryStateSetWhenTriggeredFixed; // Size: 10. Triggered:  a specific state from TemporaryStateDataInstance = v.
 	
 	// MARK: Detailed effects
 	// {object} -> players, enermies
+	// {type1} -> normal attack, skill, magic, item, sword skill, cooperated attack, all
+	// {type5} -> recover, attack
 
 	// Constructor & destructor
 	CombatEnvironmentDataInstance();

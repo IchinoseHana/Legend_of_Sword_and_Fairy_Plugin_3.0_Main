@@ -5,7 +5,8 @@ CombatEnvironmentDataInstance::SustainableStateDataInstance()
 {
 	targetType = new bool[2]();
 	hasmask = false;
-	maskColor = new PluginColorInstance;
+	maskColor = new PluginColorInstance();
+
 }
 
 CombatEnvironmentDataInstance::~SustainableStateDataInstance()
