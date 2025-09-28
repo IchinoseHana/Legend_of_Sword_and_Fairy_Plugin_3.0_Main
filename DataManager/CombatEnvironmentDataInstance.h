@@ -26,7 +26,7 @@ public:
 	PluginColorInstance *maskColor; // The color of the mask.
 	unsigned short magicChangingPosibility; // The posibility to change the magic to a specific one.
 	unsigned int magicChangingTargetIdentifier; // The identifier of the target magic that the original magic will be transformed into.
-	unsigned int *itemNotBeConsumedPosibility; // Size: 2. The posibility that {type5} items will not be consumed.
+	unsigned short *itemNotBeConsumedPosibility; // Size: 2. The posibility that {type5} items will not be consumed.
 	unsigned int *itemNotBeConsumedUpperBoundWithPrice; // Size: 2. The maximum of the purchase price that {type5} items will not be consumed.
 	int *dealedDamageModificationDirectly; // Size: 7. Dealed {type1} damage = v. This gains the higher priority compared to other damage modification variables.
 	int *dealedMagicDamageModificationDirectlyWithProperty; // Size: 5. Dealed {property} magic damage = v. This gains the higher priority compared to other damage modification variables.

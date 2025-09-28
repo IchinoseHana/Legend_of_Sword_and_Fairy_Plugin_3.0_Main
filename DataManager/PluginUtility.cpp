@@ -27,7 +27,7 @@ PluginColorInstance::PluginColorInstance()
 	this->alpha = 0;
 }
 
-PluginColorInstance::PluginColorInstance(int red, int green, int blue, int alpha)
+PluginColorInstance::PluginColorInstance(unsigned short red, unsigned short green, unsigned short blue, unsigned short alpha)
 {
 	this->red = red;
 	this->green = green;
