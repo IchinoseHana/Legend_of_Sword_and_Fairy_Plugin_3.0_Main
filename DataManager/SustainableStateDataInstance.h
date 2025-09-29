@@ -22,11 +22,11 @@ public:
 	unsigned int identifier; // The ID of the state.
 	std::string name; // The name of the state.
 	std::string description; // The description of the state.
-	unsigned int *effectIdentifier; // Size: 10. The effect identifier when triggered.
+	unsigned int *effectIdentifier; // Size: 10. The effect identifier when triggered. Just used for customized triggers.
 	bool *isCenteringEffectPosition; // Size: 10. If the effect should be put in center of all partners instead of the position of the target. Corresponding to each effect identifier.
 	unsigned int layer; // The maximum number of layers for a specific state. An effect of a state will be multiplied by the value of the current layer. The value 0 takes the same effect as 1. Slot 2: States from players and items which can be removed or replaced easily. However, if the target is an enemy, it is impossible to be removed or replaced.
-	unsigned int step; // The step of the value. After being triggered, the value will be added by this value.
-	unsigned int delay; // The count before the state taking effect.
+	unsigned int step; // The step of the value. After being triggered, the value will be added by this value. Just used for customized triggers.
+	unsigned int delay; // The count before the state taking effect. Just used for customized triggers.
 	unsigned int slot; // The slot of the state.
 	bool isForAllPartner; // If the state can apply its effect to all pertners.
 	unsigned short *currentStateModificationPosibility; // Size: 8. The posibility to modify the state included in {state1}. The default value 0 is the same as 100.

@@ -14,11 +14,9 @@ struct CombatEnvironmentDataInstance: public SustainableStateDataInstance
 {	
 public:
 
-	// MARK: The same as SustainableStateDataInstance
-	// Notice: Some variables take no effects. Including:
-	// unsigned int delay; // The count before the state taking effect.
-	// unsigned int slot; // The slot of the state.
-	// bool isForAllPartner; // If the state can apply its effect to all pertners.
+	unsigned int identifier; // The ID of the state.
+	std::string name; // The name of the state.
+	std::string description; // The description of the state.
 
 	// MARK: Additional properties
 	bool *targetType; // Size: 2. The effect can be applied to {object}.

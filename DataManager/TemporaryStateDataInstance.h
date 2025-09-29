@@ -22,7 +22,7 @@ public:
 	unsigned int identifier; // The ID of the state.
 	std::string name; // The name of the state.
 	std::string description; // The description of the state.
-	unsigned int *effectIdentifier; // Size: 10. The effect identifier when triggered.
+	unsigned int *effectIdentifier; // Size: 10. The effect identifier when triggered. Just used for customized triggers.
 	bool *isCenteringEffectPosition; // Size: 10. If the effect should be put in center of all partners instead of the position of the target. Corresponding to each effect identifier.
 	unsigned int slot; // The slot of the state. Slot 3: states from enemies and items. If the target is a role of the player, it cannot be removed except waiting for elimination natually or using some special items.
 	bool isForAllPartner; // If the state can apply its effect to all pertners.

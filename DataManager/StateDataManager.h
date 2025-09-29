@@ -5,6 +5,9 @@
 
 #include "SustainableStateDataInstance.h"
 #include "TemporaryStateDataInstance.h"
+#include "CombatPropertyDataInstance.h"
+#include "CombatEnvironmentDataInstance.h"
+#include "CombatStateDataInstance.h"
 #include "PluginUtility.h"
 #include <string>
 #include <sstream>
@@ -13,12 +16,18 @@ using std::string;
 using std::stringstream;
 
 // File paths.
-PAL3HOOK_VERIFIED_DATAVAR static const string sustainableStateDataFilePath = ".\\PLUGIN_3.0\\BaseData\\sustainableStateDataInstance.csv";
-PAL3HOOK_VERIFIED_DATAVAR static const string temporaryStateDataFilePath = ".\\PLUGIN_3.0\\BaseData\\temporaryStateDataInstance.csv";
+PAL3HOOK_VERIFIED_DATAVAR static const string sustainableStateDataFilePath = ".\\PLUGIN_3.0\\BaseData\\SustainableStateDataInstance.csv";
+PAL3HOOK_VERIFIED_DATAVAR static const string temporaryStateDataFilePath = ".\\PLUGIN_3.0\\BaseData\\TemporaryStateDataInstance.csv";
+PAL3HOOK_VERIFIED_DATAVAR static const string combatPropertyDataFilePath = ".\\PLUGIN_3.0\\BaseData\\CombatPropertyDataInstance.csv";
+PAL3HOOK_VERIFIED_DATAVAR static const string combatEnvironmentDataFilePath = ".\\PLUGIN_3.0\\BaseData\\CombatEnvironmentDataInstance.csv";
+PAL3HOOK_VERIFIED_DATAVAR static const string combatStateDataFilePath = ".\\PLUGIN_3.0\\BaseData\\CombatStateDataInstance.csv";
 
 // Maximum data sizes.
 const int maxSustainableStateDataSize = 300;
-const int maxTemporaryStateDataSize = 300;
+const int maxTemporaryStateDataSize = 150;
+const int maxCombatPropertyDataSize = 50;
+const int maxCombatEnvironmentDataSize = 200;
+const int maxCombatStateDataSize = 100;
 
 // Size of the buffer used to load the file data.
 const int maxBufferSizeForLoadingData = 4096;

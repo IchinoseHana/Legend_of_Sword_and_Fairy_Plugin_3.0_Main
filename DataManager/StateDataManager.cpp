@@ -303,7 +303,7 @@ string StateDataManager::generateDescriptionForSustainableState(SustainableState
 	if (instance->layer > 1) ss << "最大" << n2s(instance->layer) << "层 ";
 	
 	// Delay
-	if (instance->delay > 0) ss << n2s(instance->delay) << "回合后发动 ";
+	if (instance->delay > 0) ss << "延迟" << n2s(instance->delay) << "次发动 ";
 	
 	// Is for all partner
     if (instance->isForAllPartner) ss << "全体 ";
