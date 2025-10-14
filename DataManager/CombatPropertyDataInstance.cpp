@@ -31,7 +31,6 @@ string CombatPropertyDataInstance::printData(stringstream ss)
 
 	int index = 0;
 	ss << "-----CombatPropertyDataInstance Print Begin-----\n";
-	// Information from the super class
 	ss << "identifier: " << n2s(identifier) << "\n";
 	ss << "name: " << name << "\n";
 	ss << "description: " << description << "\n";

@@ -21,6 +21,7 @@ string CombatStateDataInstance::printData(stringstream ss)
 
 	int index = 0;
 	ss << "-----CombatStateDataInstance Print Begin-----\n";
+
 	// Information from the super class
 	ss << "-----Information From Class CombatEnvironmentDataInstance: Print Begin-----\n";
 	ss << tempStr;
@@ -29,6 +30,7 @@ string CombatStateDataInstance::printData(stringstream ss)
 	// No extra variables for this class
 	ss << "-----Information From Class CombatStateDataInstance: Print Begin-----\n";
 	ss << "-----Information From Class CombatStateDataInstance: Print End-----\n";
+
 	ss << "-----CombatStateDataInstance Print End-----\n";
 
 	return ss.str();

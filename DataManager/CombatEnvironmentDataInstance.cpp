@@ -51,12 +51,13 @@ string CombatEnvironmentDataInstance::printData(stringstream ss)
 
 	int index = 0;
 	ss << "-----CombatEnvironmentDataInstance Print Begin-----\n";
+
 	// Information from the super class
 	ss << "-----Information From Class SustainableStateDataInstance: Print Begin-----\n";
 	ss << tempStr;
 	ss << "-----Information From Class SustainableStateDataInstance: Print End-----\n";
-	ss << "-----Information From Class CombatEnvironmentDataInstance: Print Begin-----\n";
 
+	ss << "-----Information From Class CombatEnvironmentDataInstance: Print Begin-----\n";
 	ss << "targetType: ";
 	for (index = 0; index < 2; ++index)
 	{
@@ -130,6 +131,7 @@ string CombatEnvironmentDataInstance::printData(stringstream ss)
 	}
 	ss << "\n";
 	ss << "-----Information From Class CombatEnvironmentDataInstance: Print End-----\n";
+
 	ss << "-----CombatEnvironmentDataInstance Print End-----\n";
 
 	return ss.str();
