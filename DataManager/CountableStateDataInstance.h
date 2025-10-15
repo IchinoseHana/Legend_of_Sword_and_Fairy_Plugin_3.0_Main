@@ -6,7 +6,7 @@
 // The trigger type used to determine how to change the member "countValue".
 enum CountableStateCountValueChangeTriggerType
 {
-	CountableStateCountValueChangeTriggerTypeNone, // countValue always keeps its original value.
+	CountableStateCountValueChangeTriggerTypeNone = 0, // countValue always keeps its original value.
     CountableStateCountValueChangeTriggerTypeAfterReceiveingNormalAttackDamage, // countValue -= received damage after being attacked by normal attack.
     CountableStateCountValueChangeTriggerTypeAfterReceiveingSkillDamage, // countValue -= received damage after being attacked by skill.
 	CountableStateCountValueChangeTriggerTypeAfterReceiveingMagicDamage, // countValue -= received damage after being attacked by magic.
@@ -39,13 +39,16 @@ public:
 	// MARK: Additional properties
 	unsigned int countValue; // The value used to count. If the value becomes zero, the state will be removed.
 	bool effectTriggeredWhenCountValueChanging; // If showing the effect after the member "countValue" being changed.
-    bool effectNotTriggeredByCustomTrigger; // If do not showing the effect in the case of customized triggers.
-    CountableStateCountValueChangeTriggerType countValueChangeTriggerType; // The type of the trigger which is used to change the member "countValue". See "CountableStateCountValueChangeTriggerType" for more detailed information.
+	bool effectNotTriggeredByCustomTrigger; // If do not showing the effect in the case of customized triggers.
+	CountableStateCountValueChangeTriggerType countValueChangeTriggerType; // The type of the trigger which is used to change the member "countValue". See "CountableStateCountValueChangeTriggerType" for more detailed information.
 	
-
 	// Constructor & destructor
 	CountableStateDataInstance();
 	~CountableStateDataInstance();
+
+	// Enum
+	int transformCountableStateCountValueChangeTriggerTypeToNumber(CountableStateCountValueChangeTriggerType type);
+	CountableStateCountValueChangeTriggerType transformNumberToCountableStateCountValueChangeTriggerType(int number);
 
 	// Debug
 	string printData(stringstream ss);

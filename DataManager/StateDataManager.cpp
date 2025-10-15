@@ -208,7 +208,6 @@ SustainableStateDataInstance* StateDataManager::sustainableInstanceForIdentifier
 {
 	// Using binary search firstly
 	unsigned int value = *(std::lower_bound(this->sustainableStateIdentifierData, this->sustainableStateIdentifierData + this->sustainableStateDataSize, identifier));
-	
 
 	// If failed, using linear search to find the index
 	if (value != identifier)
@@ -243,7 +242,6 @@ TemporaryStateDataInstance* StateDataManager::temporaryInstanceForIdentifier(uns
 {
 	// Using binary search firstly
 	unsigned int value = *(std::lower_bound(this->temporaryStateIdentifierData, this->temporaryStateIdentifierData + this->temporaryStateDataSize, identifier));
-	
 
 	// If failed, using linear search to find the index
 	if (value != identifier)
@@ -271,6 +269,40 @@ TemporaryStateDataInstance* StateDataManager::temporaryInstanceForIdentifier(uns
 		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find TemporaryStateDataInstance failed");
 		// For the error case, return the first value
 		return &(this->temporaryStateData[0]);
+	}
+}
+
+CountableStateDataInstance* StateDataManager::countableInstanceForIdentifier(unsigned int identifier)
+{
+	// Using binary search firstly
+	unsigned int value = *(std::lower_bound(this->countableStateIdentifierData, this->countableStateIdentifierData + this->countableStateDataSize, identifier));
+
+	// If failed, using linear search to find the index
+	if (value != identifier)
+	{
+		value = -1;
+
+		for (int index = 0; index < this->countableStateDataSize; ++index)
+		{
+			if (this->countableStateIdentifierData[index].identifier == identifier)
+			{
+				// Find the value, break
+				value = index;
+				break;
+			}
+		}
+	}
+
+	if (value != -1)
+	{
+		return &(this->countableStateData[value]);
+	}
+	else
+	{
+		ASSERT(0 && "StateDataManager -> instanceForIdentifier: Find CountableStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find CountableStateDataInstance failed");
+		// For the error case, return the first value
+		return &(this->countableStateData[0]);
 	}
 }
 
@@ -826,3 +858,5 @@ string StateDataManager::printData()
 
 	return tempStr;
 }
+
+

@@ -14,6 +14,15 @@ CountableStateDataInstance::~CountableStateDataInstance()
 
 }
 
+int CountableStateDataInstance::transformCountableStateCountValueChangeTriggerTypeToNumber(CountableStateCountValueChangeTriggerType type)
+{
+	return static_cast<int>(type);
+}
+CountableStateCountValueChangeTriggerType CountableStateDataInstance::transformNumberToCountableStateCountValueChangeTriggerType(int number)
+{
+	return static_cast<CountableStateCountValueChangeTriggerType>(number);
+}
+
 string CountableStateDataInstance::printData(stringstream ss)
 {
 	// Get the result from the super class
