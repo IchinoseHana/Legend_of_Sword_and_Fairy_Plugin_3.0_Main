@@ -6,6 +6,7 @@ StateDataManager::StateDataManager()
 {
 	sustainableStateDataSize = 0;
 	temporaryStateDataSize = 0;
+	countableStateDataSize = 0;
 }
 
 StateDataManager::~StateDataManager()
@@ -14,6 +15,8 @@ StateDataManager::~StateDataManager()
 	if (this->sustainableStateIdentifierData) delete[] sustainableStateIdentifierData;
 	if (this->temporaryStateData) delete[] temporaryStateData;
 	if (this->temporaryStateIdentifierData) delete[] temporaryStateIdentifierData;
+	if (this->countableStateData) delete[] countableStateData;
+	if (this->countableStateIdentifierData) delete[] countableStateIdentifierData;
 }
 
 StateDataManager* StateDataManager::initialInstance = new StateDataManager();
@@ -201,10 +204,106 @@ bool StateDataManager::loadData()
 
 	fclose(fpcsv);
 
+	// MARK: Status slot 5
+	CountableStateDataInstance *dataC = new CountableStateDataInstance[maxCountableStateDataSize];
+	unsigned int *identifierDataC = new unsigned int[maxCountableStateDataSize]();
+
+	fpcsv = fopen(countableStateDataFilePath.c_str(), "r");
+	
+	if ( fpcsv == NULL )
+	{
+		ASSERT(0 && "StateDataManager -> loadData: Load CountableStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> loadData: Load CountableStateDataInstance failed");
+		return false;
+	}
+	
+	indexArraySize = 0;
+	while(!feof(fpcsv))
+	{
+		// Read a line
+		fgets(templine, maxBufferSizeForLoadingData, fpcsv);
+		
+		// Current data instance
+		CountableStateDataInstance *e = &(dataC[indexArraySize]);
+
+		// Current index 
+		indexstr = 0;
+		
+		// Handle the data in the lineData processing
+		tempstrraw = strtok(templine, "\t");
+		string tempstr = tempstrraw;
+		e->identifier = static_cast<unsigned int>(s2n(tempstr));
+		
+		// Remaining data processing
+		while(tempstrraw = strtok(NULL, "\t"))
+		{
+			++indexstr;
+			tempstr = tempstrraw;
+
+			// Remove the char '\n'
+			if (indexstr == 253 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
+			
+			if (indexstr == 1) e->name = tempstr;
+			else if (indexstr == 2) e->description = tempstr;
+			else if (indexstr == 3) ; // Comment, drop
+			else if (indexstr >= 4 && indexstr <= 13) e->effectIdentifier[indexstr - 4] = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 14 && indexstr <= 23) e->isCenteringEffectPosition[indexstr - 14] = s2b(tempstr);
+			else if (indexstr == 24) e->layer = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 25) e->step = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 26) e->delay = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 27) e->slot = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 28) e->isForAllPartner = s2b(tempstr);
+			else if (indexstr >= 29 && indexstr <= 36) e->currentStateModificationPosibility[indexstr - 29] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 37 && indexstr <= 48) e->basicStateModificationPosibility[indexstr - 37] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 49 && indexstr <= 72) e->temporaryStateSetPosibility[indexstr - 49] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 73 && indexstr <= 74) e->isInterruptCurrentAction[indexstr - 73] = s2b(tempstr);
+			else if (indexstr == 75) e->specificEffectIdentifier = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 76 && indexstr <= 82) e->customizedTriggerType[indexstr - 76] = s2b(tempstr);
+			else if (indexstr >= 83 && indexstr <= 85) e->damageType[indexstr - 83] = s2b(tempstr);
+			else if (indexstr >= 86 && indexstr <= 92) e->dealedDamageModificationByPercent[indexstr - 86] = s2n(tempstr);
+			else if (indexstr >= 93 && indexstr <= 97) e->dealedMagicDamageModificationByPercentWithProperty[indexstr - 93] = s2n(tempstr);
+			else if (indexstr >= 98 && indexstr <= 104) e->receivedDamageModificationByPercent[indexstr - 98] = s2n(tempstr);
+			else if (indexstr >= 105 && indexstr <= 109) e->receivedMagicDamageModificationByPercentWithProperty[indexstr - 105] = s2n(tempstr);
+			else if (indexstr >= 110 && indexstr <= 121) e->basicStateModificationFixed[indexstr - 110] = s2n(tempstr);
+			else if (indexstr >= 122 && indexstr <= 133) e->basicStateModificationByPercent[indexstr - 122] = s2n(tempstr);
+			else if (indexstr >= 134 && indexstr <= 136) e->consumptionModificationByPercent[indexstr - 134] = s2n(tempstr);
+			else if (indexstr >= 137 && indexstr <= 143) e->actionTakesNoEffect[indexstr - 137] = s2b(tempstr);
+			else if (indexstr >= 144 && indexstr <= 150) e->receivedActionTakesNoEffect[indexstr - 144] = s2b(tempstr);
+			else if (indexstr >= 151 && indexstr <= 158) e->actionForbid[indexstr - 151] = s2b(tempstr);
+			else if (indexstr >= 159 && indexstr <= 165) e->receivedDamageReboundByPercent[indexstr - 159] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 166 && indexstr <= 172) e->receivedDamageAbsorbByPercent[indexstr - 166] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 173 && indexstr <= 180) e->currentStateModificationWhenTriggeredFixed[indexstr - 173] = s2n(tempstr);
+			else if (indexstr >= 181 && indexstr <= 188) e->currentStateModificationWhenTriggeredByPercent[indexstr - 181] = s2n(tempstr);
+			else if (indexstr >= 189 && indexstr <= 196) e->currentStateModificationWhenTriggeredLevelBased[indexstr - 189] = s2n(tempstr);
+			else if (indexstr >= 197 && indexstr <= 208) e->basicStateModificationWhenTriggeredFixed[indexstr - 197] = s2n(tempstr);
+			else if (indexstr >= 209 && indexstr <= 220) e->basicStateModificationWhenTriggeredByPercent[indexstr - 209] = s2n(tempstr);
+			else if (indexstr >= 221 && indexstr <= 232) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 221] = s2n(tempstr);
+			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr == 257) e->countValue = static_cast<int>(s2n(tempstr));
+			else if (indexstr == 258) e->effectTriggeredWhenCountValueChanging = s2b(tempstr);
+			else if (indexstr == 259) e->effectNotTriggeredByCustomTrigger = s2b(tempstr);
+			else if (indexstr == 260) e->countValueChangeTriggerType = static_cast<CountableStateCountValueChangeTriggerType>(s2n(tempstr));
+		}
+
+		// Current identifier
+		identifierDataC[indexArraySize] = e->identifier;
+
+		// Overwrite the description
+		e->description = StateDataManager::generateDescriptionForCountableState(e, this->ss);
+
+		indexArraySize++;
+	}
+
+	this->countableStateData = dataC;
+	this->countableStateIdentifierData = identifierDataC;
+	this->countableStateDataSize = indexArraySize;
+
+	fclose(fpcsv);
+
 	return true;
 }
 
-SustainableStateDataInstance* StateDataManager::sustainableInstanceForIdentifier(unsigned int identifier)
+SustainableStateDataInstance* StateDataManager::sustainableStateInstanceForIdentifier(unsigned int identifier)
 {
 	// Using binary search firstly
 	unsigned int value = *(std::lower_bound(this->sustainableStateIdentifierData, this->sustainableStateIdentifierData + this->sustainableStateDataSize, identifier));
@@ -238,7 +337,7 @@ SustainableStateDataInstance* StateDataManager::sustainableInstanceForIdentifier
 	}
 }
 
-TemporaryStateDataInstance* StateDataManager::temporaryInstanceForIdentifier(unsigned int identifier)
+TemporaryStateDataInstance* StateDataManager::temporaryStateInstanceForIdentifier(unsigned int identifier)
 {
 	// Using binary search firstly
 	unsigned int value = *(std::lower_bound(this->temporaryStateIdentifierData, this->temporaryStateIdentifierData + this->temporaryStateDataSize, identifier));
@@ -272,7 +371,7 @@ TemporaryStateDataInstance* StateDataManager::temporaryInstanceForIdentifier(uns
 	}
 }
 
-CountableStateDataInstance* StateDataManager::countableInstanceForIdentifier(unsigned int identifier)
+CountableStateDataInstance* StateDataManager::countableStateInstanceForIdentifier(unsigned int identifier)
 {
 	// Using binary search firstly
 	unsigned int value = *(std::lower_bound(this->countableStateIdentifierData, this->countableStateIdentifierData + this->countableStateDataSize, identifier));
@@ -284,7 +383,7 @@ CountableStateDataInstance* StateDataManager::countableInstanceForIdentifier(uns
 
 		for (int index = 0; index < this->countableStateDataSize; ++index)
 		{
-			if (this->countableStateIdentifierData[index].identifier == identifier)
+			if (this->countableStateData[index].identifier == identifier)
 			{
 				// Find the value, break
 				value = index;
@@ -542,6 +641,27 @@ string StateDataManager::generateDescriptionForTemporaryState(TemporaryStateData
 	// Is interrupt current action
 	if (!instance->isInterruptCurrentAction[0]) ss << "不触发己方受伤动作 ";
 	if (!instance->isInterruptCurrentAction[1]) ss << "不触发敌方受伤动作 ";
+
+	return ss.str();
+}
+
+string StateDataManager::generateDescriptionForCountableState(CountableStateDataInstance *instance, stringstream ss)
+{
+	if (!instance) return "";
+	
+	// Customized description
+	if (instance->description.size() > 1) return instance->description;
+
+	// Get the additional information from the current class first
+	string tempStr = StateDataManager::getDescriptionForCountableStateCountValueChangeTriggerType(instance->countValueChangeTriggerType, instance->countValue);
+
+	// Then append the result by the one from the super class
+	string tempStrForSuperClass = StateDataManager::generateDescriptionForSustainableState(instance, ss);
+
+	ss.str("");
+    ss.clear();
+
+	ss << tempStr << " " << tempStrForSuperClass;
 
 	return ss.str();
 }
@@ -840,12 +960,74 @@ switch (index)
 	return "";
 }
 
+string StateDataManager::getDescriptionForCountableStateCountValueChangeTriggerType(CountableStateCountValueChangeTriggerType type, int countValue)
+{
+	// Generate the result with countValue
+	stringstream ss;
+
+	ss.str("");
+    ss.clear();
+
+	if (countValue <= 0) return "状态已失效";
+
+switch (type)
+	{
+	case CountableStateCountValueChangeTriggerTypeNone:
+		ss << "持续生效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterReceiveingNormalAttackDamage:
+		ss << "受到" << n2s(countValue) << "点普通攻击伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterReceiveingSkillDamage:
+		ss << "受到" << n2s(countValue) << "点技能伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterReceiveingMagicDamage:
+		ss << "受到" << n2s(countValue) << "点仙术伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterReceiveingItemDamage:
+		ss << "受到" << n2s(countValue) << "点物品伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterReceiveingSwordSkillDamage:
+		ss << "受到" << n2s(countValue) << "点魔剑技伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterReceiveingCooperatedAttackDamage:
+		ss << "受到" << n2s(countValue) << "点合击伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterReceiveingAllDamage:
+		ss << "受到" << n2s(countValue) << "点伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterDealingNormalAttackDamage:
+		ss << "造成" << n2s(countValue) << "点普通攻击伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterDealingSkillDamage:
+		ss << "造成" << n2s(countValue) << "点技能伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterDealingMagicDamage:
+		ss << "造成" << n2s(countValue) << "点仙术伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterDealingItemDamage:
+		ss << "造成" << n2s(countValue) << "点物品伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterDealingSwordSkillDamage:
+		ss << "造成" << n2s(countValue) << "点魔剑技伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterDealingCooperatedAttackDamage:
+		ss << "造成" << n2s(countValue) << "点合击伤害后失效";
+		break;
+	case CountableStateCountValueChangeTriggerTypeAfterDealingAllDamage:
+		ss << "造成" << n2s(countValue) << "点伤害后失效";
+		break;
+	}
+
+	return ss.str();
+}
+
 // Debug
 string StateDataManager::printData()
 {
 	string tempStr = "";
 	int index = 0;
-	for (index = 0; index < this->sustainableStateDataSize; ++index)
+	/*for (index = 0; index < this->sustainableStateDataSize; ++index)
 	{
 		SustainableStateDataInstance *e = &(this->sustainableStateData[index]);
 		tempStr += e->printData(this->ss);
@@ -853,6 +1035,11 @@ string StateDataManager::printData()
 	for (index = 0; index < this->temporaryStateDataSize; ++index)
 	{
 		TemporaryStateDataInstance *e = &(this->temporaryStateData[index]);
+		tempStr += e->printData(this->ss);
+	}*/
+	for (index = 0; index < this->countableStateDataSize; ++index)
+	{
+		CountableStateDataInstance *e = &(this->countableStateData[index]);
 		tempStr += e->printData(this->ss);
 	}
 

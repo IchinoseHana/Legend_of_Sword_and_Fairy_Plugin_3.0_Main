@@ -63,9 +63,9 @@ public:
 	// Load status from specific files.
 	bool loadData();
 	// Using binary search to find a instance related to the provided identifier.
-	SustainableStateDataInstance* sustainableInstanceForIdentifier(unsigned int identifier);
-	TemporaryStateDataInstance* temporaryInstanceForIdentifier(unsigned int identifier);
-	CountableStateDataInstance* countableInstanceForIdentifier(unsigned int identifier);
+	SustainableStateDataInstance* sustainableStateInstanceForIdentifier(unsigned int identifier);
+	TemporaryStateDataInstance* temporaryStateInstanceForIdentifier(unsigned int identifier);
+	CountableStateDataInstance* countableStateInstanceForIdentifier(unsigned int identifier);
 	
 	// MARK: Utility
 	// Get a fixed name for a status, including the layer information.
@@ -79,6 +79,10 @@ public:
 	static string generateDescriptionForSustainableState(SustainableStateDataInstance *instance, stringstream ss);
 	// Generate a default description for status slot 3 and 4.
 	static string generateDescriptionForTemporaryState(TemporaryStateDataInstance *instance, stringstream ss);
+	// Generate a default description for status slot 5.
+	static string generateDescriptionForCountableState(CountableStateDataInstance *instance, stringstream ss);
+
+	// Initial function
 	// Get the description for a specific custom trigger type.
 	static string getDescriptionForCustomTriggerType(int index);
 	// Get the description for a specific attack type.
@@ -95,6 +99,8 @@ public:
 	static string getDescriptionForCurrentState(int index);
 	// Get the description for a temporary state.
 	static string getDescriptionForTemporaryState(int index);
+	// Get the description for a count value change trigger type with a count value.
+	static string getDescriptionForCountableStateCountValueChangeTriggerType(CountableStateCountValueChangeTriggerType type, int countValue);
 
 	// MARK: Debug
 	string printData();

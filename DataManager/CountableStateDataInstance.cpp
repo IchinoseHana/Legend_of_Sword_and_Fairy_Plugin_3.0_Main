@@ -40,9 +40,9 @@ string CountableStateDataInstance::printData(stringstream ss)
 
 	ss << "-----Information From Class CountableStateDataInstance: Print Begin-----\n";
     ss << "countValue: " << n2s(countValue) << "\n";
-	ss << "effectTriggeredWhenCountValueChanging: " << n2s(countValue) << "\n";
-	ss << "effectNotTriggeredByCustomTrigger: " << n2s(countValue) << "\n";
-	ss << "countValueChangeTriggerType: " << n2s(countValue) << "\n";
+	ss << "effectTriggeredWhenCountValueChanging: " << n2s(effectTriggeredWhenCountValueChanging) << "\n";
+	ss << "effectNotTriggeredByCustomTrigger: " << n2s(effectNotTriggeredByCustomTrigger) << "\n";
+	ss << "countValueChangeTriggerType: " << n2s(countValueChangeTriggerType) << "\n";
 	ss << "-----Information From Class CountableStateDataInstance: Print End-----\n";
 
 	ss << "-----CountableStateDataInstance Print End-----\n";
