@@ -48,16 +48,25 @@ public:
 	SustainableStateDataInstance *sustainableStateData; // Status slot 1 and 2.
 	TemporaryStateDataInstance *temporaryStateData; // Status slot 3 and 4.
     CountableStateDataInstance *countableStateData; // Status slot 5.
+	CombatPropertyDataInstance *combatPropertyData ; // Combat property. 1 slot for the maximum
+	CombatEnvironmentDataInstance *combatEnvironmentData; // Combat environment. 3 slots for the maximum
+	CombatStateDataInstance *combatStateData; // Combat state. 1 slot for the maximum
 
 	// Identifiers which are used for binary search.
 	unsigned int *sustainableStateIdentifierData;
 	unsigned int *temporaryStateIdentifierData;
 	unsigned int *countableStateIdentifierData;
+	unsigned int *combatPropertyIdentifierData;
+	unsigned int *combatEnvironmentIdentifierData;
+	unsigned int *combatStateIdentifierData;
 
 	// Sized of data.
 	unsigned int sustainableStateDataSize;
 	unsigned int temporaryStateDataSize;
     unsigned int countableStateDataSize;
+	unsigned int combatPropertyDataSize;
+	unsigned int combatEnvironmentDataSize;
+	unsigned int combatStateDataSize;
 
 	// Function
 	// Load status from specific files.
@@ -66,6 +75,9 @@ public:
 	SustainableStateDataInstance* sustainableStateInstanceForIdentifier(unsigned int identifier);
 	TemporaryStateDataInstance* temporaryStateInstanceForIdentifier(unsigned int identifier);
 	CountableStateDataInstance* countableStateInstanceForIdentifier(unsigned int identifier);
+	CombatPropertyDataInstance* combatPropertyInstanceForIdentifier(unsigned int identifier);
+	CombatEnvironmentDataInstance* combatEnvironmentInstanceForIdentifier(unsigned int identifier);
+	CombatStateDataInstance* combatStateInstanceForIdentifier(unsigned int identifier);
 	
 	// MARK: Utility
 	// Get a fixed name for a status, including the layer information.
@@ -81,6 +93,12 @@ public:
 	static string generateDescriptionForTemporaryState(TemporaryStateDataInstance *instance, stringstream ss);
 	// Generate a default description for status slot 5.
 	static string generateDescriptionForCountableState(CountableStateDataInstance *instance, stringstream ss);
+	// Generate a default description for combat property.
+	static string generateDescriptionForCombatProperty(CombatPropertyDataInstance *instance, stringstream ss);
+	// Generate a default description for combat environment.
+	static string generateDescriptionForCombatEnvironment(CombatEnvironmentDataInstance *instance, stringstream ss);
+	// Generate a default description for combat state.
+	static string generateDescriptionForCombatState(CombatStateDataInstance *instance, stringstream ss);
 
 	// Initial function
 	// Get the description for a specific custom trigger type.

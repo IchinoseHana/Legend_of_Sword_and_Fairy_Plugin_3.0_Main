@@ -14,7 +14,7 @@ using std::stringstream;
 // The default value is 0 or false. Use a negative value to achieve the contrast effect.
 
 // MARK: Combat property
-// 1 slots for the maximum
+// 1 slot for the maximum
 struct CombatPropertyDataInstance
 {	
 public:
