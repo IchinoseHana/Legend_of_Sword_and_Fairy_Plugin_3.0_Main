@@ -7,6 +7,9 @@ StateDataManager::StateDataManager()
 	sustainableStateDataSize = 0;
 	temporaryStateDataSize = 0;
 	countableStateDataSize = 0;
+	combatPropertyDataSize = 0;
+	combatEnvironmentDataSize = 0;
+	combatStateDataSize = 0;
 }
 
 StateDataManager::~StateDataManager()
@@ -17,6 +20,12 @@ StateDataManager::~StateDataManager()
 	if (this->temporaryStateIdentifierData) delete[] temporaryStateIdentifierData;
 	if (this->countableStateData) delete[] countableStateData;
 	if (this->countableStateIdentifierData) delete[] countableStateIdentifierData;
+	if (this->combatPropertyData) delete[] combatPropertyData;
+	if (this->combatPropertyIdentifierData) delete[] combatPropertyIdentifierData;
+	if (this->combatEnvironmentData) delete[] combatEnvironmentData;
+	if (this->combatEnvironmentIdentifierData) delete[] combatEnvironmentIdentifierData;
+	if (this->combatStateData) delete[] combatStateData;
+	if (this->combatStateIdentifierData) delete[] combatStateIdentifierData;
 }
 
 StateDataManager* StateDataManager::initialInstance = new StateDataManager();
@@ -72,7 +81,7 @@ bool StateDataManager::loadData()
 			tempstr = tempstrraw;
 
 			// Remove the char '\n'
-			if (indexstr == 253 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
+			if (indexstr == 256 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
 			
 			if (indexstr == 1) e->name = tempstr;
 			else if (indexstr == 2) e->description = tempstr;
@@ -241,7 +250,7 @@ bool StateDataManager::loadData()
 			tempstr = tempstrraw;
 
 			// Remove the char '\n'
-			if (indexstr == 253 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
+			if (indexstr == 260 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
 			
 			if (indexstr == 1) e->name = tempstr;
 			else if (indexstr == 2) e->description = tempstr;
@@ -297,6 +306,70 @@ bool StateDataManager::loadData()
 	this->countableStateData = dataC;
 	this->countableStateIdentifierData = identifierDataC;
 	this->countableStateDataSize = indexArraySize;
+
+	fclose(fpcsv);
+
+	// MARK: Combat property
+	CombatPropertyDataInstance *dataCP = new CombatPropertyDataInstance[maxCombatPropertyDataSize];
+	unsigned int *identifierDataCP = new unsigned int[maxCombatPropertyDataSize]();
+
+	fpcsv = fopen(combatPropertyDataFilePath.c_str(), "r");
+	
+	if ( fpcsv == NULL )
+	{
+		ASSERT(0 && "StateDataManager -> loadData: Load CombatPropertyDataInstance failed");
+		throw EXCEPTION("StateDataManager -> loadData: Load CombatPropertyDataInstance failed");
+		return false;
+	}
+	
+	indexArraySize = 0;
+	while(!feof(fpcsv))
+	{
+		// Read a line
+		fgets(templine, maxBufferSizeForLoadingData, fpcsv);
+		
+		// Current data instance
+		CombatPropertyDataInstance *e = &(dataCP[indexArraySize]);
+
+		// Current index 
+		indexstr = 0;
+		
+		// Handle the data in the lineData processing
+		tempstrraw = strtok(templine, "\t");
+		string tempstr = tempstrraw;
+		e->identifier = static_cast<unsigned int>(s2n(tempstr));
+		
+		// Remaining data processing
+		while(tempstrraw = strtok(NULL, "\t"))
+		{
+			++indexstr;
+			tempstr = tempstrraw;
+
+			// Remove the char '\n'
+			if (indexstr == 30 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
+			
+			if (indexstr == 1) e->name = tempstr;
+			else if (indexstr == 2) e->description = tempstr;
+			else if (indexstr == 3) ; // Comment, drop
+			else if (indexstr >= 4 && indexstr <= 6) e->damageType[indexstr - 4] = s2b(tempstr);
+			else if (indexstr >= 7 && indexstr <= 13) e->dealedDamageModificationByPercent[indexstr - 7] = s2n(tempstr);
+			else if (indexstr >= 14 && indexstr <= 18) e->dealedMagicDamageModificationByPercentWithProperty[indexstr - 14] = s2n(tempstr);
+			else if (indexstr >= 19 && indexstr <= 25) e->receivedDamageModificationByPercent[indexstr - 19] = s2n(tempstr);
+			else if (indexstr >= 26 && indexstr <= 30) e->receivedMagicDamageModificationByPercentWithProperty[indexstr - 26] = s2n(tempstr);
+		}
+
+		// Current identifier
+		identifierDataCP[indexArraySize] = e->identifier;
+
+		// Overwrite the description
+		e->description = StateDataManager::generateDescriptionForCombatProperty(e, this->ss);
+
+		indexArraySize++;
+	}
+
+	this->combatPropertyData = dataCP;
+	this->combatPropertyIdentifierData = identifierDataCP;
+	this->combatPropertyDataSize = indexArraySize;
 
 	fclose(fpcsv);
 
@@ -405,6 +478,108 @@ CountableStateDataInstance* StateDataManager::countableStateInstanceForIdentifie
 	}
 }
 
+CombatPropertyDataInstance* StateDataManager::combatPropertyInstanceForIdentifier(unsigned int identifier)
+{
+	// Using binary search firstly
+	unsigned int value = *(std::lower_bound(this->combatPropertyIdentifierData, this->combatPropertyIdentifierData + this->combatPropertyDataSize, identifier));
+
+	// If failed, using linear search to find the index
+	if (value != identifier)
+	{
+		value = -1;
+
+		for (int index = 0; index < this->combatPropertyDataSize; ++index)
+		{
+			if (this->combatPropertyData[index].identifier == identifier)
+			{
+				// Find the value, break
+				value = index;
+				break;
+			}
+		}
+	}
+
+	if (value != -1)
+	{
+		return &(this->combatPropertyData[value]);
+	}
+	else
+	{
+		ASSERT(0 && "StateDataManager -> instanceForIdentifier: Find CombatPropertyDataInstance failed");
+		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find CombatPropertyDataInstance failed");
+		// For the error case, return the first value
+		return &(this->combatPropertyData[0]);
+	}
+}
+
+CombatEnvironmentDataInstance* StateDataManager::combatEnvironmentInstanceForIdentifier(unsigned int identifier)
+{
+	// Using binary search firstly
+	unsigned int value = *(std::lower_bound(this->combatEnvironmentIdentifierData, this->combatEnvironmentIdentifierData + this->combatEnvironmentDataSize, identifier));
+
+	// If failed, using linear search to find the index
+	if (value != identifier)
+	{
+		value = -1;
+
+		for (int index = 0; index < this->combatEnvironmentDataSize; ++index)
+		{
+			if (this->combatEnvironmentData[index].identifier == identifier)
+			{
+				// Find the value, break
+				value = index;
+				break;
+			}
+		}
+	}
+
+	if (value != -1)
+	{
+		return &(this->combatEnvironmentData[value]);
+	}
+	else
+	{
+		ASSERT(0 && "StateDataManager -> instanceForIdentifier: Find CombatEnvironmentDataInstance failed");
+		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find CombatEnvironmentDataInstance failed");
+		// For the error case, return the first value
+		return &(this->combatEnvironmentData[0]);
+	}
+}
+
+CombatStateDataInstance* StateDataManager::combatStateInstanceForIdentifier(unsigned int identifier)
+{
+	// Using binary search firstly
+	unsigned int value = *(std::lower_bound(this->combatStateIdentifierData, this->combatStateIdentifierData + this->combatStateDataSize, identifier));
+
+	// If failed, using linear search to find the index
+	if (value != identifier)
+	{
+		value = -1;
+
+		for (int index = 0; index < this->combatStateDataSize; ++index)
+		{
+			if (this->combatStateData[index].identifier == identifier)
+			{
+				// Find the value, break
+				value = index;
+				break;
+			}
+		}
+	}
+
+	if (value != -1)
+	{
+		return &(this->combatStateData[value]);
+	}
+	else
+	{
+		ASSERT(0 && "StateDataManager -> instanceForIdentifier: Find CombatStateDataInstance failed");
+		throw EXCEPTION("StateDataManager -> instanceForIdentifier: Find CombatStateDataInstance failed");
+		// For the error case, return the first value
+		return &(this->combatStateData[0]);
+	}
+}
+
 // Utility
 /*std::wstring StateDataManager::getFixedName(StateDataRunningInfo *instance)
 {
@@ -442,7 +617,6 @@ string StateDataManager::generateDescriptionForSustainableState(SustainableState
 	// Step
     if (instance->step > 0) ss << "发动后威力增加" << n2s(instance->step) << " ";
 	
-	// MARK: Triggered: Always
 	// Damage description
 	string damageDescription = "";
 	if (instance->damageType[0] == 1) damageDescription = "伤害";
@@ -450,6 +624,7 @@ string StateDataManager::generateDescriptionForSustainableState(SustainableState
 	else if (instance->damageType[2] == 1) damageDescription = "效果";
 	else damageDescription = "伤害";
 
+	// MARK: Triggered: Always
 	// Dealed damage modification
 	for (index = 0; index < 7; ++index)
 	{
@@ -662,6 +837,49 @@ string StateDataManager::generateDescriptionForCountableState(CountableStateData
     ss.clear();
 
 	ss << tempStr << " " << tempStrForSuperClass;
+
+	return ss.str();
+}
+
+string StateDataManager::generateDescriptionForCombatProperty(CombatPropertyDataInstance *instance, stringstream ss)
+{
+	if (!instance) return "";
+	
+	// Customized description
+	if (instance->description.size() > 1) return instance->description;
+
+	ss.str("");
+    ss.clear();
+	int index;
+
+	// MARK: Basic information
+	// Damage description
+	string damageDescription = "";
+	if (instance->damageType[0] == 1) damageDescription = "伤害";
+	else if (instance->damageType[1] == 1) damageDescription = "恢复";
+	else if (instance->damageType[2] == 1) damageDescription = "效果";
+	else damageDescription = "伤害";
+
+	// MARK: Triggered: Always
+	// Dealed damage modification
+	for (index = 0; index < 7; ++index)
+	{
+		if (instance->dealedDamageModificationByPercent[index] != 0) ss << StateDataManager::getDescriptionForAttackType(index) << damageDescription << (instance->dealedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->dealedDamageModificationByPercent[index]) << "% ";
+	}
+	for (index = 0; index < 5; ++index)
+	{
+		if (instance->dealedMagicDamageModificationByPercentWithProperty[index] != 0) ss << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术" << damageDescription << (instance->dealedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->dealedMagicDamageModificationByPercentWithProperty[index]) << "% ";
+	}
+	
+	// Received damage modification
+	for (index = 0; index < 7; ++index)
+	{
+		if (instance->receivedDamageModificationByPercent[index] != 0) ss << "受" << StateDataManager::getDescriptionForAttackType(index) << damageDescription << (instance->receivedDamageModificationByPercent[index] > 0 ? "+" : "-") << n2s(instance->receivedDamageModificationByPercent[index]) << "% ";
+	}
+	for (index = 0; index < 5; ++index)
+	{
+		if (instance->receivedMagicDamageModificationByPercentWithProperty[index] != 0) ss << "受" << StateDataManager::getDescriptionForMagicProperty(index) << "系仙术" << damageDescription << (instance->receivedMagicDamageModificationByPercentWithProperty[index] > 0 ? "+" : "-") << n2s(instance->receivedMagicDamageModificationByPercentWithProperty[index]) << "% ";
+	}
 
 	return ss.str();
 }
@@ -1040,6 +1258,11 @@ string StateDataManager::printData()
 	for (index = 0; index < this->countableStateDataSize; ++index)
 	{
 		CountableStateDataInstance *e = &(this->countableStateData[index]);
+		tempStr += e->printData(this->ss);
+	}
+	for (index = 0; index < this->combatPropertyDataSize; ++index)
+	{
+		CombatPropertyDataInstance *e = &(this->combatPropertyData[index]);
 		tempStr += e->printData(this->ss);
 	}
 
