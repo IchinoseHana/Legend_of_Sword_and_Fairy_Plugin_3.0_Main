@@ -19,6 +19,8 @@ public:
 	// unsigned int delay; // The count before the state taking effect.
 	// unsigned int slot; // The slot of the state.
 	// bool isForAllPartner; // If the state can apply its effect to all pertners.
+	// Notice: Some variables can influent additional properties. Including:
+	bool *damageType; // -> Can also influence "dealedDamageModificationDirectly", "dealedMagicDamageModificationDirectlyWithProperty", "receivedDamageModificationDirectly" and "receivedMagicDamageModificationDirectlyWithProperty".
 
 	// MARK: Additional properties
 	bool *targetType; // Size: 2. The effect can be applied to {object}.

@@ -16,6 +16,8 @@ CombatEnvironmentDataInstance::CombatEnvironmentDataInstance():SustainableStateD
 	receivedMagicDamageModificationDirectlyWithProperty = new int[5]();
 	usingRealTimeTrigger = false;
 	realTimeBasedStateModificationInterval = 0.0;
+	sustainableStateSetIdentifier = new unsigned int[10]();
+	temporaryStateSetIdentifier = new unsigned int[10]();
 	sustainableStateSetPosibility = new unsigned short[10]();
 	temporaryStateSetPosibility = new unsigned short[10]();
 
@@ -34,6 +36,8 @@ CombatEnvironmentDataInstance::~CombatEnvironmentDataInstance()
 	delete[] dealedMagicDamageModificationDirectlyWithProperty;
 	delete[] receivedDamageModificationDirectly;
 	delete[] receivedMagicDamageModificationDirectlyWithProperty;
+	delete[] sustainableStateSetIdentifier;
+	delete[] temporaryStateSetIdentifier;
 	delete[] sustainableStateSetPosibility;
 	delete[] temporaryStateSetPosibility;
 
@@ -105,7 +109,19 @@ string CombatEnvironmentDataInstance::printData(stringstream ss)
 	}
 	ss << "\n";
 	ss << "usingRealTimeTrigger: " << n2s(usingRealTimeTrigger) << "\n";
-	ss << "realTimeBasedStateModificationInterval: " << n2s(realTimeBasedStateModificationInterval) << "\n";	
+	ss << "realTimeBasedStateModificationInterval: " << n2s(realTimeBasedStateModificationInterval) << "\n";
+	ss << "sustainableStateSetIdentifier: ";
+	for (index = 0; index < 10; ++index)
+	{
+		ss << n2s(sustainableStateSetPosibility[index]) << " ";
+	}
+	ss << "\n";
+	ss << "temporaryStateSetIdentifier: ";
+	for (index = 0; index < 10; ++index)
+	{
+		ss << n2s(temporaryStateSetIdentifier[index]) << " ";
+	}
+	ss << "\n";
 	ss << "sustainableStateSetPosibility: ";
 	for (index = 0; index < 10; ++index)
 	{
