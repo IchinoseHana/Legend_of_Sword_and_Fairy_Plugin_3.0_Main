@@ -31,7 +31,9 @@ public:
 	unsigned short *itemNotBeConsumedPosibility; // Size: 2. The posibility that {type5} items will not be consumed.
 	unsigned int *itemNotBeConsumedUpperBoundWithPrice; // Size: 2. The maximum of the purchase price that {type5} items will not be consumed.
 	bool usingRealTimeTrigger; // If using the real-time based trigger. Effective for variables related to customized triggers.
-	unsigned double realTimeBasedStateModificationInterval; // The time interval if using real-time based state modification.
+    double realTimeBasedStateModificationInterval; // The time interval if using real-time based state modification.
+	unsigned int *sustainableStateSetIdentifier; // Size: 10. The identifier of states of SustainableStateDataInstance to set.
+	unsigned int *temporaryStateSetIdentifier; // Size: 10. The identifier of states of TemporaryStateDataInstance to set.
 	unsigned short *sustainableStateSetPosibility; // Size: 10. The posibility to set the state of SustainableStateDataInstance. The default value 0 is the same as 100.
 	unsigned short *temporaryStateSetPosibility; // Size: 10. The posibility to set the state of TemporaryStateDataInstance. The default value 0 is the same as 100.
 

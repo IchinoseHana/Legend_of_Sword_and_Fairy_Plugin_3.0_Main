@@ -373,6 +373,110 @@ bool StateDataManager::loadData()
 
 	fclose(fpcsv);
 
+	// MARK: Combat environment
+	CombatEnvironmentDataInstance *dataCE = new CombatEnvironmentDataInstance[maxCombatEnvironmentDataSize];
+	unsigned int *identifierDataCE = new unsigned int[maxCombatEnvironmentDataSize]();
+
+	fpcsv = fopen(combatEnvironmentDataFilePath.c_str(), "r");
+	
+	if ( fpcsv == NULL )
+	{
+		ASSERT(0 && "StateDataManager -> loadData: Load CombatEnvironmentDataInstance failed");
+		throw EXCEPTION("StateDataManager -> loadData: Load CombatEnvironmentDataInstance failed");
+		return false;
+	}
+	
+	indexArraySize = 0;
+	while(!feof(fpcsv))
+	{
+		// Read a line
+		fgets(templine, maxBufferSizeForLoadingData, fpcsv);
+		
+		// Current data instance
+		CombatEnvironmentDataInstance *e = &(dataCE[indexArraySize]);
+
+		// Current index 
+		indexstr = 0;
+		
+		// Handle the data in the lineData processing
+		tempstrraw = strtok(templine, "\t");
+		string tempstr = tempstrraw;
+		e->identifier = static_cast<unsigned int>(s2n(tempstr));
+		
+		// Remaining data processing
+		while(tempstrraw = strtok(NULL, "\t"))
+		{
+			++indexstr;
+			tempstr = tempstrraw;
+
+			// Remove the char '\n'
+			if (indexstr == 260 && tempstr[tempstr.size() - 1] == '\n') tempstr.erase(tempstr.size() - 1);
+			
+			if (indexstr == 1) e->name = tempstr;
+			else if (indexstr == 2) e->description = tempstr;
+			else if (indexstr == 3) ; // Comment, drop
+			else if (indexstr >= 4 && indexstr <= 13) e->effectIdentifier[indexstr - 4] = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 14 && indexstr <= 23) e->isCenteringEffectPosition[indexstr - 14] = s2b(tempstr);
+			else if (indexstr == 24) e->layer = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 25) e->step = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 26) ; // Not useful, drop
+			else if (indexstr == 27) ; // Not useful, drop
+			else if (indexstr == 28) ; // Not useful, drop
+			else if (indexstr >= 29 && indexstr <= 36) e->currentStateModificationPosibility[indexstr - 29] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 37 && indexstr <= 48) e->basicStateModificationPosibility[indexstr - 37] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 49 && indexstr <= 72) e->temporaryStateSetPosibility[indexstr - 49] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 73 && indexstr <= 74) e->isInterruptCurrentAction[indexstr - 73] = s2b(tempstr);
+			else if (indexstr == 75) e->specificEffectIdentifier = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 76 && indexstr <= 82) e->customizedTriggerType[indexstr - 76] = s2b(tempstr);
+			else if (indexstr >= 83 && indexstr <= 85) e->damageType[indexstr - 83] = s2b(tempstr);
+			else if (indexstr >= 86 && indexstr <= 92) e->dealedDamageModificationByPercent[indexstr - 86] = s2n(tempstr);
+			else if (indexstr >= 93 && indexstr <= 97) e->dealedMagicDamageModificationByPercentWithProperty[indexstr - 93] = s2n(tempstr);
+			else if (indexstr >= 98 && indexstr <= 104) e->receivedDamageModificationByPercent[indexstr - 98] = s2n(tempstr);
+			else if (indexstr >= 105 && indexstr <= 109) e->receivedMagicDamageModificationByPercentWithProperty[indexstr - 105] = s2n(tempstr);
+			else if (indexstr >= 110 && indexstr <= 121) e->basicStateModificationFixed[indexstr - 110] = s2n(tempstr);
+			else if (indexstr >= 122 && indexstr <= 133) e->basicStateModificationByPercent[indexstr - 122] = s2n(tempstr);
+			else if (indexstr >= 134 && indexstr <= 136) e->consumptionModificationByPercent[indexstr - 134] = s2n(tempstr);
+			else if (indexstr >= 137 && indexstr <= 143) e->actionTakesNoEffect[indexstr - 137] = s2b(tempstr);
+			else if (indexstr >= 144 && indexstr <= 150) e->receivedActionTakesNoEffect[indexstr - 144] = s2b(tempstr);
+			else if (indexstr >= 151 && indexstr <= 158) e->actionForbid[indexstr - 151] = s2b(tempstr);
+			else if (indexstr >= 159 && indexstr <= 165) e->receivedDamageReboundByPercent[indexstr - 159] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 166 && indexstr <= 172) e->receivedDamageAbsorbByPercent[indexstr - 166] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 173 && indexstr <= 180) e->currentStateModificationWhenTriggeredFixed[indexstr - 173] = s2n(tempstr);
+			else if (indexstr >= 181 && indexstr <= 188) e->currentStateModificationWhenTriggeredByPercent[indexstr - 181] = s2n(tempstr);
+			else if (indexstr >= 189 && indexstr <= 196) e->currentStateModificationWhenTriggeredLevelBased[indexstr - 189] = s2n(tempstr);
+			else if (indexstr >= 197 && indexstr <= 208) e->basicStateModificationWhenTriggeredFixed[indexstr - 197] = s2n(tempstr);
+			else if (indexstr >= 209 && indexstr <= 220) e->basicStateModificationWhenTriggeredByPercent[indexstr - 209] = s2n(tempstr);
+			else if (indexstr >= 221 && indexstr <= 232) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 221] = s2n(tempstr);
+			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 257 && indexstr <= 258) e->targetType[indexstr - 257] = s2b(tempstr);
+			else if (indexstr == 259) e->hasmask = s2b(tempstr);
+			else if (indexstr == 260) e->maskColor->red = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr == 261) e->maskColor->green = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr == 262) e->maskColor->blue = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr == 263) e->maskColor->alpha = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr == 264) e->magicChangingPosibility = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr == 265) e->magicChangingTargetIdentifier = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 266 && indexstr <= 267) e->itemNotBeConsumedPosibilityindexstr[indexstr - 266] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 268 && indexstr <= 269) e->itemNotBeConsumedUpperBoundWithPrice[indexstr - 268] = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr == 270) e->usingRealTimeTrigger = s2b(tempstr);
+			else if (indexstr == 271) e->realTimeBasedStateModificationInterval = s2d(tempstr);
+		}
+
+		// Current identifier
+		identifierDataC[indexArraySize] = e->identifier;
+
+		// Overwrite the description
+		e->description = StateDataManager::generateDescriptionForCountableState(e, this->ss);
+
+		indexArraySize++;
+	}
+
+	this->countableStateData = dataC;
+	this->countableStateIdentifierData = identifierDataC;
+	this->countableStateDataSize = indexArraySize;
+
+	fclose(fpcsv);
+
 	return true;
 }
 

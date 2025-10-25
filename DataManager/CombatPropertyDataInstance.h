@@ -19,7 +19,7 @@ struct CombatPropertyDataInstance
 {	
 public:
 
-	unsigned int identifier; // The ID of the state.
+	unsigned int identifier; // The identifier of the state.
 	std::string name; // The name of the state.
 	std::string description; // The description of the state.
 	bool *damageType; // Size: 3. The damage type is {type4}. The type "damage" gains the highest priority.

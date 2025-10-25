@@ -4,7 +4,9 @@
 #pragma once
 
 #define n2s(x) PluginUtility::numberToString(x)
+#define d2s(x) PluginUtility::doubleToString(x)
 #define s2n(x) PluginUtility::stringToNumber(x)
+#define s2d(x) PluginUtility::stringToDouble(x)
 #define s2b(x) PluginUtility::stringToBool(x)
 
 #include <string>
@@ -21,8 +23,12 @@ public:
 	// Basic function
 	// Transform a number to a string.
 	static string numberToString(int num);
+	// Transform a double to a string.
+	static string PluginUtility::doubleToString(double num);
 	// Transform a string to a number.
 	static int stringToNumber(const string& str);
+	// Transform a string to a double.
+	static double stringToDouble(const string& str);
 	// Transform a string to a bool. "0" -> false, other -> true.
 	static bool stringToBool(const string& str);
 

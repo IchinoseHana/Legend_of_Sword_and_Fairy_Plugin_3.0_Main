@@ -9,9 +9,22 @@ string PluginUtility::numberToString(int num)
 	return temp;
 }
 
+string PluginUtility::doubleToString(double num)
+{
+	char buffer[maxBufferSizeForNumberToString];
+	sprintf(buffer, "%f", num);
+	string temp = buffer;
+	return temp;
+}
+
 int PluginUtility::stringToNumber(const string& str)
 {
 	return atoi(str.c_str());
+}
+
+double PluginUtility::stringToDouble(const string& str)
+{
+	return atof(str.c_str());
 }
 
 bool PluginUtility::stringToBool(const string& str)

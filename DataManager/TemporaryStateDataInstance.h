@@ -19,7 +19,7 @@ struct TemporaryStateDataInstance
 {	
 public:
 
-	unsigned int identifier; // The ID of the state.
+	unsigned int identifier; // The identifier of the state.
 	std::string name; // The name of the state.
 	std::string description; // The description of the state.
 	unsigned int *effectIdentifier; // Size: 10. The effect identifier when triggered. Just used for customized triggers.
