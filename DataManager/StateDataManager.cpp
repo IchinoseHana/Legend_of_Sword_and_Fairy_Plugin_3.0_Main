@@ -118,7 +118,7 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 197 && indexstr <= 208) e->basicStateModificationWhenTriggeredFixed[indexstr - 197] = s2n(tempstr);
 			else if (indexstr >= 209 && indexstr <= 220) e->basicStateModificationWhenTriggeredByPercent[indexstr - 209] = s2n(tempstr);
 			else if (indexstr >= 221 && indexstr <= 232) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 221] = s2n(tempstr);
-			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned int>(s2n(tempstr));
 		}
 
 		// Current identifier
@@ -195,7 +195,7 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 111 && indexstr <= 122) e->basicStateModificationWhenTriggeredFixed[indexstr - 111] = s2n(tempstr);
 			else if (indexstr >= 123 && indexstr <= 134) e->basicStateModificationWhenTriggeredByPercent[indexstr - 123] = s2n(tempstr);
 			else if (indexstr >= 135 && indexstr <= 146) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 135] = s2n(tempstr);
-			else if (indexstr >= 147 && indexstr <= 170) e->temporaryStateSetWhenTriggeredFixed[indexstr - 147] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 147 && indexstr <= 170) e->temporaryStateSetWhenTriggeredFixed[indexstr - 147] = static_cast<unsigned int>(s2n(tempstr));
 		}
 
 		// Current identifier
@@ -287,7 +287,7 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 197 && indexstr <= 208) e->basicStateModificationWhenTriggeredFixed[indexstr - 197] = s2n(tempstr);
 			else if (indexstr >= 209 && indexstr <= 220) e->basicStateModificationWhenTriggeredByPercent[indexstr - 209] = s2n(tempstr);
 			else if (indexstr >= 221 && indexstr <= 232) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 221] = s2n(tempstr);
-			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned int>(s2n(tempstr));
 			else if (indexstr == 257) e->countValue = static_cast<int>(s2n(tempstr));
 			else if (indexstr == 258) e->effectTriggeredWhenCountValueChanging = s2b(tempstr);
 			else if (indexstr == 259) e->effectNotTriggeredByCustomTrigger = s2b(tempstr);
@@ -447,7 +447,7 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 197 && indexstr <= 208) e->basicStateModificationWhenTriggeredFixed[indexstr - 197] = s2n(tempstr);
 			else if (indexstr >= 209 && indexstr <= 220) e->basicStateModificationWhenTriggeredByPercent[indexstr - 209] = s2n(tempstr);
 			else if (indexstr >= 221 && indexstr <= 232) e->basicStateModificationWhenTriggeredLevelBased[indexstr - 221] = s2n(tempstr);
-			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 233 && indexstr <= 256) e->temporaryStateSetWhenTriggeredFixed[indexstr - 233] = static_cast<unsigned int>(s2n(tempstr)); 
 			else if (indexstr >= 257 && indexstr <= 258) e->targetType[indexstr - 257] = s2b(tempstr);
 			else if (indexstr == 259) e->hasmask = s2b(tempstr);
 			else if (indexstr == 260) e->maskColor->red = static_cast<unsigned short>(s2n(tempstr));
@@ -460,13 +460,23 @@ bool StateDataManager::loadData()
 			else if (indexstr >= 268 && indexstr <= 269) e->itemNotBeConsumedUpperBoundWithPrice[indexstr - 268] = static_cast<unsigned int>(s2n(tempstr));
 			else if (indexstr == 270) e->usingRealTimeTrigger = s2b(tempstr);
 			else if (indexstr == 271) e->realTimeBasedStateModificationInterval = s2d(tempstr);
+			else if (indexstr >= 272 && indexstr <= 281) e->sustainableStateInstanceSetIdentifier[indexstr - 272] = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 282 && indexstr <= 291) e->temporaryStateInstanceSetIdentifier[indexstr - 282] = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 292 && indexstr <= 301) e->sustainableStateInstanceSetPosibility[indexstr - 292] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 302 && indexstr <= 311) e->temporaryStateInstanceSetPosibility[indexstr - 302] = static_cast<unsigned short>(s2n(tempstr));
+			else if (indexstr >= 312 && indexstr <= 318) e->dealedDamageModificationDirectly[indexstr - 312] = s2n(tempstr);
+			else if (indexstr >= 319 && indexstr <= 323) e->dealedMagicDamageModificationDirectlyWithProperty[indexstr - 319] = s2n(tempstr);
+			else if (indexstr >= 324 && indexstr <= 330) e->receivedDamageModificationDirectly[indexstr - 324] = s2n(tempstr);
+			else if (indexstr >= 331 && indexstr <= 335) e->receivedMagicDamageModificationDirectlyWithProperty[indexstr - 331] = s2n(tempstr);
+			else if (indexstr >= 336 && indexstr <= 345) e->sustainableStateInstanceSetWhenTriggeredFixed[indexstr - 336] = static_cast<unsigned int>(s2n(tempstr));
+			else if (indexstr >= 346 && indexstr <= 355) e->temporaryStateInstanceSetWhenTriggeredFixed[indexstr - 346] = static_cast<unsigned int>(s2n(tempstr));
 		}
 
 		// Current identifier
-		identifierDataC[indexArraySize] = e->identifier;
+		identifierDataCE[indexArraySize] = e->identifier;
 
 		// Overwrite the description
-		e->description = StateDataManager::generateDescriptionForCountableState(e, this->ss);
+		e->description = StateDataManager::generateDescriptionForCombatEnvironment(e, this->ss);
 
 		indexArraySize++;
 	}

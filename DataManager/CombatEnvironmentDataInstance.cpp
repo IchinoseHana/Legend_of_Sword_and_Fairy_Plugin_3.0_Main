@@ -16,14 +16,14 @@ CombatEnvironmentDataInstance::CombatEnvironmentDataInstance():SustainableStateD
 	receivedMagicDamageModificationDirectlyWithProperty = new int[5]();
 	usingRealTimeTrigger = false;
 	realTimeBasedStateModificationInterval = 0.0;
-	sustainableStateSetIdentifier = new unsigned int[10]();
-	temporaryStateSetIdentifier = new unsigned int[10]();
-	sustainableStateSetPosibility = new unsigned short[10]();
-	temporaryStateSetPosibility = new unsigned short[10]();
+	sustainableStateInstanceSetIdentifier = new unsigned int[10]();
+	temporaryStateInstanceSetIdentifier = new unsigned int[10]();
+	sustainableStateInstanceSetPosibility = new unsigned short[10]();
+	temporaryStateInstanceSetPosibility = new unsigned short[10]();
 
 	// Triggered: By customizing
-	sustainableStateSetWhenTriggeredFixed = new unsigned int[10]();
-	temporaryStateSetWhenTriggeredFixed = new unsigned int[10]();
+	sustainableStateInstanceSetWhenTriggeredFixed = new unsigned int[10]();
+	temporaryStateInstanceSetWhenTriggeredFixed = new unsigned int[10]();
 }
 
 CombatEnvironmentDataInstance::~CombatEnvironmentDataInstance()
@@ -36,13 +36,13 @@ CombatEnvironmentDataInstance::~CombatEnvironmentDataInstance()
 	delete[] dealedMagicDamageModificationDirectlyWithProperty;
 	delete[] receivedDamageModificationDirectly;
 	delete[] receivedMagicDamageModificationDirectlyWithProperty;
-	delete[] sustainableStateSetIdentifier;
-	delete[] temporaryStateSetIdentifier;
-	delete[] sustainableStateSetPosibility;
-	delete[] temporaryStateSetPosibility;
+	delete[] sustainableStateInstanceSetIdentifier;
+	delete[] temporaryStateInstanceSetIdentifier;
+	delete[] sustainableStateInstanceSetPosibility;
+	delete[] temporaryStateInstanceSetPosibility;
 
-	delete[] sustainableStateSetWhenTriggeredFixed;
-	delete[] temporaryStateSetWhenTriggeredFixed;
+	delete[] sustainableStateInstanceSetWhenTriggeredFixed;
+	delete[] temporaryStateInstanceSetWhenTriggeredFixed;
 }
 
 string CombatEnvironmentDataInstance::printData(stringstream ss)
@@ -110,40 +110,40 @@ string CombatEnvironmentDataInstance::printData(stringstream ss)
 	ss << "\n";
 	ss << "usingRealTimeTrigger: " << n2s(usingRealTimeTrigger) << "\n";
 	ss << "realTimeBasedStateModificationInterval: " << d2s(realTimeBasedStateModificationInterval, 5) << "\n";
-	ss << "sustainableStateSetIdentifier: ";
+	ss << "sustainableStateInstanceSetIdentifier: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(sustainableStateSetPosibility[index]) << " ";
+		ss << n2s(sustainableStateInstanceSetPosibility[index]) << " ";
 	}
 	ss << "\n";
-	ss << "temporaryStateSetIdentifier: ";
+	ss << "temporaryStateInstanceSetIdentifier: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(temporaryStateSetIdentifier[index]) << " ";
+		ss << n2s(temporaryStateInstanceSetIdentifier[index]) << " ";
 	}
 	ss << "\n";
-	ss << "sustainableStateSetPosibility: ";
+	ss << "sustainableStateInstanceSetPosibility: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(sustainableStateSetPosibility[index]) << " ";
+		ss << n2s(sustainableStateInstanceSetPosibility[index]) << " ";
 	}
 	ss << "\n";
-	ss << "temporaryStateSetPosibility: ";
+	ss << "temporaryStateInstanceSetPosibility: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(temporaryStateSetPosibility[index]) << " ";
+		ss << n2s(temporaryStateInstanceSetPosibility[index]) << " ";
 	}
 	ss << "\n";
-	ss << "sustainableStateSetWhenTriggeredFixed: ";
+	ss << "sustainableStateInstanceSetWhenTriggeredFixed: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(sustainableStateSetWhenTriggeredFixed[index]) << " ";
+		ss << n2s(sustainableStateInstanceSetWhenTriggeredFixed[index]) << " ";
 	}
 	ss << "\n";
-	ss << "temporaryStateSetWhenTriggeredFixed: ";
+	ss << "temporaryStateInstanceSetWhenTriggeredFixed: ";
 	for (index = 0; index < 10; ++index)
 	{
-		ss << n2s(temporaryStateSetWhenTriggeredFixed[index]) << " ";
+		ss << n2s(temporaryStateInstanceSetWhenTriggeredFixed[index]) << " ";
 	}
 	ss << "\n";
 	ss << "-----Information From Class CombatEnvironmentDataInstance: Print End-----\n";
