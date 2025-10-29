@@ -20,16 +20,16 @@ public:
 	// unsigned int slot; // The slot of the state.
 	// bool isForAllPartner; // If the state can apply its effect to all pertners.
 	// Notice: Some variables can influent additional properties. Including:
-	bool *damageType; // -> Can also influence "dealedDamageModificationDirectly", "dealedMagicDamageModificationDirectlyWithProperty", "receivedDamageModificationDirectly" and "receivedMagicDamageModificationDirectlyWithProperty".
+	// bool *damageType; // -> Can also influence "dealedDamageModificationDirectly", "dealedMagicDamageModificationDirectlyWithProperty", "receivedDamageModificationDirectly" and "receivedMagicDamageModificationDirectlyWithProperty".
 
 	// MARK: Additional properties
 	bool *targetType; // Size: 2. The effect can be applied to {object}.
 	bool hasmask; // If the combat environment can generate a mask.
 	PluginColorInstance *maskColor; // The color of the mask.
 	unsigned short magicChangingPosibility; // The posibility to change the magic to a specific one.
-	unsigned int magicChangingTargetIdentifier; // The identifier of the target magic that the original magic will be transformed into.
+	unsigned int magicChangingTargetIdentifier; // The identifier of the target magic that the original magic will be transformed into. The value 0 takes no effect.
 	unsigned short *itemNotBeConsumedPosibility; // Size: 2. The posibility that {type5} items will not be consumed.
-	unsigned int *itemNotBeConsumedUpperBoundWithPrice; // Size: 2. The maximum of the purchase price that {type5} items will not be consumed.
+	unsigned int *itemNotBeConsumedUpperBoundWithPrice; // Size: 2. The maximum of the purchase price that {type5} items will not be consumed. The value 0 takes no effect.
 	bool usingRealTimeTrigger; // If using the real-time based trigger. Effective for variables related to customized triggers.
     double realTimeBasedStateModificationInterval; // The time interval if using real-time based state modification.
 	unsigned int *sustainableStateInstanceSetIdentifier; // Size: 10. The identifier of states of SustainableStateDataInstance to set.

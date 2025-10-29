@@ -4,6 +4,7 @@
 #pragma once
 
 #define n2s(x) PluginUtility::numberToString(x)
+#define n2sH(x) PluginUtility::numberToStringHex(x)
 #define d2s(x) PluginUtility::doubleToString(x)
 #define s2n(x) PluginUtility::stringToNumber(x)
 #define s2d(x) PluginUtility::stringToDouble(x)
@@ -23,6 +24,8 @@ public:
 	// Basic function
 	// Transform a number to a string.
 	static string numberToString(int num);
+	// Transform a number to a string with a hex format.
+	static string numberToStringHex(int num);
 	// Transform a double to a string.
 	static string PluginUtility::doubleToString(double num);
 	// Transform a string to a number.

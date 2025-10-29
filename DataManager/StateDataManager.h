@@ -100,7 +100,8 @@ public:
 	// Generate a default description for combat state.
 	static string generateDescriptionForCombatState(CombatStateDataInstance *instance, stringstream ss);
 
-	// Initial function
+	// MARK: Initial function
+	// Descrition for a specific type
 	// Get the description for a specific custom trigger type.
 	static string getDescriptionForCustomTriggerType(int index);
 	// Get the description for a specific attack type.
@@ -119,6 +120,13 @@ public:
 	static string getDescriptionForTemporaryState(int index);
 	// Get the description for a count value change trigger type with a count value.
 	static string getDescriptionForCountableStateCountValueChangeTriggerType(CountableStateCountValueChangeTriggerType type, int countValue);
+	// Get the description for a consumable type.
+	static string getDescriptionForConsumableType(int index);
+	
+	// Data processing
+	// Standardize the string which is used to describe a specific 8 bit color pipe by hex.
+	// Usually used after calling "n2sH" in the class "PluginUtility". For example, 255 -> FF -> FF, 1 -> 1 -> 01, 256 -> 100 -> 00.
+	static string standardizeHexColorPipe8Bit(const string& colorStr);
 
 	// MARK: Debug
 	string printData();

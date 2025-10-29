@@ -9,6 +9,14 @@ string PluginUtility::numberToString(int num)
 	return temp;
 }
 
+string PluginUtility::numberToStringHex(int num)
+{
+	char buffer[maxBufferSizeForNumberToString];
+	sprintf(buffer, "%X", num);
+	string temp = buffer;
+	return temp;
+}
+
 string PluginUtility::doubleToString(double num)
 {
 	char buffer[maxBufferSizeForNumberToString];
