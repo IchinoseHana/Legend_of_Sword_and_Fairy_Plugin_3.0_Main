@@ -109,7 +109,7 @@ string CombatEnvironmentDataInstance::printData(stringstream ss)
 	}
 	ss << "\n";
 	ss << "usingRealTimeTrigger: " << n2s(usingRealTimeTrigger) << "\n";
-	ss << "realTimeBasedStateModificationInterval: " << d2s(realTimeBasedStateModificationInterval, 5) << "\n";
+	ss << "realTimeBasedStateModificationInterval: " << d2s(realTimeBasedStateModificationInterval) << "\n";
 	ss << "sustainableStateInstanceSetIdentifier: ";
 	for (index = 0; index < 10; ++index)
 	{
