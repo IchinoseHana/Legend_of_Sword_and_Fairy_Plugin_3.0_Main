@@ -41,7 +41,7 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 	this->spiritSlot->SetBk("UI\\skillbar0.tga");
 
 	RECT pRcNumber;
-	pRcNumber.top = 31;
+	pRcNumber.top = 32;
 	pRcNumber.left = leftMargin + 260;
 	pRcNumber.right = pRcNumber.left + 45;
 	pRcNumber.bottom = pRcNumber.top + 45;
@@ -315,9 +315,10 @@ void PEP3BattlegroundEnvironmentUI::create(UIWnd* ui)
 		pRcIcon.bottom = pRcIcon.top + 32;
 		this->battlegroundEnvironmentIcon[idx].Create(0, pRcIcon, ui);
 		this->battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
-		// 战场环境默认是不显示的，除非有值
-		this->battlegroundEnvironmentIcon[idx].ShowWindow(false);
 	}
+
+	// 默认不显示，除非有值
+	this->setVisibility(false);
 }
 
 void PEP3BattlegroundEnvironmentUI::update(int environmentIndex[], int environmentNumber[])
@@ -344,5 +345,107 @@ void PEP3BattlegroundEnvironmentUI::setVisibility(bool visibility)
 	for (int idx = 0; idx < PEP3BattlegroundEnvironmentUIIconCount; ++idx)
 	{
 		this->battlegroundEnvironmentIcon[idx].ShowWindow(visibility);
+	}
+}
+
+// MARK: 首领血条UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundBossHPBarUI* battlegroundBossHPBarUIInstance = new PEP3BattlegroundBossHPBarUI();
+PEP3BattlegroundBossHPBarUI* PEP3BattlegroundBossHPBarUI::sharedInstance()
+{
+	return battlegroundBossHPBarUIInstance;
+}
+
+PEP3BattlegroundBossHPBarUI::PEP3BattlegroundBossHPBarUI()
+{
+	this->battlegroundBossHPBar = new UIStatic[PEP3BattlegroundBossHPBarCount];
+	this->battlegroundBossHPBarBackground = new UIStatic;
+}
+
+PEP3BattlegroundBossHPBarUI::~PEP3BattlegroundBossHPBarUI()
+{
+	delete[] this->battlegroundBossHPBar;
+	delete this->battlegroundBossHPBarBackground;
+}
+
+void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
+{
+	RECT pRcBarBkg;
+	pRcBarBkg.top = 120;
+	pRcBarBkg.left = ClientWidth() / 2 - 253;
+	pRcBarBkg.right = pRcBarBkg.left + 606;
+	// 对于非纯色图片支持不佳，尽量保证长度是16的倍数
+	pRcBarBkg.bottom = pRcBarBkg.top + 9;
+	this->battlegroundBossHPBarBackground->Create(0, pRcBarBkg, ui);
+	this->battlegroundBossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
+
+	for (int idx = 0; idx < PEP3BattlegroundBossHPBarCount; ++idx)
+	{
+		RECT pRcBar;
+		pRcBar.top = 123;
+		pRcBar.left = ClientWidth() / 2 - 250;
+		pRcBar.right = pRcBar.left + 500;
+		pRcBar.bottom = pRcBar.top + 3;
+		this->battlegroundBossHPBar[idx].Create(0, pRcBar, ui);
+		char fileName[PEP3_MAX_FILEPATH_LENGTH];
+		sprintf(fileName, "UI\\HPBar\\combat_bossHP%d.tga", idx + 1);
+		this->battlegroundBossHPBar[idx].SetBk(fileName);
+	}
+
+	// 默认不显示，除非有值
+	this->setVisibility(false);
+}
+
+void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNumber)
+{
+	if (currentHP <= 0)
+	{
+		// 剩余血量为0，不显示
+		this->setVisibility(false);
+		return;
+	}
+	this->battlegroundBossHPBarBackground->ShowWindow(true);
+
+	// 每一阶段的血量
+	double interval = totalHP / stageNumber;
+	// 剩余完整阶段数
+	int completeStage = currentHP / interval;
+	// 当前阶段剩余血量
+	double curStageRemaining = currentHP - completeStage * interval;
+	// 当前阶段剩余血量所占比例
+	double curStageRatio = curStageRemaining / interval;
+	int idx = 0;
+
+	// 对于完整的阶段，正常进行布局
+	/*for (idx = 0; idx < completeStage; ++idx)
+	{
+		RECT pRcBar;
+		pRcBar.top = 123;
+		pRcBar.left = ClientWidth() / 2 - 250;
+		pRcBar.right = pRcBar.left + 500;
+		pRcBar.bottom = pRcBar.top + 3;
+		this->battlegroundBossHPBar[idx + 1].SetRect(pRcBar);
+		this->battlegroundBossHPBar[idx + 1].ShowWindow(true);
+	}
+	// 对于当前阶段，按照剩余血量比例进行布局
+	RECT pRcCurBar;
+	pRcCurBar.top = 123;
+	pRcCurBar.left = ClientWidth() / 2 - 250;
+	pRcCurBar.right = pRcCurBar.left + 500 * curStageRatio;
+	pRcCurBar.bottom = pRcCurBar.top + 3;
+	this->battlegroundBossHPBar[++idx + 1].SetRect(pRcCurBar);
+	this->battlegroundBossHPBar[idx + 1].ShowWindow(true);
+	// 后续阶段不显示，包括已经消耗掉的和不存在的阶段
+	for (idx += 1; idx < PEP3BattlegroundBossHPBarCount; ++idx)
+	{
+		this->battlegroundBossHPBar[idx + 1].ShowWindow(false);
+	}*/
+}
+
+void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
+{
+	this->battlegroundBossHPBarBackground->ShowWindow(visibility);
+	for (int idx = 0; idx < PEP3BattlegroundBossHPBarCount; ++idx)
+	{
+		this->battlegroundBossHPBar[idx].ShowWindow(visibility);
 	}
 }

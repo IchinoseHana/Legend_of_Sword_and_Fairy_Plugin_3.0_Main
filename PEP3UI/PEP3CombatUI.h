@@ -78,4 +78,21 @@ public:
 	void setVisibility(bool visibility);
 };
 
+// MARK: 首领血条UI
+static const int PEP3BattlegroundBossHPBarCount = 5;
+class PEP3BattlegroundBossHPBarUI
+{
+public:
+	UIStatic* battlegroundBossHPBarBackground; // 首领血条背景
+	UIStatic* battlegroundBossHPBar; // 首领血条
+
+	PEP3BattlegroundBossHPBarUI();
+	~PEP3BattlegroundBossHPBarUI();
+
+	static PEP3BattlegroundBossHPBarUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(int totalHP, int currentHP, int stageNumber);
+	void setVisibility(bool visibility);
+};
+
 #endif
