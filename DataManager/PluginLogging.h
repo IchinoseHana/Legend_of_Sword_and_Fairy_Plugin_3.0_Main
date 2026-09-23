@@ -6,7 +6,7 @@
 #define PLOG(x) PluginLogging::sharedInstance()->log(x)
 
 // Modify this macro to set wether print the log or not.
-#define PLUGIN_LOGGING_ENABLE 1
+#define PLUGIN_LOGGING_ENABLE 0
 
 #include <string>
 

@@ -10,11 +10,12 @@ class UIStatic;
 // MARK: 仙灵、武灵UI
 class PEP3BattlegroundSpiritUI
 {
-public:
+private:
 	UIStatic *spiritSlot; // 仙灵槽
 	UIStatic *spiritNumber; // 仙灵数字
 	UIStatic *spiritUsingStatus; // 仙灵使用状态
 
+public:
 	PEP3BattlegroundSpiritUI();
 	~PEP3BattlegroundSpiritUI();
 
@@ -27,7 +28,7 @@ public:
 // MARK: 战场状态、战场属性UI
 class PEP3BattlegroundStateUI
 {
-public:
+private:
 	UIStatic* resurrectionIcon; // 复活计数图标
 	UIStatic* resurrectionNumber; // 复活计数数字
 	UIStatic* battlegroundStateIcon; // 战场状态
@@ -35,6 +36,7 @@ public:
 	UIStatic* battlegroundPropertyIcon; // 战场属性
 	UIStatic* battlegroundPropertyNumber; // 战场属性数字
 
+public:
 	PEP3BattlegroundStateUI();
 	~PEP3BattlegroundStateUI();
 
@@ -47,12 +49,13 @@ public:
 // MARK: 暗器装填、合击UI
 class PEP3BattlegroundChargeUI
 {
-public:
+private:
 	UIStatic* battlegroundChargeIcon; //暗器装填图标
 	UIStatic* battlegroundChargeNumber; //暗器装填数字
 	UIStatic* battlegroundCoorperationAttackIcon; //合击图标
 	UIStatic* battlegroundCoorperationAttackNumber; //合击数字
 
+public:
 	PEP3BattlegroundChargeUI();
 	~PEP3BattlegroundChargeUI();
 
@@ -66,9 +69,10 @@ public:
 static const int PEP3BattlegroundEnvironmentUIIconCount = 3;
 class PEP3BattlegroundEnvironmentUI
 {
-public:
+private:
 	UIStatic* battlegroundEnvironmentIcon; // 战场环境图标
 
+public:
 	PEP3BattlegroundEnvironmentUI();
 	~PEP3BattlegroundEnvironmentUI();
 
@@ -82,10 +86,11 @@ public:
 static const int PEP3BattlegroundBossHPBarCount = 5;
 class PEP3BattlegroundBossHPBarUI
 {
-public:
+private:
 	UIStatic* battlegroundBossHPBarBackground; // 首领血条背景
 	UIStatic* battlegroundBossHPBar; // 首领血条
 
+public:
 	PEP3BattlegroundBossHPBarUI();
 	~PEP3BattlegroundBossHPBarUI();
 
