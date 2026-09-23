@@ -56,7 +56,7 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 	pRcUsingStatus.right = pRcUsingStatus.left + 32;
 	pRcUsingStatus.bottom = pRcUsingStatus.top + 32;
 	this->spiritUsingStatus->Create(0, pRcUsingStatus, ui);
-	this->spiritUsingStatus->SetBk("UI\\picuseprogram1.tga");
+	this->spiritUsingStatus->SetBk("UI\\spiritIdle.tga");
 }
 
 void PEP3BattlegroundSpiritUI::update(int spiritNumber, bool isUsingSpirit)
@@ -69,7 +69,7 @@ void PEP3BattlegroundSpiritUI::update(int spiritNumber, bool isUsingSpirit)
 	sprintf(numberText, "%d", abs(spiritNumber));
 	this->spiritNumber->SetText(numberText);
 
-	this->spiritUsingStatus->SetBk(isUsingSpirit ? "UI\\picuseprogram1.tga" : "UI\\picuseprogram2.tga");
+	this->spiritUsingStatus->SetBk(isUsingSpirit ? "UI\\spiritUse.tga" : "UI\\spiritIdle.tga");
 }
 
 void PEP3BattlegroundSpiritUI::setVisibility(bool visibility)
@@ -349,22 +349,22 @@ void PEP3BattlegroundEnvironmentUI::setVisibility(bool visibility)
 }
 
 // MARK: 首领血条UI
-PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundBossHPBarUI* battlegroundBossHPBarUIInstance = new PEP3BattlegroundBossHPBarUI();
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundBossHPBarUI* bossHPBarUIInstance = new PEP3BattlegroundBossHPBarUI();
 PEP3BattlegroundBossHPBarUI* PEP3BattlegroundBossHPBarUI::sharedInstance()
 {
-	return battlegroundBossHPBarUIInstance;
+	return bossHPBarUIInstance;
 }
 
 PEP3BattlegroundBossHPBarUI::PEP3BattlegroundBossHPBarUI()
 {
-	this->battlegroundBossHPBar = new UIStatic[PEP3BattlegroundBossHPBarCount];
-	this->battlegroundBossHPBarBackground = new UIStatic;
+	this->bossHPBar = new UIStatic[PEP3BattlegroundBossHPBarUIBarCount];
+	this->bossHPBarBackground = new UIStatic;
 }
 
 PEP3BattlegroundBossHPBarUI::~PEP3BattlegroundBossHPBarUI()
 {
-	delete[] this->battlegroundBossHPBar;
-	delete this->battlegroundBossHPBarBackground;
+	delete[] this->bossHPBar;
+	delete this->bossHPBarBackground;
 }
 
 void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
@@ -375,20 +375,20 @@ void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 	pRcBarBkg.right = pRcBarBkg.left + 512;
 	// 对于非纯色图片支持不佳，需要保证长度和宽度是16的倍数，好在可以使用Alpha通道
 	pRcBarBkg.bottom = pRcBarBkg.top + 16;
-	this->battlegroundBossHPBarBackground->Create(0, pRcBarBkg, ui);
-	this->battlegroundBossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
+	this->bossHPBarBackground->Create(0, pRcBarBkg, ui);
+	this->bossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
 
-	for (int idx = 0; idx < PEP3BattlegroundBossHPBarCount; ++idx)
+	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
 		RECT pRcBar;
 		pRcBar.top = 123;
 		pRcBar.left = ClientWidth() / 2 - 253;
 		pRcBar.right = pRcBar.left + 506;
 		pRcBar.bottom = pRcBar.top + 3;
-		this->battlegroundBossHPBar[idx].Create(0, pRcBar, ui);
+		this->bossHPBar[idx].Create(0, pRcBar, ui);
 		char fileName[PEP3_MAX_FILEPATH_LENGTH];
 		sprintf(fileName, "UI\\HPBar\\combat_bossHP%d.tga", idx + 1);
-		this->battlegroundBossHPBar[idx].SetBk(fileName);
+		this->bossHPBar[idx].SetBk(fileName);
 	}
 
 	// 默认不显示，除非有值
@@ -403,7 +403,7 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 		this->setVisibility(false);
 		return;
 	}
-	this->battlegroundBossHPBarBackground->ShowWindow(true);
+	this->bossHPBarBackground->ShowWindow(true);
 
 	// 每一阶段的血量
 	double interval = totalHP / stageNumber;
@@ -423,8 +423,8 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 		pRcBar.left = ClientWidth() / 2 - 253;
 		pRcBar.right = pRcBar.left + 506;
 		pRcBar.bottom = pRcBar.top + 3;
-		this->battlegroundBossHPBar[idx].SetRect(pRcBar);
-		this->battlegroundBossHPBar[idx].ShowWindow(true);
+		this->bossHPBar[idx].SetRect(pRcBar);
+		this->bossHPBar[idx].ShowWindow(true);
 	}
 	// 对于当前阶段，按照剩余血量比例进行布局
 	RECT pRcCurBar;
@@ -433,23 +433,306 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	pRcCurBar.right = pRcCurBar.left + 506 * curStageRatio;
 	pRcCurBar.bottom = pRcCurBar.top + 3;
 	// 上一轮循环退出后刚好位于下一个索引
-	if (idx < PEP3BattlegroundBossHPBarCount)
+	if (idx < PEP3BattlegroundBossHPBarUIBarCount)
 	{
-		this->battlegroundBossHPBar[idx].SetRect(pRcCurBar);
-		this->battlegroundBossHPBar[idx].ShowWindow(true);
+		this->bossHPBar[idx].SetRect(pRcCurBar);
+		this->bossHPBar[idx].ShowWindow(true);
 	}
 	// 后续阶段不显示，包括已经消耗掉的和不存在的阶段
-	for (idx += 1; idx < PEP3BattlegroundBossHPBarCount; ++idx)
+	for (idx += 1; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
-		this->battlegroundBossHPBar[idx].ShowWindow(false);
+		this->bossHPBar[idx].ShowWindow(false);
 	}
 }
 
 void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
 {
-	this->battlegroundBossHPBarBackground->ShowWindow(visibility);
-	for (int idx = 0; idx < PEP3BattlegroundBossHPBarCount; ++idx)
+	this->bossHPBarBackground->ShowWindow(visibility);
+	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
-		this->battlegroundBossHPBar[idx].ShowWindow(visibility);
+		this->bossHPBar[idx].ShowWindow(visibility);
+	}
+}
+
+// MARK: 信息面板UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundInformationBoardUI* battlegroundInformationBoardUIInstance = new PEP3BattlegroundInformationBoardUI();
+PEP3BattlegroundInformationBoardUI* PEP3BattlegroundInformationBoardUI::sharedInstance()
+{
+	return battlegroundInformationBoardUIInstance;
+}
+
+PEP3BattlegroundInformationBoardUI::PEP3BattlegroundInformationBoardUI()
+{
+	//this->bossHPBar = new UIStatic[PEP3BattlegroundBossHPBarUIBarCount];
+	//this->bossHPBarBackground = new UIStatic;
+}
+
+PEP3BattlegroundInformationBoardUI::~PEP3BattlegroundInformationBoardUI()
+{
+	//delete[] this->bossHPBar;
+	//delete this->bossHPBarBackground;
+}
+
+void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
+{
+	//敌人信息
+	//背景
+	RECT barRect;
+	gbColorQuad ci(87, 65, 20, 255);
+	pRc9.top = 40;
+	pRc9.left = ClientWidth() - 1064;
+	pRc9.right = pRc9.left + 1024;
+	pRc9.bottom = pRc9.top + 1024;
+	m_InformationEnemyBK.Create(0, pRc9, this);
+	m_InformationEnemyBK.SetBk("UI\\combatinformation.tga");
+
+	//逐个创建条目内容
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 258;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[0].Create(0, pRc9, this);
+	pRc9.left += 384;
+	pRc9.right = pRc9.left + 258;
+	m_InformationEnemy[1].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[2].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[3].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[4].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[5].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[6].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[7].Create(0, pRc9, this);
+	pRc9.left += 288;
+	pRc9.right = pRc9.left + 192;
+	m_InformationEnemy[8].Create(0, pRc9, this);
+	//进度条
+	barRect.top = pRc9.top + 29;
+	barRect.left = ClientWidth() - 808 + 480;
+	barRect.right = barRect.left + 96;
+	barRect.bottom = barRect.top + 6;
+	m_InformationEnemyBarBK[0].Create(0, barRect, this);
+	m_InformationEnemyBarBK[0].SetBk("UI\\combat_bossHPBK.tga");
+	m_InformationEnemyBar[0].Create(0, barRect, this);
+	m_InformationEnemyBar[0].SetBk("UI\\combat_bossHP.tga");
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[9].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[10].Create(0, pRc9, this);
+	pRc9.left += 288;
+	pRc9.right = pRc9.left + 192;
+	m_InformationEnemy[11].Create(0, pRc9, this);
+	//进度条
+	barRect.top = barRect.top + 64;
+	barRect.bottom = barRect.top + 6;
+	m_InformationEnemyBarBK[1].Create(0, barRect, this);
+	m_InformationEnemyBarBK[1].SetBk("UI\\combat_bossHPBK.tga");
+	m_InformationEnemyBar[1].Create(0, barRect, this);
+	m_InformationEnemyBar[1].SetBk("UI\\combat_bossHP4.tga");
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[12].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 288;
+	m_InformationEnemy[13].Create(0, pRc9, this);
+	pRc9.left += 384;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[14].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[15].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 288;
+	m_InformationEnemy[16].Create(0, pRc9, this);
+	pRc9.left += 384;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[17].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[18].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 288;
+	m_InformationEnemy[19].Create(0, pRc9, this);
+	pRc9.left += 384;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[20].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[21].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 288;
+	m_InformationEnemy[22].Create(0, pRc9, this);
+	pRc9.left += 384;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[23].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 96;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[24].Create(0, pRc9, this);
+	pRc9.left += 192;
+	pRc9.right = pRc9.left + 288;
+	m_InformationEnemy[25].Create(0, pRc9, this);
+	pRc9.left += 384;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[26].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 192;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[27].Create(0, pRc9, this);
+	pRc9.left += 288;
+	pRc9.right = pRc9.left + 192;
+	m_InformationEnemy[28].Create(0, pRc9, this);
+	pRc9.left += 288;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[29].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 192;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[30].Create(0, pRc9, this);
+	pRc9.left += 288;
+	pRc9.right = pRc9.left + 192;
+	m_InformationEnemy[31].Create(0, pRc9, this);
+	pRc9.left += 288;
+	pRc9.right = pRc9.left + 96;
+	m_InformationEnemy[32].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 672;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[33].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 672;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[34].Create(0, pRc9, this);
+	pRc9.top += 64;
+	pRc9.left = ClientWidth() - 808 + 96;
+	pRc9.right = pRc9.left + 672;
+	pRc9.bottom = pRc9.top + 64;
+	m_InformationEnemy[35].Create(0, pRc9, this);
+	//状态栏
+	pRc9.top = 40;
+	pRc9.left = ClientWidth() - 1064 + 95;
+	pRc9.right = pRc9.left + 161;
+	pRc9.bottom = pRc9.top + 53;
+	m_InformationEnemyStatus[0].Create(0, pRc9, this);
+	pRc9.top += 106;
+	pRc9.bottom = pRc9.top + 53;
+	m_InformationEnemyStatus[1].Create(0, pRc9, this);
+	pRc9.top += 106;
+	pRc9.bottom = pRc9.top + 53;
+	m_InformationEnemyStatus[2].Create(0, pRc9, this);
+	pRc9.top += 106;
+	pRc9.bottom = pRc9.top + 53;
+	m_InformationEnemyStatus[3].Create(0, pRc9, this);
+
+	//条目内容的统一部分
+	for (int a = 0; a < 36; a++)
+	{
+		m_InformationEnemy[a].SetFont(true);
+		m_InformationEnemy[a].SetFontColor(ci);
+		m_InformationEnemy[a].SetText("", true);
+	}
+	for (a = 0; a < 4; a++)
+	{
+		m_InformationEnemyStatus[a].SetFont(true);
+		m_InformationEnemyStatus[a].SetFontColor(ci);
+		m_InformationEnemyStatus[a].SetText("", true);
+	}
+
+	m_InformationEnemyBK.ShowWindow(false);
+	m_InformationEnemyBarBK[0].ShowWindow(false);
+	m_InformationEnemyBarBK[1].ShowWindow(false);
+	m_InformationEnemyBar[0].ShowWindow(false);
+	m_InformationEnemyBar[1].ShowWindow(false);
+	for (a = 0; a < 36; a++) m_InformationEnemy[a].ShowWindow(false);
+	for (a = 0; a < 4; a++) m_InformationEnemyStatus[a].ShowWindow(false);
+}
+
+void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNumber)
+{
+	if (currentHP <= 0)
+	{
+		// 剩余血量为0，不显示
+		this->setVisibility(false);
+		return;
+	}
+	this->bossHPBarBackground->ShowWindow(true);
+
+	// 每一阶段的血量
+	double interval = totalHP / stageNumber;
+	// 剩余完整阶段数
+	int completeStage = currentHP / interval;
+	// 当前阶段剩余血量
+	double curStageRemaining = currentHP - completeStage * interval;
+	// 当前阶段剩余血量所占比例
+	double curStageRatio = curStageRemaining / interval;
+	int idx = 0;
+
+	// 对于完整的阶段，正常进行布局
+	for (idx = 0; idx < completeStage; ++idx)
+	{
+		RECT pRcBar;
+		pRcBar.top = 123;
+		pRcBar.left = ClientWidth() / 2 - 253;
+		pRcBar.right = pRcBar.left + 506;
+		pRcBar.bottom = pRcBar.top + 3;
+		this->bossHPBar[idx].SetRect(pRcBar);
+		this->bossHPBar[idx].ShowWindow(true);
+	}
+	// 对于当前阶段，按照剩余血量比例进行布局
+	RECT pRcCurBar;
+	pRcCurBar.top = 123;
+	pRcCurBar.left = ClientWidth() / 2 - 253;
+	pRcCurBar.right = pRcCurBar.left + 506 * curStageRatio;
+	pRcCurBar.bottom = pRcCurBar.top + 3;
+	// 上一轮循环退出后刚好位于下一个索引
+	if (idx < PEP3BattlegroundBossHPBarUIBarCount)
+	{
+		this->bossHPBar[idx].SetRect(pRcCurBar);
+		this->bossHPBar[idx].ShowWindow(true);
+	}
+	// 后续阶段不显示，包括已经消耗掉的和不存在的阶段
+	for (idx += 1; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
+	{
+		this->bossHPBar[idx].ShowWindow(false);
+	}
+}
+
+void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
+{
+	this->bossHPBarBackground->ShowWindow(visibility);
+	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
+	{
+		this->bossHPBar[idx].ShowWindow(visibility);
 	}
 }

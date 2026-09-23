@@ -83,12 +83,12 @@ public:
 };
 
 // MARK: 首领血条UI
-static const int PEP3BattlegroundBossHPBarCount = 5;
+static const int PEP3BattlegroundBossHPBarUIBarCount = 5;
 class PEP3BattlegroundBossHPBarUI
 {
 private:
-	UIStatic* battlegroundBossHPBarBackground; // 首领血条背景
-	UIStatic* battlegroundBossHPBar; // 首领血条
+	UIStatic* bossHPBarBackground; // 首领血条背景
+	UIStatic* bossHPBar; // 首领血条
 
 public:
 	PEP3BattlegroundBossHPBarUI();
@@ -97,6 +97,60 @@ public:
 	static PEP3BattlegroundBossHPBarUI* sharedInstance();
 	void create(UIWnd* ui);
 	void update(int totalHP, int currentHP, int stageNumber);
+	void setVisibility(bool visibility);
+};
+
+// MARK: 信息面板UI
+static const int PEP3BattlegroundInformationBoardUIActionCount = 3;
+class PEP3BattlegroundInformationBoardUI
+{
+private:
+	UIStatic* informationBoardBackground;
+	// Page 1
+	UIStatic* enrmyID;
+	UIStatic* enrmyName;
+	UIStatic* enrmyType;
+	UIStatic* enrmyLevel;
+	UIStatic* enrmyMoney;
+	UIStatic* enrmyExperience;
+	UIStatic* enrmyAttack;
+	UIStatic* enrmyDefence;
+	UIStatic* enrmySpeed;
+	UIStatic* enemyHPBar;
+	UIStatic* enemyHPBarBackground;
+	UIStatic* enrmyLuck;
+	UIStatic* enemyMPBar;
+	UIStatic* enemyMPBarBackground;
+	UIStatic* enrmyWater;
+	UIStatic* enrmyNormalAttack;
+	UIStatic* enrmyNormalAttackGPRecover;
+	UIStatic* enrmyFire;
+	UIStatic* enrmyDrop;
+	UIStatic* enrmyDropAmount;
+	UIStatic* enrmyWind;
+	UIStatic* enrmyAdditionalDrop;
+	UIStatic* enrmyAdditionalDropAmount;
+	UIStatic* enrmyThunder;
+	UIStatic* enrmySteal;
+	UIStatic* enrmyStealCount;
+	UIStatic* enrmyEarth;
+	UIStatic* enrmyInitialState;
+	UIStatic* enrmyInitialStateDuration;
+	UIStatic* enrmySpecificDrop;
+	UIStatic* enrmySpecificSkillName;
+	UIStatic* enrmySpecificDropPercentage;
+	UIStatic* enrmyAdditionalSpecificDrop;
+	UIStatic* enrmyAdditionalSpecificSkillName;
+	UIStatic* enrmyAdditionalSpecificDropPercentage;
+	UIStatic* enrmyAction[PEP3BattlegroundInformationBoardUIActionCount];
+
+public:
+	PEP3BattlegroundInformationBoardUI();
+	~PEP3BattlegroundInformationBoardUI();
+
+	static PEP3BattlegroundInformationBoardUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(int pageNumber);
 	void setVisibility(bool visibility);
 };
 
