@@ -371,10 +371,10 @@ void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 {
 	RECT pRcBarBkg;
 	pRcBarBkg.top = 120;
-	pRcBarBkg.left = ClientWidth() / 2 - 253;
-	pRcBarBkg.right = pRcBarBkg.left + 606;
-	// 对于非纯色图片支持不佳，尽量保证长度是16的倍数
-	pRcBarBkg.bottom = pRcBarBkg.top + 9;
+	pRcBarBkg.left = ClientWidth() / 2 - 256;
+	pRcBarBkg.right = pRcBarBkg.left + 512;
+	// 对于非纯色图片支持不佳，需要保证长度和宽度是16的倍数，好在可以使用Alpha通道
+	pRcBarBkg.bottom = pRcBarBkg.top + 16;
 	this->battlegroundBossHPBarBackground->Create(0, pRcBarBkg, ui);
 	this->battlegroundBossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
 
@@ -382,8 +382,8 @@ void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 	{
 		RECT pRcBar;
 		pRcBar.top = 123;
-		pRcBar.left = ClientWidth() / 2 - 250;
-		pRcBar.right = pRcBar.left + 500;
+		pRcBar.left = ClientWidth() / 2 - 253;
+		pRcBar.right = pRcBar.left + 506;
 		pRcBar.bottom = pRcBar.top + 3;
 		this->battlegroundBossHPBar[idx].Create(0, pRcBar, ui);
 		char fileName[PEP3_MAX_FILEPATH_LENGTH];
@@ -416,29 +416,33 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	int idx = 0;
 
 	// 对于完整的阶段，正常进行布局
-	/*for (idx = 0; idx < completeStage; ++idx)
+	for (idx = 0; idx < completeStage; ++idx)
 	{
 		RECT pRcBar;
 		pRcBar.top = 123;
-		pRcBar.left = ClientWidth() / 2 - 250;
-		pRcBar.right = pRcBar.left + 500;
+		pRcBar.left = ClientWidth() / 2 - 253;
+		pRcBar.right = pRcBar.left + 506;
 		pRcBar.bottom = pRcBar.top + 3;
-		this->battlegroundBossHPBar[idx + 1].SetRect(pRcBar);
-		this->battlegroundBossHPBar[idx + 1].ShowWindow(true);
+		this->battlegroundBossHPBar[idx].SetRect(pRcBar);
+		this->battlegroundBossHPBar[idx].ShowWindow(true);
 	}
 	// 对于当前阶段，按照剩余血量比例进行布局
 	RECT pRcCurBar;
 	pRcCurBar.top = 123;
-	pRcCurBar.left = ClientWidth() / 2 - 250;
-	pRcCurBar.right = pRcCurBar.left + 500 * curStageRatio;
+	pRcCurBar.left = ClientWidth() / 2 - 253;
+	pRcCurBar.right = pRcCurBar.left + 506 * curStageRatio;
 	pRcCurBar.bottom = pRcCurBar.top + 3;
-	this->battlegroundBossHPBar[++idx + 1].SetRect(pRcCurBar);
-	this->battlegroundBossHPBar[idx + 1].ShowWindow(true);
+	// 上一轮循环退出后刚好位于下一个索引
+	if (idx < PEP3BattlegroundBossHPBarCount)
+	{
+		this->battlegroundBossHPBar[idx].SetRect(pRcCurBar);
+		this->battlegroundBossHPBar[idx].ShowWindow(true);
+	}
 	// 后续阶段不显示，包括已经消耗掉的和不存在的阶段
 	for (idx += 1; idx < PEP3BattlegroundBossHPBarCount; ++idx)
 	{
-		this->battlegroundBossHPBar[idx + 1].ShowWindow(false);
-	}*/
+		this->battlegroundBossHPBar[idx].ShowWindow(false);
+	}
 }
 
 void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
