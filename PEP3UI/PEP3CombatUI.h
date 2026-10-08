@@ -142,7 +142,7 @@ private:
 	UIStatic* enrmyAdditionalSpecificDrop;
 	UIStatic* enrmyAdditionalSpecificSkillName;
 	UIStatic* enrmyAdditionalSpecificDropPercentage;
-	UIStatic* enrmyAction[PEP3BattlegroundInformationBoardUIActionCount];
+	UIStatic* enrmyAction;
 
 public:
 	PEP3BattlegroundInformationBoardUI();

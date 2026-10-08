@@ -17,4 +17,14 @@ namespace spcPEP3UIUtil
 		// 按照系统默认的1024 * 768分辨率来进行缩放
 		return rawValue * ClientHeight() / 768;
 	}
+
+	RECT rect(int left, int top, int width, int height)
+	{
+		RECT r;
+		r.left = left;
+		r.top = top;
+		r.right = left + width;
+		r.bottom = top + height;
+		return r;
+	}
 }
