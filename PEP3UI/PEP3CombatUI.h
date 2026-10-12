@@ -81,7 +81,7 @@ public:
 	void update(int environmentIndex[], int environmentNumber[]);
 	void setVisibility(bool visibility);
 };
-
+PEP3BattlegroundInformationBoardUI
 // MARK: 首领血条UI
 static const int PEP3BattlegroundBossHPBarUIBarCount = 5;
 class PEP3BattlegroundBossHPBarUI
@@ -101,48 +101,63 @@ public:
 };
 
 // MARK: 信息面板UI
+class PEP3BattlegroundInformationBoardUITextElement : public UIStatic
+{
+public:
+	void Create(UINT id, const RECT& rect, UIWnd* pfather);
+};
+
 static const int PEP3BattlegroundInformationBoardUIActionCount = 3;
+static const int PEP3BattlegroundInformationBoardUIStatusItemCount = 4;
 class PEP3BattlegroundInformationBoardUI
 {
 private:
+	// Background
 	UIStatic* informationBoardBackground;
+
+	// Element
 	// Page 1
-	UIStatic* enrmyID;
-	UIStatic* enrmyName;
-	UIStatic* enrmyType;
-	UIStatic* enrmyLevel;
-	UIStatic* enrmyMoney;
-	UIStatic* enrmyExperience;
-	UIStatic* enrmyAttack;
-	UIStatic* enrmyDefence;
-	UIStatic* enrmySpeed;
+	PEP3BattlegroundInformationBoardUITextElement* enemyID;
+	PEP3BattlegroundInformationBoardUITextElement* enemyName;
+	PEP3BattlegroundInformationBoardUITextElement* enemyType;
+	PEP3BattlegroundInformationBoardUITextElement* enemyLevel;
+	PEP3BattlegroundInformationBoardUITextElement* enemyMoney;
+	PEP3BattlegroundInformationBoardUITextElement* enemyExperience;
+	PEP3BattlegroundInformationBoardUITextElement* enemyAttack;
+	PEP3BattlegroundInformationBoardUITextElement* enemyDefence;
+	PEP3BattlegroundInformationBoardUITextElement* enemyHP;
 	UIStatic* enemyHPBar;
 	UIStatic* enemyHPBarBackground;
-	UIStatic* enrmyLuck;
+	PEP3BattlegroundInformationBoardUITextElement* enemySpeed;
+	PEP3BattlegroundInformationBoardUITextElement* enemyLuck;
+	PEP3BattlegroundInformationBoardUITextElement* enemyMP;
 	UIStatic* enemyMPBar;
 	UIStatic* enemyMPBarBackground;
-	UIStatic* enrmyWater;
-	UIStatic* enrmyNormalAttack;
-	UIStatic* enrmyNormalAttackGPRecover;
-	UIStatic* enrmyFire;
-	UIStatic* enrmyDrop;
-	UIStatic* enrmyDropAmount;
-	UIStatic* enrmyWind;
-	UIStatic* enrmyAdditionalDrop;
-	UIStatic* enrmyAdditionalDropAmount;
-	UIStatic* enrmyThunder;
-	UIStatic* enrmySteal;
-	UIStatic* enrmyStealCount;
-	UIStatic* enrmyEarth;
-	UIStatic* enrmyInitialState;
-	UIStatic* enrmyInitialStateDuration;
-	UIStatic* enrmySpecificDrop;
-	UIStatic* enrmySpecificSkillName;
-	UIStatic* enrmySpecificDropPercentage;
-	UIStatic* enrmyAdditionalSpecificDrop;
-	UIStatic* enrmyAdditionalSpecificSkillName;
-	UIStatic* enrmyAdditionalSpecificDropPercentage;
-	UIStatic* enrmyAction;
+	PEP3BattlegroundInformationBoardUITextElement* enemyWater;
+	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttack;
+	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttackGPRecover;
+	PEP3BattlegroundInformationBoardUITextElement* enemyFire;
+	PEP3BattlegroundInformationBoardUITextElement* enemyDrop;
+	PEP3BattlegroundInformationBoardUITextElement* enemyDropAmount;
+	PEP3BattlegroundInformationBoardUITextElement* enemyWind;
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalDrop;
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalDropAmount;
+	PEP3BattlegroundInformationBoardUITextElement* enemyThunder;
+	PEP3BattlegroundInformationBoardUITextElement* enemySteal;
+	PEP3BattlegroundInformationBoardUITextElement* enemyStealCount;
+	PEP3BattlegroundInformationBoardUITextElement* enemyEarth;
+	PEP3BattlegroundInformationBoardUITextElement* enemyInitialState;
+	PEP3BattlegroundInformationBoardUITextElement* enemyInitialStateDuration;
+	PEP3BattlegroundInformationBoardUITextElement* enemySpecificDrop;
+	PEP3BattlegroundInformationBoardUITextElement* enemySpecificSkillName;
+	PEP3BattlegroundInformationBoardUITextElement* enemySpecificDropPercentage;
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificDrop;
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificSkillName;
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificDropPercentage;
+	PEP3BattlegroundInformationBoardUITextElement* enemyAction;
+
+	// Status Items
+	PEP3BattlegroundInformationBoardUITextElement* statusItems;
 
 public:
 	PEP3BattlegroundInformationBoardUI();

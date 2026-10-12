@@ -387,6 +387,14 @@ void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
 }
 
 // MARK: 信息面板UI
+void PEP3BattlegroundInformationBoardUIElement::Create(UINT id, const RECT& rect, UIWnd* pfather)
+{
+	UIStatic::Create(id, rect, pfather);
+	this->SetFont(true);
+	this->SetFontColor(textColor);
+	this->SetText("", true);
+}
+
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundInformationBoardUI* battlegroundInformationBoardUIInstance = new PEP3BattlegroundInformationBoardUI();
 PEP3BattlegroundInformationBoardUI* PEP3BattlegroundInformationBoardUI::sharedInstance()
 {
@@ -395,287 +403,203 @@ PEP3BattlegroundInformationBoardUI* PEP3BattlegroundInformationBoardUI::sharedIn
 
 PEP3BattlegroundInformationBoardUI::PEP3BattlegroundInformationBoardUI()
 {
-	this->enrmyID = new UIStatic;
-	this->enrmyName = new UIStatic;
-	this->enrmyType = new UIStatic;
-	this->enrmyLevel = new UIStatic;
-	this->enrmyMoney = new UIStatic;
-	this->enrmyExperience = new UIStatic;
-	this->enrmyAttack = new UIStatic;
-	this->enrmyDefence = new UIStatic;
-	this->enrmySpeed = new UIStatic;
+	this->enemyID = new UIStatic;
+	this->enemyName = new UIStatic;
+	this->enemyType = new UIStatic;
+	this->enemyLevel = new UIStatic;
+	this->enemyMoney = new UIStatic;
+	this->enemyExperience = new UIStatic;
+	this->enemyAttack = new UIStatic;
+	this->enemyDefence = new UIStatic;
+	this->enemyHP = new UIStatic;
 	this->enemyHPBar = new UIStatic;
 	this->enemyHPBarBackground = new UIStatic;
-	this->enrmyLuck = new UIStatic;
+	this->enemySpeed = new UIStatic;
+	this->enemyLuck = new UIStatic;
+	this->enemyMP = new UIStatic;
 	this->enemyMPBar = new UIStatic;
 	this->enemyMPBarBackground = new UIStatic;
-	this->enrmyWater = new UIStatic;
-	this->enrmyNormalAttack = new UIStatic;
-	this->enrmyNormalAttackGPRecover = new UIStatic;
-	this->enrmyFire = new UIStatic;
-	this->enrmyDrop = new UIStatic;
-	this->enrmyDropAmount = new UIStatic;
-	this->enrmyWind = new UIStatic;
-	this->enrmyAdditionalDrop = new UIStatic;
-	this->enrmyAdditionalDropAmount = new UIStatic;
-	this->enrmyThunder = new UIStatic;
-	this->enrmySteal = new UIStatic;
-	this->enrmyStealCount = new UIStatic;
-	this->enrmyEarth = new UIStatic;
-	this->enrmyInitialState = new UIStatic;
-	this->enrmyInitialStateDuration = new UIStatic;
-	this->enrmySpecificDrop = new UIStatic;
-	this->enrmySpecificSkillName = new UIStatic;
-	this->enrmySpecificDropPercentage = new UIStatic;
-	this->enrmyAdditionalSpecificDrop = new UIStatic;
-	this->enrmyAdditionalSpecificSkillName = new UIStatic;
-	this->enrmyAdditionalSpecificDropPercentage = new UIStatic;
-	this->enrmyAction = new UIStatic[PEP3BattlegroundInformationBoardUIActionCount];
+	this->enemyWater = new UIStatic;
+	this->enemyNormalAttack = new UIStatic;
+	this->enemyNormalAttackGPRecover = new UIStatic;
+	this->enemyFire = new UIStatic;
+	this->enemyDrop = new UIStatic;
+	this->enemyDropAmount = new UIStatic;
+	this->enemyWind = new UIStatic;
+	this->enemyAdditionalDrop = new UIStatic;
+	this->enemyAdditionalDropAmount = new UIStatic;
+	this->enemyThunder = new UIStatic;
+	this->enemySteal = new UIStatic;
+	this->enemyStealCount = new UIStatic;
+	this->enemyEarth = new UIStatic;
+	this->enemyInitialState = new UIStatic;
+	this->enemyInitialStateDuration = new UIStatic;
+	this->enemySpecificDrop = new UIStatic;
+	this->enemySpecificSkillName = new UIStatic;
+	this->enemySpecificDropPercentage = new UIStatic;
+	this->enemyAdditionalSpecificDrop = new UIStatic;
+	this->enemyAdditionalSpecificSkillName = new UIStatic;
+	this->enemyAdditionalSpecificDropPercentage = new UIStatic;
+	this->enemyAction = new UIStatic[PEP3BattlegroundInformationBoardUIActionCount];
+	this->statusItems = new UIStatic[PEP3BattlegroundInformationBoardUIStatusItemCount];
 }
 
 PEP3BattlegroundInformationBoardUI::~PEP3BattlegroundInformationBoardUI()
 {
-	delete this->enrmyID;
-	delete this->enrmyName;
-	delete this->enrmyType;
-	delete this->enrmyLevel;
-	delete this->enrmyMoney;
-	delete this->enrmyExperience;
-	delete this->enrmyAttack;
-	delete this->enrmyDefence;
-	delete this->enrmySpeed;
+	delete this->enemyID;
+	delete this->enemyName;
+	delete this->enemyType;
+	delete this->enemyLevel;
+	delete this->enemyMoney;
+	delete this->enemyExperience;
+	delete this->enemyAttack;
+	delete this->enemyDefence;
+	delete this->enemyHP;
 	delete this->enemyHPBar;
 	delete this->enemyHPBarBackground;
-	delete this->enrmyLuck;
+	delete this->enemySpeed;
+	delete this->enemyLuck;
+	delete this->enemyMP;
 	delete this->enemyMPBar;
 	delete this->enemyMPBarBackground;
-	delete this->enrmyWater;
-	delete this->enrmyNormalAttack;
-	delete this->enrmyNormalAttackGPRecover;
-	delete this->enrmyFire;
-	delete this->enrmyDrop;
-	delete this->enrmyDropAmount;
-	delete this->enrmyWind;
-	delete this->enrmyAdditionalDrop;
-	delete this->enrmyAdditionalDropAmount;
-	delete this->enrmyThunder;
-	delete this->enrmySteal;
-	delete this->enrmyStealCount;
-	delete this->enrmyEarth;
-	delete this->enrmyInitialState;
-	delete this->enrmyInitialStateDuration;
-	delete this->enrmySpecificDrop;
-	delete this->enrmySpecificSkillName;
-	delete this->enrmySpecificDropPercentage;
-	delete this->enrmyAdditionalSpecificDrop;
-	delete this->enrmyAdditionalSpecificSkillName;
-	delete this->enrmyAdditionalSpecificDropPercentage;
-	delete[] this->enrmyAction;
+	delete this->enemyWater;
+	delete this->enemyNormalAttack;
+	delete this->enemyNormalAttackGPRecover;
+	delete this->enemyFire;
+	delete this->enemyDrop;
+	delete this->enemyDropAmount;
+	delete this->enemyWind;
+	delete this->enemyAdditionalDrop;
+	delete this->enemyAdditionalDropAmount;
+	delete this->enemyThunder;
+	delete this->enemySteal;
+	delete this->enemyStealCount;
+	delete this->enemyEarth;
+	delete this->enemyInitialState;
+	delete this->enemyInitialStateDuration;
+	delete this->enemySpecificDrop;
+	delete this->enemySpecificSkillName;
+	delete this->enemySpecificDropPercentage;
+	delete this->enemyAdditionalSpecificDrop;
+	delete this->enemyAdditionalSpecificSkillName;
+	delete this->enemyAdditionalSpecificDropPercentage;
+	delete[] this->enemyAction;
+	delete[] this->statusItems;
 }
 
 void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 {
-	//敌人信息
-	////背景
-	//RECT barRect;
-	//gbColorQuad ci(87, 65, 20, 255);
-	//pRc9.top = 40;
-	//pRc9.left = ClientWidth() - 1064;
-	//pRc9.right = pRc9.left + 1024;
-	//pRc9.bottom = pRc9.top + 1024;
-	//m_InformationEnemyBK.Create(0, pRc9, this);
-	//m_InformationEnemyBK.SetBk("UI\\combatinformation.tga");
+	int idx;
 
-	////逐个创建条目内容
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 258;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[0].Create(0, pRc9, this);
-	//pRc9.left += 384;
-	//pRc9.right = pRc9.left + 258;
-	//m_InformationEnemy[1].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[2].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[3].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[4].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[5].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[6].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[7].Create(0, pRc9, this);
-	//pRc9.left += 288;
-	//pRc9.right = pRc9.left + 192;
-	//m_InformationEnemy[8].Create(0, pRc9, this);
-	////进度条
-	//barRect.top = pRc9.top + 29;
-	//barRect.left = ClientWidth() - 808 + 480;
-	//barRect.right = barRect.left + 96;
-	//barRect.bottom = barRect.top + 6;
-	//m_InformationEnemyBarBK[0].Create(0, barRect, this);
-	//m_InformationEnemyBarBK[0].SetBk("UI\\combat_bossHPBK.tga");
-	//m_InformationEnemyBar[0].Create(0, barRect, this);
-	//m_InformationEnemyBar[0].SetBk("UI\\combat_bossHP.tga");
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[9].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[10].Create(0, pRc9, this);
-	//pRc9.left += 288;
-	//pRc9.right = pRc9.left + 192;
-	//m_InformationEnemy[11].Create(0, pRc9, this);
-	////进度条
-	//barRect.top = barRect.top + 64;
-	//barRect.bottom = barRect.top + 6;
-	//m_InformationEnemyBarBK[1].Create(0, barRect, this);
-	//m_InformationEnemyBarBK[1].SetBk("UI\\combat_bossHPBK.tga");
-	//m_InformationEnemyBar[1].Create(0, barRect, this);
-	//m_InformationEnemyBar[1].SetBk("UI\\combat_bossHP4.tga");
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[12].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 288;
-	//m_InformationEnemy[13].Create(0, pRc9, this);
-	//pRc9.left += 384;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[14].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[15].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 288;
-	//m_InformationEnemy[16].Create(0, pRc9, this);
-	//pRc9.left += 384;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[17].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[18].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 288;
-	//m_InformationEnemy[19].Create(0, pRc9, this);
-	//pRc9.left += 384;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[20].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[21].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 288;
-	//m_InformationEnemy[22].Create(0, pRc9, this);
-	//pRc9.left += 384;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[23].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 96;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[24].Create(0, pRc9, this);
-	//pRc9.left += 192;
-	//pRc9.right = pRc9.left + 288;
-	//m_InformationEnemy[25].Create(0, pRc9, this);
-	//pRc9.left += 384;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[26].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 192;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[27].Create(0, pRc9, this);
-	//pRc9.left += 288;
-	//pRc9.right = pRc9.left + 192;
-	//m_InformationEnemy[28].Create(0, pRc9, this);
-	//pRc9.left += 288;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[29].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 192;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[30].Create(0, pRc9, this);
-	//pRc9.left += 288;
-	//pRc9.right = pRc9.left + 192;
-	//m_InformationEnemy[31].Create(0, pRc9, this);
-	//pRc9.left += 288;
-	//pRc9.right = pRc9.left + 96;
-	//m_InformationEnemy[32].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 672;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[33].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 672;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[34].Create(0, pRc9, this);
-	//pRc9.top += 64;
-	//pRc9.left = ClientWidth() - 808 + 96;
-	//pRc9.right = pRc9.left + 672;
-	//pRc9.bottom = pRc9.top + 64;
-	//m_InformationEnemy[35].Create(0, pRc9, this);
-	////状态栏
-	//pRc9.top = 40;
-	//pRc9.left = ClientWidth() - 1064 + 95;
-	//pRc9.right = pRc9.left + 161;
-	//pRc9.bottom = pRc9.top + 53;
-	//m_InformationEnemyStatus[0].Create(0, pRc9, this);
-	//pRc9.top += 106;
-	//pRc9.bottom = pRc9.top + 53;
-	//m_InformationEnemyStatus[1].Create(0, pRc9, this);
-	//pRc9.top += 106;
-	//pRc9.bottom = pRc9.top + 53;
-	//m_InformationEnemyStatus[2].Create(0, pRc9, this);
-	//pRc9.top += 106;
-	//pRc9.bottom = pRc9.top + 53;
-	//m_InformationEnemyStatus[3].Create(0, pRc9, this);
+	// 背景
+	RECT pRcBack = rect(ClientWidth() - 1064, 40, 1024, 1024);
+	gbColorQuad textColor(87, 65, 20, 255);
+	this->informationBoardBackground.Create(0, pRcBack, this);
+	this->informationBoardBackground.SetBk("UI\\combatinformation.tga");
 
-	////条目内容的统一部分
-	//for (int a = 0; a < 36; a++)
-	//{
-	//	m_InformationEnemy[a].SetFont(true);
-	//	m_InformationEnemy[a].SetFontColor(ci);
-	//	m_InformationEnemy[a].SetText("", true);
-	//}
-	//for (a = 0; a < 4; a++)
-	//{
-	//	m_InformationEnemyStatus[a].SetFont(true);
-	//	m_InformationEnemyStatus[a].SetFontColor(ci);
-	//	m_InformationEnemyStatus[a].SetText("", true);
-	//}
+	// 主面板
+	RECT pRcElement;
+	pRcElement = rect(ClientWidth() - 712, 104, 258, 64);
+	this->enemyID->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 328, 104, 258, 64);
+	this->enemyName->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 168, 96, 64);
+	this->enemyType->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 168, 96, 64);
+	this->enemyLevel->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 328, 168, 96, 64);
+	this->enemyMoney->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 168, 96, 64);
+	this->enemyExperience->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 232, 96, 64);
+	this->enemyAttack->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 232, 96, 64);
+	this->enemyDefence->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 232, 232, 192, 64);
+	this->enemyHP->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
+	this->enemyHPBar->Create(0, pRcElement, this);
+	this->enemyHPBar->SetBk("UI\\HPBar\\combat_bossHP.tga");
+	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
+	this->enemyHPBarBackground->Create(0, pRcElement, this);
+	this->enemyHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
+	pRcElement = rect(ClientWidth() - 712, 296, 96, 64);
+	this->enemySpeed->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 296, 96, 64);
+	this->enemyLuck->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 232, 296, 192, 64);
+	this->enemyMP->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
+	this->enemyMPBar->Create(0, pRcElement, this);
+	this->enemyMPBar->SetBk("UI\\HPBar\\combat_bossHP4.tga");
+	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
+	this->enemyMPBarBackground->Create(0, pRcElement, this);
+	this->enemyMPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
+	pRcElement = rect(ClientWidth() - 712, 360, 96, 64);
+	this->enemyWater->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 360, 288, 64);
+	this->enemyNormalAttack->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 360, 96, 64);
+	this->enemyNormalAttackGPRecover->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 424, 96, 64);
+	this->enemyFire->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 424, 288, 64);
+	this->enemyDrop->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 424, 96, 64);
+	this->enemyDropAmount->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 488, 96, 64);
+	this->enemyWind->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 488, 288, 64);
+	this->enemyAdditionalDrop->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 488, 96, 64);
+	this->enemyAdditionalDropAmount->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 552, 96, 64);
+	this->enemyThunder->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 552, 288, 64);
+	this->enemySteal->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 552, 96, 64);
+	this->enemyStealCount->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 616, 96, 64);
+	this->enemyEarth->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 520, 616, 288, 64);
+	this->enemyInitialState->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 616, 96, 64);
+	this->enemySpecificDrop->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 680, 192, 64);
+	this->enemySpecificDrop->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 424, 680, 192, 64);
+	this->enemySpecificSkillName->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 680, 96, 64);
+	this->enemySpecificDropPercentage->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 712, 744, 192, 64);
+	this->enemyAdditionalSpecificDrop->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 424, 744, 192, 64);
+	this->enemyAdditionalSpecificSkillName->Create(0, pRcElement, this);
+	pRcElement = rect(ClientWidth() - 136, 744, 96, 64);
+	this->enemyAdditionalSpecificDropPercentage->Create(0, pRcElement, this);
+	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
+	{
+		pRcElement = rect(ClientWidth() - 712, 808 + 64 * idx, 672, 64);
+		this->enemyAction[idx].Create(0, pRcElement, this);
+	}
 
-	//m_InformationEnemyBK.ShowWindow(false);
-	//m_InformationEnemyBarBK[0].ShowWindow(false);
-	//m_InformationEnemyBarBK[1].ShowWindow(false);
-	//m_InformationEnemyBar[0].ShowWindow(false);
-	//m_InformationEnemyBar[1].ShowWindow(false);
-	//for (a = 0; a < 36; a++) m_InformationEnemy[a].ShowWindow(false);
-	//for (a = 0; a < 4; a++) m_InformationEnemyStatus[a].ShowWindow(false);
+	//状态栏
+	RECT pRcStatusItem;
+	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusItemCount; ++idx)
+	{
+		pRcStatusItem = rect(ClientWidth() - 969, 40 + 106 * idx, 161, 53);
+		this->statusItems[idx].Create(0, pRcStatusItem, this);
+	}
+
+	//条目内容的统一部分
+
+	m_InformationEnemyBK.ShowWindow(false);
+	m_InformationEnemyBarBK[0].ShowWindow(false);
+	m_InformationEnemyBarBK[1].ShowWindow(false);
+	m_InformationEnemyBar[0].ShowWindow(false);
+	m_InformationEnemyBar[1].ShowWindow(false);
+	for (a = 0; a < 36; a++) m_InformationEnemy[a].ShowWindow(false);
+	for (a = 0; a < 4; a++) m_InformationEnemyStatus[a].ShowWindow(false);
 }
 
 void PEP3BattlegroundInformationBoardUI::update(int pageNumber)
@@ -686,4 +610,9 @@ void PEP3BattlegroundInformationBoardUI::update(int pageNumber)
 void PEP3BattlegroundInformationBoardUI::setVisibility(bool visibility)
 {
 	
+}
+
+void PEP3BattlegroundInformationBoardUI::create(int pageNumber)
+{
+
 }
