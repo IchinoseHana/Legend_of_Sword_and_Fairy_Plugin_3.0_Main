@@ -3,6 +3,7 @@
 #include "PEP3CombatUI.h"
 
 #include "..\..\pal3\ui\uistatic.h"
+#include "..\..\pal3\combat\cbrolestate.h"
 #include "..\Utility\PEP3UIUtil.h"
 #include "..\Utility\PEP3Define.h"
 
@@ -387,12 +388,13 @@ void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
 }
 
 // MARK: 信息面板UI
-void PEP3BattlegroundInformationBoardUIElement::Create(UINT id, const RECT& rect, UIWnd* pfather)
+void PEP3BattlegroundInformationBoardUITextElement::Create(UINT id, const RECT& rect, UIWnd* pfather)
 {
+	gbColorQuad textColor(87, 65, 20, 255);
 	UIStatic::Create(id, rect, pfather);
-	this->SetFont(true);
-	this->SetFontColor(textColor);
-	this->SetText("", true);
+	UIStatic::SetFont(true);
+	UIStatic::SetFontColor(textColor);
+	UIStatic::SetText("", true);
 }
 
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundInformationBoardUI* battlegroundInformationBoardUIInstance = new PEP3BattlegroundInformationBoardUI();
@@ -403,49 +405,53 @@ PEP3BattlegroundInformationBoardUI* PEP3BattlegroundInformationBoardUI::sharedIn
 
 PEP3BattlegroundInformationBoardUI::PEP3BattlegroundInformationBoardUI()
 {
-	this->enemyID = new UIStatic;
-	this->enemyName = new UIStatic;
-	this->enemyType = new UIStatic;
-	this->enemyLevel = new UIStatic;
-	this->enemyMoney = new UIStatic;
-	this->enemyExperience = new UIStatic;
-	this->enemyAttack = new UIStatic;
-	this->enemyDefence = new UIStatic;
-	this->enemyHP = new UIStatic;
-	this->enemyHPBar = new UIStatic;
+	this->visibility = false;
+
+	this->informationBoardBackground = new UIStatic;
+	this->enemyID = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyName = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyType = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyLevel = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyMoney = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyExperience = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyAttack = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyDefence = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyHP = new PEP3BattlegroundInformationBoardUITextElement;
 	this->enemyHPBarBackground = new UIStatic;
-	this->enemySpeed = new UIStatic;
-	this->enemyLuck = new UIStatic;
-	this->enemyMP = new UIStatic;
-	this->enemyMPBar = new UIStatic;
+	this->enemyHPBar = new UIStatic;
+	this->enemySpeed = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyLuck = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyMP = new PEP3BattlegroundInformationBoardUITextElement;
 	this->enemyMPBarBackground = new UIStatic;
-	this->enemyWater = new UIStatic;
-	this->enemyNormalAttack = new UIStatic;
-	this->enemyNormalAttackGPRecover = new UIStatic;
-	this->enemyFire = new UIStatic;
-	this->enemyDrop = new UIStatic;
-	this->enemyDropAmount = new UIStatic;
-	this->enemyWind = new UIStatic;
-	this->enemyAdditionalDrop = new UIStatic;
-	this->enemyAdditionalDropAmount = new UIStatic;
-	this->enemyThunder = new UIStatic;
-	this->enemySteal = new UIStatic;
-	this->enemyStealCount = new UIStatic;
-	this->enemyEarth = new UIStatic;
-	this->enemyInitialState = new UIStatic;
-	this->enemyInitialStateDuration = new UIStatic;
-	this->enemySpecificDrop = new UIStatic;
-	this->enemySpecificSkillName = new UIStatic;
-	this->enemySpecificDropPercentage = new UIStatic;
-	this->enemyAdditionalSpecificDrop = new UIStatic;
-	this->enemyAdditionalSpecificSkillName = new UIStatic;
-	this->enemyAdditionalSpecificDropPercentage = new UIStatic;
-	this->enemyAction = new UIStatic[PEP3BattlegroundInformationBoardUIActionCount];
-	this->statusItems = new UIStatic[PEP3BattlegroundInformationBoardUIStatusItemCount];
+	this->enemyMPBar = new UIStatic;
+	this->enemyWater = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyNormalAttack = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyNormalAttackGPRecover = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyFire = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyDropAmount = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyWind = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyAdditionalDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyAdditionalDropAmount = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyThunder = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemySteal = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyStealCount = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyEarth = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyInitialState = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyInitialStateDuration = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemySpecificDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemySpecificSkillName = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemySpecificDropPercentage = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyAdditionalSpecificDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyAdditionalSpecificSkillName = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyAdditionalSpecificDropPercentage = new PEP3BattlegroundInformationBoardUITextElement;
+	this->enemyAction = new PEP3BattlegroundInformationBoardUITextElement[PEP3BattlegroundInformationBoardUIActionCount];
+	this->enemyStatus = new PEP3BattlegroundInformationBoardUITextElement[PEP3BattlegroundInformationBoardUIStatusCount];
 }
 
 PEP3BattlegroundInformationBoardUI::~PEP3BattlegroundInformationBoardUI()
 {
+	delete this->informationBoardBackground;
 	delete this->enemyID;
 	delete this->enemyName;
 	delete this->enemyType;
@@ -455,13 +461,13 @@ PEP3BattlegroundInformationBoardUI::~PEP3BattlegroundInformationBoardUI()
 	delete this->enemyAttack;
 	delete this->enemyDefence;
 	delete this->enemyHP;
-	delete this->enemyHPBar;
 	delete this->enemyHPBarBackground;
+	delete this->enemyHPBar;
 	delete this->enemySpeed;
 	delete this->enemyLuck;
 	delete this->enemyMP;
-	delete this->enemyMPBar;
 	delete this->enemyMPBarBackground;
+	delete this->enemyMPBar;
 	delete this->enemyWater;
 	delete this->enemyNormalAttack;
 	delete this->enemyNormalAttackGPRecover;
@@ -484,7 +490,7 @@ PEP3BattlegroundInformationBoardUI::~PEP3BattlegroundInformationBoardUI()
 	delete this->enemyAdditionalSpecificSkillName;
 	delete this->enemyAdditionalSpecificDropPercentage;
 	delete[] this->enemyAction;
-	delete[] this->statusItems;
+	delete[] this->enemyStatus;
 }
 
 void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
@@ -494,125 +500,257 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	// 背景
 	RECT pRcBack = rect(ClientWidth() - 1064, 40, 1024, 1024);
 	gbColorQuad textColor(87, 65, 20, 255);
-	this->informationBoardBackground.Create(0, pRcBack, this);
-	this->informationBoardBackground.SetBk("UI\\combatinformation.tga");
+	this->informationBoardBackground->Create(0, pRcBack, ui);
+	this->informationBoardBackground->SetBk("UI\\combatinformation.tga");
 
 	// 主面板
 	RECT pRcElement;
 	pRcElement = rect(ClientWidth() - 712, 104, 258, 64);
-	this->enemyID->Create(0, pRcElement, this);
+	this->enemyID->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 104, 258, 64);
-	this->enemyName->Create(0, pRcElement, this);
+	this->enemyName->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 168, 96, 64);
-	this->enemyType->Create(0, pRcElement, this);
+	this->enemyType->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 168, 96, 64);
-	this->enemyLevel->Create(0, pRcElement, this);
+	this->enemyLevel->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 168, 96, 64);
-	this->enemyMoney->Create(0, pRcElement, this);
+	this->enemyMoney->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 168, 96, 64);
-	this->enemyExperience->Create(0, pRcElement, this);
+	this->enemyExperience->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 232, 96, 64);
-	this->enemyAttack->Create(0, pRcElement, this);
+	this->enemyAttack->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 232, 96, 64);
-	this->enemyDefence->Create(0, pRcElement, this);
+	this->enemyDefence->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 232, 232, 192, 64);
-	this->enemyHP->Create(0, pRcElement, this);
+	this->enemyHP->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
-	this->enemyHPBar->Create(0, pRcElement, this);
-	this->enemyHPBar->SetBk("UI\\HPBar\\combat_bossHP.tga");
+	this->enemyHPBarBackground->Create(0, pRcElement, ui);
+	this->enemyHPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
 	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
-	this->enemyHPBarBackground->Create(0, pRcElement, this);
-	this->enemyHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
+	this->enemyHPBar->Create(0, pRcElement, ui);
+	this->enemyHPBar->SetBk("UI\\HPBar\\combat_bossHP1.tga");
 	pRcElement = rect(ClientWidth() - 712, 296, 96, 64);
-	this->enemySpeed->Create(0, pRcElement, this);
+	this->enemySpeed->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 296, 96, 64);
-	this->enemyLuck->Create(0, pRcElement, this);
+	this->enemyLuck->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 232, 296, 192, 64);
-	this->enemyMP->Create(0, pRcElement, this);
+	this->enemyMP->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
-	this->enemyMPBar->Create(0, pRcElement, this);
+	this->enemyMPBarBackground->Create(0, pRcElement, ui);
+	this->enemyMPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
+	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
+	this->enemyMPBar->Create(0, pRcElement, ui);
 	this->enemyMPBar->SetBk("UI\\HPBar\\combat_bossHP4.tga");
-	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
-	this->enemyMPBarBackground->Create(0, pRcElement, this);
-	this->enemyMPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
 	pRcElement = rect(ClientWidth() - 712, 360, 96, 64);
-	this->enemyWater->Create(0, pRcElement, this);
+	this->enemyWater->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 360, 288, 64);
-	this->enemyNormalAttack->Create(0, pRcElement, this);
+	this->enemyNormalAttack->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 360, 96, 64);
-	this->enemyNormalAttackGPRecover->Create(0, pRcElement, this);
+	this->enemyNormalAttackGPRecover->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 424, 96, 64);
-	this->enemyFire->Create(0, pRcElement, this);
+	this->enemyFire->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 424, 288, 64);
-	this->enemyDrop->Create(0, pRcElement, this);
+	this->enemyDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 424, 96, 64);
-	this->enemyDropAmount->Create(0, pRcElement, this);
+	this->enemyDropAmount->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 488, 96, 64);
-	this->enemyWind->Create(0, pRcElement, this);
+	this->enemyWind->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 488, 288, 64);
-	this->enemyAdditionalDrop->Create(0, pRcElement, this);
+	this->enemyAdditionalDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 488, 96, 64);
-	this->enemyAdditionalDropAmount->Create(0, pRcElement, this);
+	this->enemyAdditionalDropAmount->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 552, 96, 64);
-	this->enemyThunder->Create(0, pRcElement, this);
+	this->enemyThunder->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 552, 288, 64);
-	this->enemySteal->Create(0, pRcElement, this);
+	this->enemySteal->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 552, 96, 64);
-	this->enemyStealCount->Create(0, pRcElement, this);
+	this->enemyStealCount->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 616, 96, 64);
-	this->enemyEarth->Create(0, pRcElement, this);
+	this->enemyEarth->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 616, 288, 64);
-	this->enemyInitialState->Create(0, pRcElement, this);
+	this->enemyInitialState->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 616, 96, 64);
-	this->enemySpecificDrop->Create(0, pRcElement, this);
+	this->enemySpecificDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 680, 192, 64);
-	this->enemySpecificDrop->Create(0, pRcElement, this);
+	this->enemySpecificDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 424, 680, 192, 64);
-	this->enemySpecificSkillName->Create(0, pRcElement, this);
+	this->enemySpecificSkillName->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 680, 96, 64);
-	this->enemySpecificDropPercentage->Create(0, pRcElement, this);
+	this->enemySpecificDropPercentage->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 744, 192, 64);
-	this->enemyAdditionalSpecificDrop->Create(0, pRcElement, this);
+	this->enemyAdditionalSpecificDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 424, 744, 192, 64);
-	this->enemyAdditionalSpecificSkillName->Create(0, pRcElement, this);
+	this->enemyAdditionalSpecificSkillName->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 744, 96, 64);
-	this->enemyAdditionalSpecificDropPercentage->Create(0, pRcElement, this);
+	this->enemyAdditionalSpecificDropPercentage->Create(0, pRcElement, ui);
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
 	{
 		pRcElement = rect(ClientWidth() - 712, 808 + 64 * idx, 672, 64);
-		this->enemyAction[idx].Create(0, pRcElement, this);
+		this->enemyAction[idx].Create(0, pRcElement, ui);
 	}
 
-	//状态栏
+	// 状态栏
 	RECT pRcStatusItem;
-	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusItemCount; ++idx)
+	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusCount; ++idx)
 	{
 		pRcStatusItem = rect(ClientWidth() - 969, 40 + 106 * idx, 161, 53);
-		this->statusItems[idx].Create(0, pRcStatusItem, this);
+		this->enemyStatus[idx].Create(0, pRcStatusItem, ui);
 	}
 
-	//条目内容的统一部分
-
-	m_InformationEnemyBK.ShowWindow(false);
-	m_InformationEnemyBarBK[0].ShowWindow(false);
-	m_InformationEnemyBarBK[1].ShowWindow(false);
-	m_InformationEnemyBar[0].ShowWindow(false);
-	m_InformationEnemyBar[1].ShowWindow(false);
-	for (a = 0; a < 36; a++) m_InformationEnemy[a].ShowWindow(false);
-	for (a = 0; a < 4; a++) m_InformationEnemyStatus[a].ShowWindow(false);
+	// 默认隐藏
+	this->setVisibility(false);
 }
 
-void PEP3BattlegroundInformationBoardUI::update(int pageNumber)
+void PEP3BattlegroundInformationBoardUI::update(int pageNumber, string information[], CCBRoleState *roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[])
 {
-	
+	int idx;
+
+	// 先更新数据库中的静态数据
+    this->enemyID->SetText((char*)information[0].c_str(), true);
+	this->enemyName->SetText((char*)information[1].c_str(), true);
+	this->enemyType->SetText((char*)information[2].c_str(), true);
+	this->enemyLevel->SetText((char*)information[3].c_str(), true);
+	this->enemyMoney->SetText((char*)information[4].c_str(), true);
+	this->enemyExperience->SetText((char*)information[5].c_str(), true);
+	this->enemyAttack->SetText((char*)information[6].c_str(), true);
+	this->enemyDefence->SetText((char*)information[7].c_str(), true);
+	this->enemyHP->SetText((char*)information[8].c_str(), true);
+	this->enemySpeed->SetText((char*)information[9].c_str(), true);
+	this->enemyLuck->SetText((char*)information[10].c_str(), true);
+	this->enemyMP->SetText((char*)information[11].c_str(), true);
+	this->enemyWater->SetText((char*)information[12].c_str(), true);
+	this->enemyNormalAttack->SetText((char*)information[13].c_str(), true);
+	this->enemyNormalAttackGPRecover->SetText((char*)information[14].c_str(), true);
+	this->enemyFire->SetText((char*)information[15].c_str(), true);
+	this->enemyDrop->SetText((char*)information[16].c_str(), true);
+	this->enemyDropAmount->SetText((char*)information[17].c_str(), true);
+	this->enemyWind->SetText((char*)information[18].c_str(), true);
+	this->enemyAdditionalDrop->SetText((char*)information[19].c_str(), true);
+	this->enemyAdditionalDropAmount->SetText((char*)information[20].c_str(), true);
+	this->enemyThunder->SetText((char*)information[21].c_str(), true);
+	this->enemySteal->SetText((char*)information[22].c_str(), true);
+	this->enemyStealCount->SetText((char*)information[23].c_str(), true);
+	this->enemyEarth->SetText((char*)information[24].c_str(), true);
+	this->enemyInitialState->SetText((char*)information[25].c_str(), true);
+	this->enemyInitialStateDuration->SetText((char*)information[26].c_str(), true);
+	this->enemySpecificDrop->SetText((char*)information[27].c_str(), true);
+	this->enemySpecificSkillName->SetText((char*)information[28].c_str(), true);
+	this->enemySpecificDropPercentage->SetText((char*)information[29].c_str(), true);
+	this->enemyAdditionalSpecificDrop->SetText((char*)information[30].c_str(), true);
+	this->enemyAdditionalSpecificSkillName->SetText((char*)information[31].c_str(), true);
+	this->enemyAdditionalSpecificDropPercentage->SetText((char*)information[32].c_str(), true);
+	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
+	{
+		this->enemyAction[idx].SetText((char*)information[33 + idx].c_str(), true);
+	}
+
+	// 再更新当前的实际数据
+	char stringBuffer[256];
+	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nLevel);
+	this->enemyLevel->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nAttack);
+	this->enemyAttack->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nDefence);
+	this->enemyDefence->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nHP);
+	this->enemyHP->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nSpeed);
+	this->enemySpeed->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nLuck);
+	this->enemyLuck->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nMP);
+	this->enemyMP->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Water));
+	this->enemyWater->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Fire));
+	this->enemyFire->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Wind));
+	this->enemyWind->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Thunder));
+	this->enemyThunder->SetText(stringBuffer, true);
+	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Earth));
+	this->enemyEarth->SetText(stringBuffer, true);
+
+	// 如果有需要显示的特殊信息，则更新
+	if (customizedHPText != "")
+	{
+		this->enemyHP->SetText((char*)customizedHPText.c_str(), true);
+	}
+	if (customizedMPText != "")
+	{
+		this->enemyMP->SetText((char*)customizedMPText.c_str(), true);
+	}
+
+	// 处理生命槽和魔力槽
+	RECT pRcElement;
+	pRcElement = rect(ClientWidth() - 328, 261, roleState->GetRole(roleIndex)->nFullHP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nHP) / roleState->GetRole(roleIndex)->nFullHP), 6);
+	this->enemyHPBar->SetRect(pRcElement);
+	pRcElement = rect(ClientWidth() - 328, 325, roleState->GetRole(roleIndex)->nFullMP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nMP) / roleState->GetRole(roleIndex)->nFullMP), 6);
+	this->enemyMPBar->SetRect(pRcElement);
+
+	// 处理状态
+	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusCount; ++idx)
+	{
+		this->enemyStatus[idx].SetText((char*)statusName[idx].c_str(), true);
+	}
 }
 
 void PEP3BattlegroundInformationBoardUI::setVisibility(bool visibility)
 {
-	
+	int idx;
+
+	this->visibility = visibility;
+
+	this->informationBoardBackground->ShowWindow(visibility);
+	this->enemyID->ShowWindow(visibility);
+	this->enemyName->ShowWindow(visibility);
+	this->enemyType->ShowWindow(visibility);
+	this->enemyLevel->ShowWindow(visibility);
+	this->enemyMoney->ShowWindow(visibility);
+	this->enemyExperience->ShowWindow(visibility);
+	this->enemyAttack->ShowWindow(visibility);
+	this->enemyDefence->ShowWindow(visibility);
+	this->enemyHP->ShowWindow(visibility);
+	this->enemyHPBar->ShowWindow(visibility);
+	this->enemyHPBarBackground->ShowWindow(visibility);
+	this->enemySpeed->ShowWindow(visibility);
+	this->enemyLuck->ShowWindow(visibility);
+	this->enemyMP->ShowWindow(visibility);
+	this->enemyMPBar->ShowWindow(visibility);
+	this->enemyMPBarBackground->ShowWindow(visibility);
+	this->enemyWater->ShowWindow(visibility);
+	this->enemyNormalAttack->ShowWindow(visibility);
+	this->enemyNormalAttackGPRecover->ShowWindow(visibility);
+	this->enemyFire->ShowWindow(visibility);
+	this->enemyDrop->ShowWindow(visibility);
+	this->enemyDropAmount->ShowWindow(visibility);
+	this->enemyWind->ShowWindow(visibility);
+	this->enemyAdditionalDrop->ShowWindow(visibility);
+	this->enemyAdditionalDropAmount->ShowWindow(visibility);
+	this->enemyThunder->ShowWindow(visibility);
+	this->enemySteal->ShowWindow(visibility);
+	this->enemyStealCount->ShowWindow(visibility);
+	this->enemyEarth->ShowWindow(visibility);
+	this->enemyInitialState->ShowWindow(visibility);
+	this->enemyInitialStateDuration->ShowWindow(visibility);
+	this->enemySpecificDrop->ShowWindow(visibility);
+	this->enemySpecificSkillName->ShowWindow(visibility);
+	this->enemySpecificDropPercentage->ShowWindow(visibility);
+	this->enemyAdditionalSpecificDrop->ShowWindow(visibility);
+	this->enemyAdditionalSpecificSkillName->ShowWindow(visibility);
+	this->enemyAdditionalSpecificDropPercentage->ShowWindow(visibility);
+	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
+	{
+		this->enemyAction[idx].ShowWindow(visibility);
+	}
+	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusCount; ++idx)
+	{
+		this->enemyStatus[idx].ShowWindow(visibility);
+	}
 }
 
-void PEP3BattlegroundInformationBoardUI::create(int pageNumber)
+bool PEP3BattlegroundInformationBoardUI::getVisibility()
 {
-
+	return this->visibility;
 }
+

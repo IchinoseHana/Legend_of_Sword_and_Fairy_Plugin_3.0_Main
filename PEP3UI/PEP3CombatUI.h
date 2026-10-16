@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "..\..\pal3\ui\uiwnd.h"
+#include "..\..\pal3\ui\uistatic.h"
 
-class UIStatic;
+using std::string;
 
 // MARK: 仙灵、武灵UI
 class PEP3BattlegroundSpiritUI
@@ -81,7 +81,7 @@ public:
 	void update(int environmentIndex[], int environmentNumber[]);
 	void setVisibility(bool visibility);
 };
-PEP3BattlegroundInformationBoardUI
+
 // MARK: 首领血条UI
 static const int PEP3BattlegroundBossHPBarUIBarCount = 5;
 class PEP3BattlegroundBossHPBarUI
@@ -101,17 +101,21 @@ public:
 };
 
 // MARK: 信息面板UI
+class CCBRoleState;
 class PEP3BattlegroundInformationBoardUITextElement : public UIStatic
 {
 public:
-	void Create(UINT id, const RECT& rect, UIWnd* pfather);
+	void PEP3BattlegroundInformationBoardUITextElement::Create(UINT id, const RECT& rect, UIWnd* pfather);
 };
 
 static const int PEP3BattlegroundInformationBoardUIActionCount = 3;
-static const int PEP3BattlegroundInformationBoardUIStatusItemCount = 4;
+static const int PEP3BattlegroundInformationBoardUIStatusCount = 4;
 class PEP3BattlegroundInformationBoardUI
 {
 private:
+	// Initial variables
+	bool visibility;
+
 	// Background
 	UIStatic* informationBoardBackground;
 
@@ -126,13 +130,13 @@ private:
 	PEP3BattlegroundInformationBoardUITextElement* enemyAttack;
 	PEP3BattlegroundInformationBoardUITextElement* enemyDefence;
 	PEP3BattlegroundInformationBoardUITextElement* enemyHP;
-	UIStatic* enemyHPBar;
 	UIStatic* enemyHPBarBackground;
+	UIStatic* enemyHPBar;
 	PEP3BattlegroundInformationBoardUITextElement* enemySpeed;
 	PEP3BattlegroundInformationBoardUITextElement* enemyLuck;
 	PEP3BattlegroundInformationBoardUITextElement* enemyMP;
-	UIStatic* enemyMPBar;
 	UIStatic* enemyMPBarBackground;
+	UIStatic* enemyMPBar;
 	PEP3BattlegroundInformationBoardUITextElement* enemyWater;
 	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttack;
 	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttackGPRecover;
@@ -157,7 +161,7 @@ private:
 	PEP3BattlegroundInformationBoardUITextElement* enemyAction;
 
 	// Status Items
-	PEP3BattlegroundInformationBoardUITextElement* statusItems;
+	PEP3BattlegroundInformationBoardUITextElement* enemyStatus;
 
 public:
 	PEP3BattlegroundInformationBoardUI();
@@ -165,8 +169,9 @@ public:
 
 	static PEP3BattlegroundInformationBoardUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(int pageNumber);
+	void update(int pageNumber, string information[], CCBRoleState* roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[]);
 	void setVisibility(bool visibility);
+	bool getVisibility();
 };
 
 #endif
