@@ -21,16 +21,16 @@ PEP3BattlegroundSpiritUI* PEP3BattlegroundSpiritUI::sharedInstance()
 
 PEP3BattlegroundSpiritUI::PEP3BattlegroundSpiritUI()
 {
-	this->spiritSlot = new UIStatic;
-	this->spiritNumber = new UIStatic;
-	this->spiritUsingStatus = new UIStatic;
+	spiritSlot = new UIStatic;
+	spiritNumber = new UIStatic;
+	spiritUsingStatus = new UIStatic;
 }
 
 PEP3BattlegroundSpiritUI::~PEP3BattlegroundSpiritUI()
 {
-	delete this->spiritSlot;
-	delete this->spiritNumber;
-	delete this->spiritUsingStatus;
+	delete spiritSlot;
+	delete spiritNumber;
+	delete spiritUsingStatus;
 }
 
 void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
@@ -38,37 +38,37 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 	int leftMargin = calCombatUIHorizontalMargin();
 
 	RECT pRcSlot = rect(leftMargin, 40, 256, 16);
-	this->spiritSlot->Create(0, pRcSlot, ui);
-	this->spiritSlot->SetBk("UI\\skillbar0.tga");
+	spiritSlot->Create(0, pRcSlot, ui);
+	spiritSlot->SetBk("UI\\skillbar0.tga");
 
 	RECT pRcNumber = rect(leftMargin + 260, 32, 45, 45);
-	this->spiritNumber->Create(0, pRcNumber, ui);
+	spiritNumber->Create(0, pRcNumber, ui);
 	gbColorQuad color(0, 255, 255, 255);
-	this->spiritNumber->SetFontColor(color);
-	this->spiritNumber->SetText("0");
+	spiritNumber->SetFontColor(color);
+	spiritNumber->SetText("0");
 
 	RECT pRcUsingStatus = rect(leftMargin, 70, 32, 32);
-	this->spiritUsingStatus->Create(0, pRcUsingStatus, ui);
-	this->spiritUsingStatus->SetBk("UI\\spiritIdle.tga");
+	spiritUsingStatus->Create(0, pRcUsingStatus, ui);
+	spiritUsingStatus->SetBk("UI\\spiritIdle.tga");
 }
 
 void PEP3BattlegroundSpiritUI::update(int spiritNumber, bool isUsingSpirit)
 {
 	char fileName[PEP3_MAX_FILEPATH_LENGTH] = { 0 };
 	sprintf(fileName, "UI\\SkillBar\\skillbar%d.tga", spiritNumber);
-	this->spiritSlot->SetBk(fileName);
+	spiritSlot->SetBk(fileName);
 
 	char numberText[3] = { 0 };
 	sprintf(numberText, "%d", abs(spiritNumber));
 	this->spiritNumber->SetText(numberText);
 
-	this->spiritUsingStatus->SetBk(isUsingSpirit ? "UI\\spiritUse.tga" : "UI\\spiritIdle.tga");
+	spiritUsingStatus->SetBk(isUsingSpirit ? "UI\\spiritUse.tga" : "UI\\spiritIdle.tga");
 }
 
 void PEP3BattlegroundSpiritUI::setVisibility(bool visibility)
 {
-	this->spiritSlot->ShowWindow(visibility);
-	this->spiritNumber->ShowWindow(visibility);
+	spiritSlot->ShowWindow(visibility);
+	spiritNumber->ShowWindow(visibility);
 }
 
 // MARK: 战场状态、战场属性UI
@@ -80,22 +80,22 @@ PEP3BattlegroundStateUI* PEP3BattlegroundStateUI::sharedInstance()
 
 PEP3BattlegroundStateUI::PEP3BattlegroundStateUI()
 {
-	this->resurrectionIcon = new UIStatic;
-	this->resurrectionNumber = new UIStatic;
-	this->battlegroundStateIcon = new UIStatic;
-	this->battlegroundStateNumber = new UIStatic;
-	this->battlegroundPropertyIcon = new UIStatic;
-	this->battlegroundPropertyNumber = new UIStatic;
+	resurrectionIcon = new UIStatic;
+	resurrectionNumber = new UIStatic;
+	battlegroundStateIcon = new UIStatic;
+	battlegroundStateNumber = new UIStatic;
+	battlegroundPropertyIcon = new UIStatic;
+	battlegroundPropertyNumber = new UIStatic;
 }
 
 PEP3BattlegroundStateUI::~PEP3BattlegroundStateUI()
 {
-	delete this->resurrectionIcon;
-	delete this->resurrectionNumber;
-	delete this->battlegroundStateIcon;
-	delete this->battlegroundStateNumber;
-	delete this->battlegroundPropertyIcon;
-	delete this->battlegroundPropertyNumber;
+	delete resurrectionIcon;
+	delete resurrectionNumber;
+	delete battlegroundStateIcon;
+	delete battlegroundStateNumber;
+	delete battlegroundPropertyIcon;
+	delete battlegroundPropertyNumber;
 }
 
 void PEP3BattlegroundStateUI::create(UIWnd* ui)
@@ -104,31 +104,31 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 	gbColorQuad color(0, 255, 255, 255);
 
 	RECT pRCResIcon = rect(leftMargin + 53, 70, 32, 32);
-	this->resurrectionIcon->Create(0, pRCResIcon, ui);
-	this->resurrectionIcon->SetBk("UI\\battlegroundResurrection.tga");
+	resurrectionIcon->Create(0, pRCResIcon, ui);
+	resurrectionIcon->SetBk("UI\\battlegroundResurrection.tga");
 
-	RECT pRcResNumber = rect(leftMargin + 92, 70, 45, 45);
-	this->resurrectionNumber->Create(0, pRcResNumber, ui);
-	this->resurrectionNumber->SetFontColor(color);
-	this->resurrectionNumber->SetText("0");
+	RECT pRcResNumber = rect(leftMargin + 92, 70, 45, 32);
+	resurrectionNumber->Create(0, pRcResNumber, ui);
+	resurrectionNumber->SetFontColor(color);
+	resurrectionNumber->SetText("0");
 
 	RECT pRCBatStateIcon = rect(leftMargin + 123, 70, 32, 32);
-	this->battlegroundStateIcon->Create(0, pRCBatStateIcon, ui);
-	this->battlegroundStateIcon->SetBk("UI\\battlegroundStateDefault.tga");
+	battlegroundStateIcon->Create(0, pRCBatStateIcon, ui);
+	battlegroundStateIcon->SetBk("UI\\battlegroundStateDefault.tga");
 
-	RECT pRCBatStateNumber = rect(leftMargin + 161, 70, 45, 45);
-	this->battlegroundStateNumber->Create(0, pRCBatStateNumber, ui);
-	this->battlegroundStateNumber->SetFontColor(color);
-	this->battlegroundStateNumber->SetText("000");
+	RECT pRCBatStateNumber = rect(leftMargin + 161, 70, 45, 32);
+	battlegroundStateNumber->Create(0, pRCBatStateNumber, ui);
+	battlegroundStateNumber->SetFontColor(color);
+	battlegroundStateNumber->SetText("000");
 
 	RECT pRCBatPropertyIcon = rect(leftMargin + 206, 70, 32, 32);
-	this->battlegroundPropertyIcon->Create(0, pRCBatPropertyIcon, ui);
-	this->battlegroundPropertyIcon->SetBk("UI\\battlegroundStateDefault.tga");
+	battlegroundPropertyIcon->Create(0, pRCBatPropertyIcon, ui);
+	battlegroundPropertyIcon->SetBk("UI\\battlegroundStateDefault.tga");
 
-	RECT pRCBatPropertyNumber = rect(leftMargin + 244, 70, 45, 45);
-	this->battlegroundPropertyNumber->Create(0, pRCBatPropertyNumber, ui);
-	this->battlegroundPropertyNumber->SetFontColor(color);
-	this->battlegroundPropertyNumber->SetText("000");
+	RECT pRCBatPropertyNumber = rect(leftMargin + 244, 70, 45, 32);
+	battlegroundPropertyNumber->Create(0, pRCBatPropertyNumber, ui);
+	battlegroundPropertyNumber->SetFontColor(color);
+	battlegroundPropertyNumber->SetText("000");
 }
 
 void PEP3BattlegroundStateUI::update(int resurrectionNumber, int stateIndex, int stateNumber, int propertyIndex, int propertyNumnber)
@@ -140,29 +140,29 @@ void PEP3BattlegroundStateUI::update(int resurrectionNumber, int stateIndex, int
 	this->resurrectionNumber->SetText(numberText);
 	
 	sprintf(fileName, "UI\\BattlegroundState\\battlejyoutai%d.tga", stateIndex);
-	this->battlegroundStateIcon->SetBk(stateIndex <= 0 ? "UI\\battlegroundStateDefault.tga" : fileName);
+	battlegroundStateIcon->SetBk(stateIndex <= 0 ? "UI\\battlegroundStateDefault.tga" : fileName);
 
 	memset(numberText, '\0', sizeof(numberText));
 	sprintf(numberText, "%03d", abs(stateNumber));
-	this->battlegroundStateNumber->SetText(numberText);
+	battlegroundStateNumber->SetText(numberText);
 	
 	memset(fileName, '\0', sizeof(fileName));
 	sprintf(fileName, "UI\\BattlegroundProperty\\battlezokusei%d.tga", propertyIndex);
-	this->battlegroundPropertyIcon->SetBk(propertyIndex <= 0 ? "UI\\battlegroundStateDefault.tga" : fileName);
+	battlegroundPropertyIcon->SetBk(propertyIndex <= 0 ? "UI\\battlegroundStateDefault.tga" : fileName);
 	
 	memset(numberText, '\0', sizeof(numberText));
 	sprintf(numberText, "%03d", abs(propertyNumnber));
-	this->battlegroundPropertyNumber->SetText(numberText);
+	battlegroundPropertyNumber->SetText(numberText);
 }
 
 void PEP3BattlegroundStateUI::setVisibility(bool visibility)
 {
-	this->resurrectionIcon->ShowWindow(visibility);
-	this->resurrectionNumber->ShowWindow(visibility);
-	this->battlegroundStateIcon->ShowWindow(visibility);
-	this->battlegroundStateNumber->ShowWindow(visibility);
-	this->battlegroundPropertyIcon->ShowWindow(visibility);
-	this->battlegroundPropertyNumber->ShowWindow(visibility);
+	resurrectionIcon->ShowWindow(visibility);
+	resurrectionNumber->ShowWindow(visibility);
+	battlegroundStateIcon->ShowWindow(visibility);
+	battlegroundStateNumber->ShowWindow(visibility);
+	battlegroundPropertyIcon->ShowWindow(visibility);
+	battlegroundPropertyNumber->ShowWindow(visibility);
 }
 
 // MARK: 暗器装填、合击UI
@@ -174,18 +174,18 @@ PEP3BattlegroundChargeUI* PEP3BattlegroundChargeUI::sharedInstance()
 
 PEP3BattlegroundChargeUI::PEP3BattlegroundChargeUI()
 {
-	this->battlegroundChargeIcon = new UIStatic;
-	this->battlegroundChargeNumber = new UIStatic;
-	this->battlegroundCoorperationAttackIcon = new UIStatic;
-	this->battlegroundCoorperationAttackNumber = new UIStatic;
+	battlegroundChargeIcon = new UIStatic;
+	battlegroundChargeNumber = new UIStatic;
+	battlegroundCoorperationAttackIcon = new UIStatic;
+	battlegroundCoorperationAttackNumber = new UIStatic;
 }
 
 PEP3BattlegroundChargeUI::~PEP3BattlegroundChargeUI()
 {
-	delete this->battlegroundChargeIcon;
-	delete this->battlegroundChargeNumber;
-	delete this->battlegroundCoorperationAttackIcon;
-	delete this->battlegroundCoorperationAttackNumber;
+	delete battlegroundChargeIcon;
+	delete battlegroundChargeNumber;
+	delete battlegroundCoorperationAttackIcon;
+	delete battlegroundCoorperationAttackNumber;
 }
 
 void PEP3BattlegroundChargeUI::create(UIWnd* ui)
@@ -198,42 +198,42 @@ void PEP3BattlegroundChargeUI::create(UIWnd* ui)
 
 	// 先处理合击，再处理暗器装填
 	RECT pRcCoAttackIcon = rect(rightMargin - 100, upperBound, 32, 32);
-	this->battlegroundCoorperationAttackIcon->Create(0, pRcCoAttackIcon, ui);
-	this->battlegroundCoorperationAttackIcon->SetBk("UI\\battlegroundCoorperationAttack.tga");
+	battlegroundCoorperationAttackIcon->Create(0, pRcCoAttackIcon, ui);
+	battlegroundCoorperationAttackIcon->SetBk("UI\\battlegroundCoorperationAttack.tga");
 
-	RECT pRcCoAttackNumber = rect(pRcCoAttackIcon.left + 48, upperBound, 32, 32);
-	this->battlegroundCoorperationAttackNumber->Create(0, pRcCoAttackNumber, ui);
-	this->battlegroundCoorperationAttackNumber->SetFontColor(color);
-	this->battlegroundCoorperationAttackNumber->SetText("00");
+	RECT pRcCoAttackNumber = rect(pRcCoAttackIcon.left + 46, upperBound, 45, 32);
+	battlegroundCoorperationAttackNumber->Create(0, pRcCoAttackNumber, ui);
+	battlegroundCoorperationAttackNumber->SetFontColor(color);
+	battlegroundCoorperationAttackNumber->SetText("000");
 
-	RECT pRcChargeIcon = rect(pRcCoAttackNumber.left - 144, upperBound, 32, 32);
-	this->battlegroundChargeIcon->Create(0, pRcChargeIcon, ui);
-	this->battlegroundChargeIcon->SetBk("UI\\battlegroundCharge.tga");
+	RECT pRcChargeIcon = rect(pRcCoAttackNumber.left - 145, upperBound, 32, 32);
+	battlegroundChargeIcon->Create(0, pRcChargeIcon, ui);
+	battlegroundChargeIcon->SetBk("UI\\battlegroundCharge.tga");
 
-	RECT pRcChargeNumber = rect(pRcChargeIcon.left + 48, upperBound, 32, 32);
-	this->battlegroundChargeNumber->Create(0, pRcChargeNumber, ui);
-	this->battlegroundChargeNumber->SetFontColor(color);
-	this->battlegroundChargeNumber->SetText("00");
+	RECT pRcChargeNumber = rect(pRcChargeIcon.left + 46, upperBound, 45, 32);
+	battlegroundChargeNumber->Create(0, pRcChargeNumber, ui);
+	battlegroundChargeNumber->SetFontColor(color);
+	battlegroundChargeNumber->SetText("000");
 }
 
 void PEP3BattlegroundChargeUI::update(int chargeNumber, int cooperationAttackNumber)
 {
 	char numberText[3] = { 0 };
 
-	sprintf(numberText, "%02d", abs(chargeNumber));
-	this->battlegroundChargeNumber->SetText(numberText);
+	sprintf(numberText, "%03d", abs(chargeNumber));
+	battlegroundChargeNumber->SetText(numberText);
 
 	memset(numberText, '\0', sizeof(cooperationAttackNumber));
-	sprintf(numberText, "%02d", abs(cooperationAttackNumber));
-	this->battlegroundCoorperationAttackNumber->SetText(numberText);
+	sprintf(numberText, "%03d", abs(cooperationAttackNumber));
+	battlegroundCoorperationAttackNumber->SetText(numberText);
 }
 
 void PEP3BattlegroundChargeUI::setVisibility(bool visibility)
 {
-	this->battlegroundChargeIcon->ShowWindow(visibility);
-	this->battlegroundChargeNumber->ShowWindow(visibility);
-	this->battlegroundCoorperationAttackIcon->ShowWindow(visibility);
-	this->battlegroundCoorperationAttackNumber->ShowWindow(visibility);
+	battlegroundChargeIcon->ShowWindow(visibility);
+	battlegroundChargeNumber->ShowWindow(visibility);
+	battlegroundCoorperationAttackIcon->ShowWindow(visibility);
+	battlegroundCoorperationAttackNumber->ShowWindow(visibility);
 }
 
 // MARK: 战场环境UI
@@ -245,12 +245,12 @@ PEP3BattlegroundEnvironmentUI* PEP3BattlegroundEnvironmentUI::sharedInstance()
 
 PEP3BattlegroundEnvironmentUI::PEP3BattlegroundEnvironmentUI()
 {
-	this->battlegroundEnvironmentIcon = new UIStatic[PEP3BattlegroundEnvironmentUIIconCount];
+	battlegroundEnvironmentIcon = new UIStatic[PEP3BattlegroundEnvironmentUIIconCount];
 }
 
 PEP3BattlegroundEnvironmentUI::~PEP3BattlegroundEnvironmentUI()
 {
-	delete[] this->battlegroundEnvironmentIcon;
+	delete[] battlegroundEnvironmentIcon;
 }
 
 void PEP3BattlegroundEnvironmentUI::create(UIWnd* ui)
@@ -262,12 +262,12 @@ void PEP3BattlegroundEnvironmentUI::create(UIWnd* ui)
 	for (int idx = 0; idx < PEP3BattlegroundEnvironmentUIIconCount; ++idx)
 	{
 		RECT pRcIcon = rect(rightMargin - 52 - (idx * 48), upperBound, 32, 32);
-		this->battlegroundEnvironmentIcon[idx].Create(0, pRcIcon, ui);
-		this->battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
+		battlegroundEnvironmentIcon[idx].Create(0, pRcIcon, ui);
+		battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
 	}
 
 	// 默认不显示，除非有值
-	this->setVisibility(false);
+	setVisibility(false);
 }
 
 void PEP3BattlegroundEnvironmentUI::update(int environmentIndex[], int environmentNumber[])
@@ -278,13 +278,13 @@ void PEP3BattlegroundEnvironmentUI::update(int environmentIndex[], int environme
 		{
 			char fileName[PEP3_MAX_FILEPATH_LENGTH];
 			sprintf(fileName, "UI\\BattlegroundEnvironment\\battlekannkyou%d.tga", environmentIndex[idx]);
-			this->battlegroundEnvironmentIcon[idx].SetBk(fileName);
-			this->battlegroundEnvironmentIcon[idx].ShowWindow(true);
+			battlegroundEnvironmentIcon[idx].SetBk(fileName);
+			battlegroundEnvironmentIcon[idx].ShowWindow(true);
 		}
 		else
 		{
-			this->battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
-			this->battlegroundEnvironmentIcon[idx].ShowWindow(false);
+			battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
+			battlegroundEnvironmentIcon[idx].ShowWindow(false);
 		}
 	}
 }
@@ -293,7 +293,7 @@ void PEP3BattlegroundEnvironmentUI::setVisibility(bool visibility)
 {
 	for (int idx = 0; idx < PEP3BattlegroundEnvironmentUIIconCount; ++idx)
 	{
-		this->battlegroundEnvironmentIcon[idx].ShowWindow(visibility);
+		battlegroundEnvironmentIcon[idx].ShowWindow(visibility);
 	}
 }
 
@@ -306,34 +306,34 @@ PEP3BattlegroundBossHPBarUI* PEP3BattlegroundBossHPBarUI::sharedInstance()
 
 PEP3BattlegroundBossHPBarUI::PEP3BattlegroundBossHPBarUI()
 {
-	this->bossHPBar = new UIStatic[PEP3BattlegroundBossHPBarUIBarCount];
-	this->bossHPBarBackground = new UIStatic;
+	bossHPBar = new UIStatic[PEP3BattlegroundBossHPBarUIBarCount];
+	bossHPBarBackground = new UIStatic;
 }
 
 PEP3BattlegroundBossHPBarUI::~PEP3BattlegroundBossHPBarUI()
 {
-	delete[] this->bossHPBar;
-	delete this->bossHPBarBackground;
+	delete[] bossHPBar;
+	delete bossHPBarBackground;
 }
 
 void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 {
 	// 对于非纯色图片支持不佳，需要保证长度和宽度是16的倍数，好在可以使用Alpha通道
 	RECT pRcBarBkg = rect(ClientWidth() / 2 - 256, 120, 512, 16);
-	this->bossHPBarBackground->Create(0, pRcBarBkg, ui);
-	this->bossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
+	bossHPBarBackground->Create(0, pRcBarBkg, ui);
+	bossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
 
 	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
 		RECT pRcBar = rect(ClientWidth() / 2 - 253, 123, 506, 3);;
-		this->bossHPBar[idx].Create(0, pRcBar, ui);
+		bossHPBar[idx].Create(0, pRcBar, ui);
 		char fileName[PEP3_MAX_FILEPATH_LENGTH];
 		sprintf(fileName, "UI\\HPBar\\combat_bossHP%d.tga", idx + 1);
-		this->bossHPBar[idx].SetBk(fileName);
+		bossHPBar[idx].SetBk(fileName);
 	}
 
 	// 默认不显示，除非有值
-	this->setVisibility(false);
+	setVisibility(false);
 }
 
 void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNumber)
@@ -341,10 +341,10 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	if (currentHP <= 0)
 	{
 		// 剩余血量为0，不显示
-		this->setVisibility(false);
+		setVisibility(false);
 		return;
 	}
-	this->bossHPBarBackground->ShowWindow(true);
+	bossHPBarBackground->ShowWindow(true);
 
 	// 每一阶段的血量
 	double interval = totalHP / stageNumber;
@@ -360,30 +360,30 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	for (idx = 0; idx < completeStage; ++idx)
 	{
 		RECT pRcBar = rect(ClientWidth() / 2 - 253, 123, 506, 3);
-		this->bossHPBar[idx].SetRect(pRcBar);
-		this->bossHPBar[idx].ShowWindow(true);
+		bossHPBar[idx].SetRect(pRcBar);
+		bossHPBar[idx].ShowWindow(true);
 	}
 	// 对于当前阶段，按照剩余血量比例进行布局
 	RECT pRcCurBar = rect(ClientWidth() / 2 - 253, 123, 506 * curStageRatio, 3);
 	// 上一轮循环退出后刚好位于下一个索引
 	if (idx < PEP3BattlegroundBossHPBarUIBarCount)
 	{
-		this->bossHPBar[idx].SetRect(pRcCurBar);
-		this->bossHPBar[idx].ShowWindow(true);
+		bossHPBar[idx].SetRect(pRcCurBar);
+		bossHPBar[idx].ShowWindow(true);
 	}
 	// 后续阶段不显示，包括已经消耗掉的和不存在的阶段
 	for (idx += 1; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
-		this->bossHPBar[idx].ShowWindow(false);
+		bossHPBar[idx].ShowWindow(false);
 	}
 }
 
 void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
 {
-	this->bossHPBarBackground->ShowWindow(visibility);
+	bossHPBarBackground->ShowWindow(visibility);
 	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
-		this->bossHPBar[idx].ShowWindow(visibility);
+		bossHPBar[idx].ShowWindow(visibility);
 	}
 }
 
@@ -405,92 +405,92 @@ PEP3BattlegroundInformationBoardUI* PEP3BattlegroundInformationBoardUI::sharedIn
 
 PEP3BattlegroundInformationBoardUI::PEP3BattlegroundInformationBoardUI()
 {
-	this->visibility = false;
+	visibility = false;
 
-	this->informationBoardBackground = new UIStatic;
-	this->enemyID = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyName = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyType = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyLevel = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyMoney = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyExperience = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyAttack = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyDefence = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyHP = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyHPBarBackground = new UIStatic;
-	this->enemyHPBar = new UIStatic;
-	this->enemySpeed = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyLuck = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyMP = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyMPBarBackground = new UIStatic;
-	this->enemyMPBar = new UIStatic;
-	this->enemyWater = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyNormalAttack = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyNormalAttackGPRecover = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyFire = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyDrop = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyDropAmount = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyWind = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyAdditionalDrop = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyAdditionalDropAmount = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyThunder = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemySteal = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyStealCount = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyEarth = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyInitialState = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyInitialStateDuration = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemySpecificDrop = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemySpecificSkillName = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemySpecificDropPercentage = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyAdditionalSpecificDrop = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyAdditionalSpecificSkillName = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyAdditionalSpecificDropPercentage = new PEP3BattlegroundInformationBoardUITextElement;
-	this->enemyAction = new PEP3BattlegroundInformationBoardUITextElement[PEP3BattlegroundInformationBoardUIActionCount];
-	this->enemyStatus = new PEP3BattlegroundInformationBoardUITextElement[PEP3BattlegroundInformationBoardUIStatusCount];
+	informationBoardBackground = new UIStatic;
+	enemyID = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyName = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyType = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyLevel = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyMoney = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyExperience = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyAttack = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyDefence = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyHP = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyHPBarBackground = new UIStatic;
+	enemyHPBar = new UIStatic;
+	enemySpeed = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyLuck = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyMP = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyMPBarBackground = new UIStatic;
+	enemyMPBar = new UIStatic;
+	enemyWater = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyNormalAttack = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyNormalAttackGPRecover = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyFire = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyDropAmount = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyWind = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyAdditionalDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyAdditionalDropAmount = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyThunder = new PEP3BattlegroundInformationBoardUITextElement;
+	enemySteal = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyStealCount = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyEarth = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyInitialState = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyInitialStateDuration = new PEP3BattlegroundInformationBoardUITextElement;
+	enemySpecificDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	enemySpecificSkillName = new PEP3BattlegroundInformationBoardUITextElement;
+	enemySpecificDropPercentage = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyAdditionalSpecificDrop = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyAdditionalSpecificSkillName = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyAdditionalSpecificDropPercentage = new PEP3BattlegroundInformationBoardUITextElement;
+	enemyAction = new PEP3BattlegroundInformationBoardUITextElement[PEP3BattlegroundInformationBoardUIActionCount];
+	enemyStatus = new PEP3BattlegroundInformationBoardUITextElement[PEP3BattlegroundInformationBoardUIStatusCount];
 }
 
 PEP3BattlegroundInformationBoardUI::~PEP3BattlegroundInformationBoardUI()
 {
-	delete this->informationBoardBackground;
-	delete this->enemyID;
-	delete this->enemyName;
-	delete this->enemyType;
-	delete this->enemyLevel;
-	delete this->enemyMoney;
-	delete this->enemyExperience;
-	delete this->enemyAttack;
-	delete this->enemyDefence;
-	delete this->enemyHP;
-	delete this->enemyHPBarBackground;
-	delete this->enemyHPBar;
-	delete this->enemySpeed;
-	delete this->enemyLuck;
-	delete this->enemyMP;
-	delete this->enemyMPBarBackground;
-	delete this->enemyMPBar;
-	delete this->enemyWater;
-	delete this->enemyNormalAttack;
-	delete this->enemyNormalAttackGPRecover;
-	delete this->enemyFire;
-	delete this->enemyDrop;
-	delete this->enemyDropAmount;
-	delete this->enemyWind;
-	delete this->enemyAdditionalDrop;
-	delete this->enemyAdditionalDropAmount;
-	delete this->enemyThunder;
-	delete this->enemySteal;
-	delete this->enemyStealCount;
-	delete this->enemyEarth;
-	delete this->enemyInitialState;
-	delete this->enemyInitialStateDuration;
-	delete this->enemySpecificDrop;
-	delete this->enemySpecificSkillName;
-	delete this->enemySpecificDropPercentage;
-	delete this->enemyAdditionalSpecificDrop;
-	delete this->enemyAdditionalSpecificSkillName;
-	delete this->enemyAdditionalSpecificDropPercentage;
-	delete[] this->enemyAction;
-	delete[] this->enemyStatus;
+	delete informationBoardBackground;
+	delete enemyID;
+	delete enemyName;
+	delete enemyType;
+	delete enemyLevel;
+	delete enemyMoney;
+	delete enemyExperience;
+	delete enemyAttack;
+	delete enemyDefence;
+	delete enemyHP;
+	delete enemyHPBarBackground;
+	delete enemyHPBar;
+	delete enemySpeed;
+	delete enemyLuck;
+	delete enemyMP;
+	delete enemyMPBarBackground;
+	delete enemyMPBar;
+	delete enemyWater;
+	delete enemyNormalAttack;
+	delete enemyNormalAttackGPRecover;
+	delete enemyFire;
+	delete enemyDrop;
+	delete enemyDropAmount;
+	delete enemyWind;
+	delete enemyAdditionalDrop;
+	delete enemyAdditionalDropAmount;
+	delete enemyThunder;
+	delete enemySteal;
+	delete enemyStealCount;
+	delete enemyEarth;
+	delete enemyInitialState;
+	delete enemyInitialStateDuration;
+	delete enemySpecificDrop;
+	delete enemySpecificSkillName;
+	delete enemySpecificDropPercentage;
+	delete enemyAdditionalSpecificDrop;
+	delete enemyAdditionalSpecificSkillName;
+	delete enemyAdditionalSpecificDropPercentage;
+	delete[] enemyAction;
+	delete[] enemyStatus;
 }
 
 void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
@@ -500,93 +500,93 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	// 背景
 	RECT pRcBack = rect(ClientWidth() - 1064, 40, 1024, 1024);
 	gbColorQuad textColor(87, 65, 20, 255);
-	this->informationBoardBackground->Create(0, pRcBack, ui);
-	this->informationBoardBackground->SetBk("UI\\combatinformation.tga");
+	informationBoardBackground->Create(0, pRcBack, ui);
+	informationBoardBackground->SetBk("UI\\combatinformation.tga");
 
 	// 主面板
 	RECT pRcElement;
 	pRcElement = rect(ClientWidth() - 712, 104, 258, 64);
-	this->enemyID->Create(0, pRcElement, ui);
+	enemyID->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 104, 258, 64);
-	this->enemyName->Create(0, pRcElement, ui);
+	enemyName->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 168, 96, 64);
-	this->enemyType->Create(0, pRcElement, ui);
+	enemyType->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 168, 96, 64);
-	this->enemyLevel->Create(0, pRcElement, ui);
+	enemyLevel->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 168, 96, 64);
-	this->enemyMoney->Create(0, pRcElement, ui);
+	enemyMoney->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 168, 96, 64);
-	this->enemyExperience->Create(0, pRcElement, ui);
+	enemyExperience->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 232, 96, 64);
-	this->enemyAttack->Create(0, pRcElement, ui);
+	enemyAttack->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 232, 96, 64);
-	this->enemyDefence->Create(0, pRcElement, ui);
+	enemyDefence->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 232, 232, 192, 64);
-	this->enemyHP->Create(0, pRcElement, ui);
+	enemyHP->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
-	this->enemyHPBarBackground->Create(0, pRcElement, ui);
-	this->enemyHPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
+	enemyHPBarBackground->Create(0, pRcElement, ui);
+	enemyHPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
 	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
-	this->enemyHPBar->Create(0, pRcElement, ui);
-	this->enemyHPBar->SetBk("UI\\HPBar\\combat_bossHP1.tga");
+	enemyHPBar->Create(0, pRcElement, ui);
+	enemyHPBar->SetBk("UI\\HPBar\\combat_bossHP1.tga");
 	pRcElement = rect(ClientWidth() - 712, 296, 96, 64);
-	this->enemySpeed->Create(0, pRcElement, ui);
+	enemySpeed->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 296, 96, 64);
-	this->enemyLuck->Create(0, pRcElement, ui);
+	enemyLuck->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 232, 296, 192, 64);
-	this->enemyMP->Create(0, pRcElement, ui);
+	enemyMP->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
-	this->enemyMPBarBackground->Create(0, pRcElement, ui);
-	this->enemyMPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
+	enemyMPBarBackground->Create(0, pRcElement, ui);
+	enemyMPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
 	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
-	this->enemyMPBar->Create(0, pRcElement, ui);
-	this->enemyMPBar->SetBk("UI\\HPBar\\combat_bossHP4.tga");
+	enemyMPBar->Create(0, pRcElement, ui);
+	enemyMPBar->SetBk("UI\\HPBar\\combat_bossHP4.tga");
 	pRcElement = rect(ClientWidth() - 712, 360, 96, 64);
-	this->enemyWater->Create(0, pRcElement, ui);
+	enemyWater->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 360, 288, 64);
-	this->enemyNormalAttack->Create(0, pRcElement, ui);
+	enemyNormalAttack->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 360, 96, 64);
-	this->enemyNormalAttackGPRecover->Create(0, pRcElement, ui);
+	enemyNormalAttackGPRecover->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 424, 96, 64);
-	this->enemyFire->Create(0, pRcElement, ui);
+	enemyFire->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 424, 288, 64);
-	this->enemyDrop->Create(0, pRcElement, ui);
+	enemyDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 424, 96, 64);
-	this->enemyDropAmount->Create(0, pRcElement, ui);
+	enemyDropAmount->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 488, 96, 64);
-	this->enemyWind->Create(0, pRcElement, ui);
+	enemyWind->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 488, 288, 64);
-	this->enemyAdditionalDrop->Create(0, pRcElement, ui);
+	enemyAdditionalDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 488, 96, 64);
-	this->enemyAdditionalDropAmount->Create(0, pRcElement, ui);
+	enemyAdditionalDropAmount->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 552, 96, 64);
-	this->enemyThunder->Create(0, pRcElement, ui);
+	enemyThunder->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 552, 288, 64);
-	this->enemySteal->Create(0, pRcElement, ui);
+	enemySteal->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 552, 96, 64);
-	this->enemyStealCount->Create(0, pRcElement, ui);
+	enemyStealCount->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 616, 96, 64);
-	this->enemyEarth->Create(0, pRcElement, ui);
+	enemyEarth->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 520, 616, 288, 64);
-	this->enemyInitialState->Create(0, pRcElement, ui);
+	enemyInitialState->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 616, 96, 64);
-	this->enemySpecificDrop->Create(0, pRcElement, ui);
+	enemySpecificDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 680, 192, 64);
-	this->enemySpecificDrop->Create(0, pRcElement, ui);
+	enemySpecificDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 424, 680, 192, 64);
-	this->enemySpecificSkillName->Create(0, pRcElement, ui);
+	enemySpecificSkillName->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 680, 96, 64);
-	this->enemySpecificDropPercentage->Create(0, pRcElement, ui);
+	enemySpecificDropPercentage->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 712, 744, 192, 64);
-	this->enemyAdditionalSpecificDrop->Create(0, pRcElement, ui);
+	enemyAdditionalSpecificDrop->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 424, 744, 192, 64);
-	this->enemyAdditionalSpecificSkillName->Create(0, pRcElement, ui);
+	enemyAdditionalSpecificSkillName->Create(0, pRcElement, ui);
 	pRcElement = rect(ClientWidth() - 136, 744, 96, 64);
-	this->enemyAdditionalSpecificDropPercentage->Create(0, pRcElement, ui);
+	enemyAdditionalSpecificDropPercentage->Create(0, pRcElement, ui);
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
 	{
 		pRcElement = rect(ClientWidth() - 712, 808 + 64 * idx, 672, 64);
-		this->enemyAction[idx].Create(0, pRcElement, ui);
+		enemyAction[idx].Create(0, pRcElement, ui);
 	}
 
 	// 状态栏
@@ -594,11 +594,11 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusCount; ++idx)
 	{
 		pRcStatusItem = rect(ClientWidth() - 969, 40 + 106 * idx, 161, 53);
-		this->enemyStatus[idx].Create(0, pRcStatusItem, ui);
+		enemyStatus[idx].Create(0, pRcStatusItem, ui);
 	}
 
 	// 默认隐藏
-	this->setVisibility(false);
+	setVisibility(false);
 }
 
 void PEP3BattlegroundInformationBoardUI::update(int pageNumber, string information[], CCBRoleState *roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[])
@@ -606,92 +606,92 @@ void PEP3BattlegroundInformationBoardUI::update(int pageNumber, string informati
 	int idx;
 
 	// 先更新数据库中的静态数据
-    this->enemyID->SetText((char*)information[0].c_str(), true);
-	this->enemyName->SetText((char*)information[1].c_str(), true);
-	this->enemyType->SetText((char*)information[2].c_str(), true);
-	this->enemyLevel->SetText((char*)information[3].c_str(), true);
-	this->enemyMoney->SetText((char*)information[4].c_str(), true);
-	this->enemyExperience->SetText((char*)information[5].c_str(), true);
-	this->enemyAttack->SetText((char*)information[6].c_str(), true);
-	this->enemyDefence->SetText((char*)information[7].c_str(), true);
-	this->enemyHP->SetText((char*)information[8].c_str(), true);
-	this->enemySpeed->SetText((char*)information[9].c_str(), true);
-	this->enemyLuck->SetText((char*)information[10].c_str(), true);
-	this->enemyMP->SetText((char*)information[11].c_str(), true);
-	this->enemyWater->SetText((char*)information[12].c_str(), true);
-	this->enemyNormalAttack->SetText((char*)information[13].c_str(), true);
-	this->enemyNormalAttackGPRecover->SetText((char*)information[14].c_str(), true);
-	this->enemyFire->SetText((char*)information[15].c_str(), true);
-	this->enemyDrop->SetText((char*)information[16].c_str(), true);
-	this->enemyDropAmount->SetText((char*)information[17].c_str(), true);
-	this->enemyWind->SetText((char*)information[18].c_str(), true);
-	this->enemyAdditionalDrop->SetText((char*)information[19].c_str(), true);
-	this->enemyAdditionalDropAmount->SetText((char*)information[20].c_str(), true);
-	this->enemyThunder->SetText((char*)information[21].c_str(), true);
-	this->enemySteal->SetText((char*)information[22].c_str(), true);
-	this->enemyStealCount->SetText((char*)information[23].c_str(), true);
-	this->enemyEarth->SetText((char*)information[24].c_str(), true);
-	this->enemyInitialState->SetText((char*)information[25].c_str(), true);
-	this->enemyInitialStateDuration->SetText((char*)information[26].c_str(), true);
-	this->enemySpecificDrop->SetText((char*)information[27].c_str(), true);
-	this->enemySpecificSkillName->SetText((char*)information[28].c_str(), true);
-	this->enemySpecificDropPercentage->SetText((char*)information[29].c_str(), true);
-	this->enemyAdditionalSpecificDrop->SetText((char*)information[30].c_str(), true);
-	this->enemyAdditionalSpecificSkillName->SetText((char*)information[31].c_str(), true);
-	this->enemyAdditionalSpecificDropPercentage->SetText((char*)information[32].c_str(), true);
+    enemyID->SetText((char*)information[0].c_str(), true);
+	enemyName->SetText((char*)information[1].c_str(), true);
+	enemyType->SetText((char*)information[2].c_str(), true);
+	enemyLevel->SetText((char*)information[3].c_str(), true);
+	enemyMoney->SetText((char*)information[4].c_str(), true);
+	enemyExperience->SetText((char*)information[5].c_str(), true);
+	enemyAttack->SetText((char*)information[6].c_str(), true);
+	enemyDefence->SetText((char*)information[7].c_str(), true);
+	enemyHP->SetText((char*)information[8].c_str(), true);
+	enemySpeed->SetText((char*)information[9].c_str(), true);
+	enemyLuck->SetText((char*)information[10].c_str(), true);
+	enemyMP->SetText((char*)information[11].c_str(), true);
+	enemyWater->SetText((char*)information[12].c_str(), true);
+	enemyNormalAttack->SetText((char*)information[13].c_str(), true);
+	enemyNormalAttackGPRecover->SetText((char*)information[14].c_str(), true);
+	enemyFire->SetText((char*)information[15].c_str(), true);
+	enemyDrop->SetText((char*)information[16].c_str(), true);
+	enemyDropAmount->SetText((char*)information[17].c_str(), true);
+	enemyWind->SetText((char*)information[18].c_str(), true);
+	enemyAdditionalDrop->SetText((char*)information[19].c_str(), true);
+	enemyAdditionalDropAmount->SetText((char*)information[20].c_str(), true);
+	enemyThunder->SetText((char*)information[21].c_str(), true);
+	enemySteal->SetText((char*)information[22].c_str(), true);
+	enemyStealCount->SetText((char*)information[23].c_str(), true);
+	enemyEarth->SetText((char*)information[24].c_str(), true);
+	enemyInitialState->SetText((char*)information[25].c_str(), true);
+	enemyInitialStateDuration->SetText((char*)information[26].c_str(), true);
+	enemySpecificDrop->SetText((char*)information[27].c_str(), true);
+	enemySpecificSkillName->SetText((char*)information[28].c_str(), true);
+	enemySpecificDropPercentage->SetText((char*)information[29].c_str(), true);
+	enemyAdditionalSpecificDrop->SetText((char*)information[30].c_str(), true);
+	enemyAdditionalSpecificSkillName->SetText((char*)information[31].c_str(), true);
+	enemyAdditionalSpecificDropPercentage->SetText((char*)information[32].c_str(), true);
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
 	{
-		this->enemyAction[idx].SetText((char*)information[33 + idx].c_str(), true);
+		enemyAction[idx].SetText((char*)information[33 + idx].c_str(), true);
 	}
 
 	// 再更新当前的实际数据
 	char stringBuffer[256];
 	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nLevel);
-	this->enemyLevel->SetText(stringBuffer, true);
+	enemyLevel->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nAttack);
-	this->enemyAttack->SetText(stringBuffer, true);
+	enemyAttack->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nDefence);
-	this->enemyDefence->SetText(stringBuffer, true);
+	enemyDefence->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nHP);
-	this->enemyHP->SetText(stringBuffer, true);
+	enemyHP->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nSpeed);
-	this->enemySpeed->SetText(stringBuffer, true);
+	enemySpeed->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nLuck);
-	this->enemyLuck->SetText(stringBuffer, true);
+	enemyLuck->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetRole(roleIndex)->nMP);
-	this->enemyMP->SetText(stringBuffer, true);
+	enemyMP->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Water));
-	this->enemyWater->SetText(stringBuffer, true);
+	enemyWater->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Fire));
-	this->enemyFire->SetText(stringBuffer, true);
+	enemyFire->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Wind));
-	this->enemyWind->SetText(stringBuffer, true);
+	enemyWind->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Thunder));
-	this->enemyThunder->SetText(stringBuffer, true);
+	enemyThunder->SetText(stringBuffer, true);
 	sprintf(stringBuffer, "%d", roleState->GetAttackFiveMagic(roleIndex, CBFM_Earth));
-	this->enemyEarth->SetText(stringBuffer, true);
+	enemyEarth->SetText(stringBuffer, true);
 
 	// 如果有需要显示的特殊信息，则更新
 	if (customizedHPText != "")
 	{
-		this->enemyHP->SetText((char*)customizedHPText.c_str(), true);
+		enemyHP->SetText((char*)customizedHPText.c_str(), true);
 	}
 	if (customizedMPText != "")
 	{
-		this->enemyMP->SetText((char*)customizedMPText.c_str(), true);
+		enemyMP->SetText((char*)customizedMPText.c_str(), true);
 	}
 
 	// 处理生命槽和魔力槽
 	RECT pRcElement;
 	pRcElement = rect(ClientWidth() - 328, 261, roleState->GetRole(roleIndex)->nFullHP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nHP) / roleState->GetRole(roleIndex)->nFullHP), 6);
-	this->enemyHPBar->SetRect(pRcElement);
+	enemyHPBar->SetRect(pRcElement);
 	pRcElement = rect(ClientWidth() - 328, 325, roleState->GetRole(roleIndex)->nFullMP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nMP) / roleState->GetRole(roleIndex)->nFullMP), 6);
-	this->enemyMPBar->SetRect(pRcElement);
+	enemyMPBar->SetRect(pRcElement);
 
 	// 处理状态
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusCount; ++idx)
 	{
-		this->enemyStatus[idx].SetText((char*)statusName[idx].c_str(), true);
+		enemyStatus[idx].SetText((char*)statusName[idx].c_str(), true);
 	}
 }
 
@@ -701,56 +701,56 @@ void PEP3BattlegroundInformationBoardUI::setVisibility(bool visibility)
 
 	this->visibility = visibility;
 
-	this->informationBoardBackground->ShowWindow(visibility);
-	this->enemyID->ShowWindow(visibility);
-	this->enemyName->ShowWindow(visibility);
-	this->enemyType->ShowWindow(visibility);
-	this->enemyLevel->ShowWindow(visibility);
-	this->enemyMoney->ShowWindow(visibility);
-	this->enemyExperience->ShowWindow(visibility);
-	this->enemyAttack->ShowWindow(visibility);
-	this->enemyDefence->ShowWindow(visibility);
-	this->enemyHP->ShowWindow(visibility);
-	this->enemyHPBar->ShowWindow(visibility);
-	this->enemyHPBarBackground->ShowWindow(visibility);
-	this->enemySpeed->ShowWindow(visibility);
-	this->enemyLuck->ShowWindow(visibility);
-	this->enemyMP->ShowWindow(visibility);
-	this->enemyMPBar->ShowWindow(visibility);
-	this->enemyMPBarBackground->ShowWindow(visibility);
-	this->enemyWater->ShowWindow(visibility);
-	this->enemyNormalAttack->ShowWindow(visibility);
-	this->enemyNormalAttackGPRecover->ShowWindow(visibility);
-	this->enemyFire->ShowWindow(visibility);
-	this->enemyDrop->ShowWindow(visibility);
-	this->enemyDropAmount->ShowWindow(visibility);
-	this->enemyWind->ShowWindow(visibility);
-	this->enemyAdditionalDrop->ShowWindow(visibility);
-	this->enemyAdditionalDropAmount->ShowWindow(visibility);
-	this->enemyThunder->ShowWindow(visibility);
-	this->enemySteal->ShowWindow(visibility);
-	this->enemyStealCount->ShowWindow(visibility);
-	this->enemyEarth->ShowWindow(visibility);
-	this->enemyInitialState->ShowWindow(visibility);
-	this->enemyInitialStateDuration->ShowWindow(visibility);
-	this->enemySpecificDrop->ShowWindow(visibility);
-	this->enemySpecificSkillName->ShowWindow(visibility);
-	this->enemySpecificDropPercentage->ShowWindow(visibility);
-	this->enemyAdditionalSpecificDrop->ShowWindow(visibility);
-	this->enemyAdditionalSpecificSkillName->ShowWindow(visibility);
-	this->enemyAdditionalSpecificDropPercentage->ShowWindow(visibility);
+	informationBoardBackground->ShowWindow(visibility);
+	enemyID->ShowWindow(visibility);
+	enemyName->ShowWindow(visibility);
+	enemyType->ShowWindow(visibility);
+	enemyLevel->ShowWindow(visibility);
+	enemyMoney->ShowWindow(visibility);
+	enemyExperience->ShowWindow(visibility);
+	enemyAttack->ShowWindow(visibility);
+	enemyDefence->ShowWindow(visibility);
+	enemyHP->ShowWindow(visibility);
+	enemyHPBar->ShowWindow(visibility);
+	enemyHPBarBackground->ShowWindow(visibility);
+	enemySpeed->ShowWindow(visibility);
+	enemyLuck->ShowWindow(visibility);
+	enemyMP->ShowWindow(visibility);
+	enemyMPBar->ShowWindow(visibility);
+	enemyMPBarBackground->ShowWindow(visibility);
+	enemyWater->ShowWindow(visibility);
+	enemyNormalAttack->ShowWindow(visibility);
+	enemyNormalAttackGPRecover->ShowWindow(visibility);
+	enemyFire->ShowWindow(visibility);
+	enemyDrop->ShowWindow(visibility);
+	enemyDropAmount->ShowWindow(visibility);
+	enemyWind->ShowWindow(visibility);
+	enemyAdditionalDrop->ShowWindow(visibility);
+	enemyAdditionalDropAmount->ShowWindow(visibility);
+	enemyThunder->ShowWindow(visibility);
+	enemySteal->ShowWindow(visibility);
+	enemyStealCount->ShowWindow(visibility);
+	enemyEarth->ShowWindow(visibility);
+	enemyInitialState->ShowWindow(visibility);
+	enemyInitialStateDuration->ShowWindow(visibility);
+	enemySpecificDrop->ShowWindow(visibility);
+	enemySpecificSkillName->ShowWindow(visibility);
+	enemySpecificDropPercentage->ShowWindow(visibility);
+	enemyAdditionalSpecificDrop->ShowWindow(visibility);
+	enemyAdditionalSpecificSkillName->ShowWindow(visibility);
+	enemyAdditionalSpecificDropPercentage->ShowWindow(visibility);
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
 	{
-		this->enemyAction[idx].ShowWindow(visibility);
+		enemyAction[idx].ShowWindow(visibility);
 	}
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusCount; ++idx)
 	{
-		this->enemyStatus[idx].ShowWindow(visibility);
+		enemyStatus[idx].ShowWindow(visibility);
 	}
 }
 
 bool PEP3BattlegroundInformationBoardUI::getVisibility()
 {
-	return this->visibility;
+	return visibility;
 }
 

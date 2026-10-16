@@ -42,18 +42,18 @@ bool PluginUtility::stringToBool(const string& str)
 
 PluginColorInstance::PluginColorInstance()
 {
-	this->red = 0;
-	this->green = 0;
-	this->blue = 0;
-	this->alpha = 0;
+	red = 0;
+	green = 0;
+	blue = 0;
+	alpha = 0;
 }
 
 PluginColorInstance::PluginColorInstance(unsigned short red, unsigned short green, unsigned short blue, unsigned short alpha)
 {
-	this->red = red;
-	this->green = green;
-	this->blue = blue;
-	this->alpha = alpha;
+	red = red;
+	green = green;
+	blue = blue;
+	alpha = alpha;
 }
 
 PluginColorInstance::~PluginColorInstance()
