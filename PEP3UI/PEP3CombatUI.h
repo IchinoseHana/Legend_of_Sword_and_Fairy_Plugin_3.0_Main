@@ -210,4 +210,42 @@ public:
 	void setVisibility(bool visibility);
 };
 
+// MARK: 技能说明UI
+class PEP3BattlegroundSkillInformationUI
+{
+private:
+	UIStatic* informationBackground; // 背景
+	UIStatic* upperText; // 上半部分描述
+	UIStatic* lowerText; // 下半部分描述
+
+
+public:
+	PEP3BattlegroundSkillInformationUI();
+	~PEP3BattlegroundSkillInformationUI();
+
+	static PEP3BattlegroundSkillInformationUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(string upperText, string lowerText);
+	void setVisibility(bool visibility);
+};
+
+// MARK: 武器技UI
+//class PEP3BattlegroundWeaponSkillUI
+//{
+//private:
+//	UIStatic* skillName; // 技能名称
+//	UIStatic* leftMarker; // 左切换提示
+//	UIStatic* rightMarker; // 右切换提示
+//
+//
+//public:
+//	PEP3BattlegroundWeaponSkillUI();
+//	~PEP3BattlegroundWeaponSkillUI();
+//
+//	static PEP3BattlegroundWeaponSkillUI* sharedInstance();
+//	void create(UIWnd* ui);
+//	void update();
+//	void setVisibility(bool visibility);
+//};
+
 #endif

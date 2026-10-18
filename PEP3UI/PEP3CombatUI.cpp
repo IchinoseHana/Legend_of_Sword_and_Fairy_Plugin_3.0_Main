@@ -12,7 +12,6 @@ using spcPEP3UIUtil::calCombatUIVerticalScaledValue;
 using spcPEP3UIUtil::rect;
 
 // MARK: 仙灵、武灵UI
-
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundSpiritUI* battlegroundSpiritUIInstance = new PEP3BattlegroundSpiritUI();
 PEP3BattlegroundSpiritUI* PEP3BattlegroundSpiritUI::sharedInstance()
 {
@@ -39,7 +38,7 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 
 	RECT pRcSlot = rect(leftMargin, 40, 256, 16);
 	spiritSlot->Create(0, pRcSlot, ui);
-	spiritSlot->SetBk("UI\\skillbar0.tga");
+	spiritSlot->SetBk("UI\\SkillBar\\skillbar0.tga");
 
 	RECT pRcNumber = rect(leftMargin + 260, 32, 45, 45);
 	spiritNumber->Create(0, pRcNumber, ui);
@@ -49,7 +48,7 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 
 	RECT pRcUsingStatus = rect(leftMargin, 70, 32, 32);
 	spiritUsingStatus->Create(0, pRcUsingStatus, ui);
-	spiritUsingStatus->SetBk("UI\\spiritIdle.tga");
+	spiritUsingStatus->SetBk("UI\\spirit\\spiritIdle.tga");
 
 	setVisibility(false);
 }
@@ -64,7 +63,7 @@ void PEP3BattlegroundSpiritUI::update(int spiritNumber, bool isUsingSpirit)
 	sprintf(numberText, "%d", abs(spiritNumber));
 	this->spiritNumber->SetText(numberText);
 
-	spiritUsingStatus->SetBk(isUsingSpirit ? "UI\\spiritUse.tga" : "UI\\spiritIdle.tga");
+	spiritUsingStatus->SetBk(isUsingSpirit ? "UI\\spirit\\spiritUse.tga" : "UI\\spirit\\spiritIdle.tga");
 }
 
 void PEP3BattlegroundSpiritUI::setVisibility(bool visibility)
@@ -325,7 +324,7 @@ PEP3BattlegroundBossHPBarUI::~PEP3BattlegroundBossHPBarUI()
 
 void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 {
-	// 对于非纯色图片支持不佳，需要保证长度和宽度是16的倍数，好在可以使用Alpha通道
+	// 对于非纯色图片支持不佳，需要保证长度和宽度是2的整数次方，好在可以使用Alpha通道
 	RECT pRcBarBkg = rect(ClientWidth() / 2 - 256, 120, 512, 16);
 	bossHPBarBackground->Create(0, pRcBarBkg, ui);
 	bossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
@@ -817,4 +816,61 @@ void PEP3BattlegroundRankUI::update(PEP3BattlegroundRankUIRankType rank)
 void PEP3BattlegroundRankUI::setVisibility(bool visibility)
 {
 	rankIcon->ShowWindow(visibility);
+}
+
+// MARK: 评分UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundSkillInformationUI* battlegroundSkillInformationUIInstance = new PEP3BattlegroundSkillInformationUI();
+PEP3BattlegroundSkillInformationUI* PEP3BattlegroundSkillInformationUI::sharedInstance()
+{
+	return battlegroundSkillInformationUIInstance;
+}
+
+PEP3BattlegroundSkillInformationUI::PEP3BattlegroundSkillInformationUI()
+{
+	informationBackground = new UIStatic;
+	upperText = new UIStatic;
+	lowerText = new UIStatic;
+}
+
+PEP3BattlegroundSkillInformationUI::~PEP3BattlegroundSkillInformationUI()
+{
+	delete informationBackground;
+	delete upperText;
+	delete lowerText;
+}
+
+void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
+{
+	int leftMargin = calCombatUIHorizontalMargin();
+	gbColorQuad textColor(56, 25, 27, 255);
+	// 按照实际测试效果的偏移量
+	int deltaX = 1;
+	int deltaY = 0;
+
+	RECT pRcBackground = rect(leftMargin, 156, 512, 512);
+	informationBackground->Create(0, pRcBackground, ui);
+	informationBackground->SetBk("UI\\SkillInformation\\skillInformation.tga");
+	RECT pRcUpper = rect(leftMargin + 32 + deltaX, 188 + deltaY, 224, 224);
+	upperText->Create(0, pRcUpper, ui);
+	upperText->SetFontColor(textColor);
+	upperText->SetText("");
+	RECT pRcLower = rect(leftMargin + 32 + deltaX, 412 + deltaY, 224, 144);
+	lowerText->Create(0, pRcLower, ui);
+	lowerText->SetFontColor(textColor);
+	lowerText->SetText("");
+
+	setVisibility(false);
+}
+
+void PEP3BattlegroundSkillInformationUI::update(string upperText, string lowerText)
+{
+	this->upperText->SetText((char*)upperText.c_str());
+	this->lowerText->SetText((char*)lowerText.c_str());
+}
+
+void PEP3BattlegroundSkillInformationUI::setVisibility(bool visibility)
+{
+	informationBackground->ShowWindow(visibility);
+	upperText->ShowWindow(visibility);
+	lowerText->ShowWindow(visibility);
 }
