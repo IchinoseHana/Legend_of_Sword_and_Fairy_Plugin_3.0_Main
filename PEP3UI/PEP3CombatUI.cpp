@@ -107,7 +107,7 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 
 	RECT pRCResIcon = rect(leftMargin + 53, 70, 32, 32);
 	resurrectionIcon->Create(0, pRCResIcon, ui);
-	resurrectionIcon->SetBk("UI\\battlegroundResurrection.tga");
+	resurrectionIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundResurrection.tga");
 
 	RECT pRcResNumber = rect(leftMargin + 92, 70, 45, 32);
 	resurrectionNumber->Create(0, pRcResNumber, ui);
@@ -116,7 +116,7 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 
 	RECT pRCBatStateIcon = rect(leftMargin + 123, 70, 32, 32);
 	battlegroundStateIcon->Create(0, pRCBatStateIcon, ui);
-	battlegroundStateIcon->SetBk("UI\\battlegroundStateDefault.tga");
+	battlegroundStateIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
 
 	RECT pRCBatStateNumber = rect(leftMargin + 161, 70, 45, 32);
 	battlegroundStateNumber->Create(0, pRCBatStateNumber, ui);
@@ -125,7 +125,7 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 
 	RECT pRCBatPropertyIcon = rect(leftMargin + 206, 70, 32, 32);
 	battlegroundPropertyIcon->Create(0, pRCBatPropertyIcon, ui);
-	battlegroundPropertyIcon->SetBk("UI\\battlegroundStateDefault.tga");
+	battlegroundPropertyIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
 
 	RECT pRCBatPropertyNumber = rect(leftMargin + 244, 70, 45, 32);
 	battlegroundPropertyNumber->Create(0, pRCBatPropertyNumber, ui);
@@ -144,7 +144,7 @@ void PEP3BattlegroundStateUI::update(int resurrectionNumber, int stateIndex, int
 	this->resurrectionNumber->SetText(numberText);
 	
 	sprintf(fileName, "UI\\BattlegroundState\\battlejyoutai%d.tga", stateIndex);
-	battlegroundStateIcon->SetBk(stateIndex <= 0 ? "UI\\battlegroundStateDefault.tga" : fileName);
+	battlegroundStateIcon->SetBk(stateIndex <= 0 ? "UI\\battlegroundStatePublic\\battlegroundStateDefault.tga" : fileName);
 
 	memset(numberText, '\0', sizeof(numberText));
 	sprintf(numberText, "%03d", abs(stateNumber));
@@ -152,7 +152,7 @@ void PEP3BattlegroundStateUI::update(int resurrectionNumber, int stateIndex, int
 	
 	memset(fileName, '\0', sizeof(fileName));
 	sprintf(fileName, "UI\\BattlegroundProperty\\battlezokusei%d.tga", propertyIndex);
-	battlegroundPropertyIcon->SetBk(propertyIndex <= 0 ? "UI\\battlegroundStateDefault.tga" : fileName);
+	battlegroundPropertyIcon->SetBk(propertyIndex <= 0 ? "UI\\battlegroundStatePublic\\battlegroundStateDefault.tga" : fileName);
 	
 	memset(numberText, '\0', sizeof(numberText));
 	sprintf(numberText, "%03d", abs(propertyNumnber));
@@ -203,7 +203,7 @@ void PEP3BattlegroundChargeUI::create(UIWnd* ui)
 	// 先处理合击，再处理暗器装填
 	RECT pRcCoAttackIcon = rect(rightMargin - 100, upperBound, 32, 32);
 	battlegroundCoorperationAttackIcon->Create(0, pRcCoAttackIcon, ui);
-	battlegroundCoorperationAttackIcon->SetBk("UI\\battlegroundCoorperationAttack.tga");
+	battlegroundCoorperationAttackIcon->SetBk("UI\\ChargeInfo\\battlegroundCoorperationAttack.tga");
 
 	RECT pRcCoAttackNumber = rect(pRcCoAttackIcon.left + 46, upperBound, 45, 32);
 	battlegroundCoorperationAttackNumber->Create(0, pRcCoAttackNumber, ui);
@@ -212,7 +212,7 @@ void PEP3BattlegroundChargeUI::create(UIWnd* ui)
 
 	RECT pRcChargeIcon = rect(pRcCoAttackNumber.left - 145, upperBound, 32, 32);
 	battlegroundChargeIcon->Create(0, pRcChargeIcon, ui);
-	battlegroundChargeIcon->SetBk("UI\\battlegroundCharge.tga");
+	battlegroundChargeIcon->SetBk("UI\\ChargeInfo\\battlegroundCharge.tga");
 
 	RECT pRcChargeNumber = rect(pRcChargeIcon.left + 46, upperBound, 45, 32);
 	battlegroundChargeNumber->Create(0, pRcChargeNumber, ui);
@@ -269,7 +269,7 @@ void PEP3BattlegroundEnvironmentUI::create(UIWnd* ui)
 	{
 		RECT pRcIcon = rect(rightMargin - 52 - (idx * 48), upperBound, 32, 32);
 		battlegroundEnvironmentIcon[idx].Create(0, pRcIcon, ui);
-		battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
+		battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
 	}
 
 	setVisibility(false);
@@ -288,7 +288,7 @@ void PEP3BattlegroundEnvironmentUI::update(int environmentIndex[], int environme
 		}
 		else
 		{
-			battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
+			battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
 			battlegroundEnvironmentIcon[idx].ShowWindow(false);
 		}
 	}
