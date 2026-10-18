@@ -87,6 +87,9 @@ static const int PEP3BattlegroundBossHPBarUIBarCount = 5;
 class PEP3BattlegroundBossHPBarUI
 {
 private:
+	// Initial variables
+	bool visibility;
+
 	UIStatic* bossHPBarBackground; // 首领血条背景
 	UIStatic* bossHPBar; // 首领血条
 
@@ -102,6 +105,14 @@ public:
 
 // MARK: 信息面板UI
 class CCBRoleState;
+
+enum PEP3BattlegroundInformationBoardUIPageType
+{
+	PEP3BattlegroundInformationBoardUIPageTypeInformation,
+	PEP3BattlegroundInformationBoardUIPageTypeStatus,
+	PEP3BattlegroundInformationBoardUIPageTypeAction
+};
+
 class PEP3BattlegroundInformationBoardUITextElement : public UIStatic
 {
 public:
@@ -120,48 +131,48 @@ private:
 	UIStatic* informationBoardBackground;
 
 	// Element
-	// Page 1
-	PEP3BattlegroundInformationBoardUITextElement* enemyID;
-	PEP3BattlegroundInformationBoardUITextElement* enemyName;
-	PEP3BattlegroundInformationBoardUITextElement* enemyType;
-	PEP3BattlegroundInformationBoardUITextElement* enemyLevel;
-	PEP3BattlegroundInformationBoardUITextElement* enemyMoney;
-	PEP3BattlegroundInformationBoardUITextElement* enemyExperience;
-	PEP3BattlegroundInformationBoardUITextElement* enemyAttack;
-	PEP3BattlegroundInformationBoardUITextElement* enemyDefence;
-	PEP3BattlegroundInformationBoardUITextElement* enemyHP;
-	UIStatic* enemyHPBarBackground;
-	UIStatic* enemyHPBar;
+	// Page 1 - PEP3BattlegroundInformationBoardUIPageTypeInformation
+	PEP3BattlegroundInformationBoardUITextElement* enemyID; // ID
+	PEP3BattlegroundInformationBoardUITextElement* enemyName; // 名称
+	PEP3BattlegroundInformationBoardUITextElement* enemyType; // 类型
+	PEP3BattlegroundInformationBoardUITextElement* enemyLevel; // 等级
+	PEP3BattlegroundInformationBoardUITextElement* enemyMoney; // 金钱
+	PEP3BattlegroundInformationBoardUITextElement* enemyExperience; // 经验
+	PEP3BattlegroundInformationBoardUITextElement* enemyAttack; // 攻击力
+	PEP3BattlegroundInformationBoardUITextElement* enemyDefence; // 防御力
+	PEP3BattlegroundInformationBoardUITextElement* enemyHP; // 生命值
+	UIStatic* enemyHPBarBackground; // 生命槽背景
+	UIStatic* enemyHPBar; // 生命槽
 	PEP3BattlegroundInformationBoardUITextElement* enemySpeed;
 	PEP3BattlegroundInformationBoardUITextElement* enemyLuck;
 	PEP3BattlegroundInformationBoardUITextElement* enemyMP;
-	UIStatic* enemyMPBarBackground;
-	UIStatic* enemyMPBar;
-	PEP3BattlegroundInformationBoardUITextElement* enemyWater;
-	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttack;
-	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttackGPRecover;
-	PEP3BattlegroundInformationBoardUITextElement* enemyFire;
-	PEP3BattlegroundInformationBoardUITextElement* enemyDrop;
-	PEP3BattlegroundInformationBoardUITextElement* enemyDropAmount;
-	PEP3BattlegroundInformationBoardUITextElement* enemyWind;
-	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalDrop;
-	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalDropAmount;
-	PEP3BattlegroundInformationBoardUITextElement* enemyThunder;
-	PEP3BattlegroundInformationBoardUITextElement* enemySteal;
-	PEP3BattlegroundInformationBoardUITextElement* enemyStealCount;
-	PEP3BattlegroundInformationBoardUITextElement* enemyEarth;
-	PEP3BattlegroundInformationBoardUITextElement* enemyInitialState;
-	PEP3BattlegroundInformationBoardUITextElement* enemyInitialStateDuration;
-	PEP3BattlegroundInformationBoardUITextElement* enemySpecificDrop;
-	PEP3BattlegroundInformationBoardUITextElement* enemySpecificSkillName;
-	PEP3BattlegroundInformationBoardUITextElement* enemySpecificDropPercentage;
-	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificDrop;
-	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificSkillName;
-	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificDropPercentage;
-	PEP3BattlegroundInformationBoardUITextElement* enemyAction;
+	UIStatic* enemyMPBarBackground; // 魔力槽背景
+	UIStatic* enemyMPBar; // 魔力槽
+	PEP3BattlegroundInformationBoardUITextElement* enemyWater; // 水
+	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttack; // 普通攻击类型
+	PEP3BattlegroundInformationBoardUITextElement* enemyNormalAttackGPRecover; // 普通攻击回复气
+	PEP3BattlegroundInformationBoardUITextElement* enemyFire; // 火
+	PEP3BattlegroundInformationBoardUITextElement* enemyDrop; // 掉落物品ID
+	PEP3BattlegroundInformationBoardUITextElement* enemyDropAmount; // 掉落物品数量
+	PEP3BattlegroundInformationBoardUITextElement* enemyWind; // 风
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalDrop; // 次要掉落物品ID
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalDropAmount; // 次要掉落物品数量
+	PEP3BattlegroundInformationBoardUITextElement* enemyThunder; // 雷
+	PEP3BattlegroundInformationBoardUITextElement* enemySteal; // 偷窃物品ID
+	PEP3BattlegroundInformationBoardUITextElement* enemyStealCount; // 偷窃物品数量
+	PEP3BattlegroundInformationBoardUITextElement* enemyEarth; // 土
+	PEP3BattlegroundInformationBoardUITextElement* enemyInitialState; // 初始状态
+	PEP3BattlegroundInformationBoardUITextElement* enemyInitialStateDuration; // 初始状态持续时间
+	PEP3BattlegroundInformationBoardUITextElement* enemySpecificDrop; // 特殊掉落物品ID
+	PEP3BattlegroundInformationBoardUITextElement* enemySpecificSkillName; // 特殊掉落物品需求技能ID
+	PEP3BattlegroundInformationBoardUITextElement* enemySpecificDropPercentage; // 特殊掉落物品概率
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificDrop; // 次要特殊掉落物品ID
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificSkillName; // 次要特殊掉落物品需求技能ID
+	PEP3BattlegroundInformationBoardUITextElement* enemyAdditionalSpecificDropPercentage; // 次要特殊掉落物品概率
+	PEP3BattlegroundInformationBoardUITextElement* enemyAction; // 行动模式
 
 	// Status Items
-	PEP3BattlegroundInformationBoardUITextElement* enemyStatus;
+	PEP3BattlegroundInformationBoardUITextElement* enemyStatus; // 当前状态
 
 public:
 	PEP3BattlegroundInformationBoardUI();
@@ -169,9 +180,34 @@ public:
 
 	static PEP3BattlegroundInformationBoardUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(int pageNumber, string information[], CCBRoleState* roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[]);
+	void update(PEP3BattlegroundInformationBoardUIPageType pageType, string information[], CCBRoleState* roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[]);
 	void setVisibility(bool visibility);
 	bool getVisibility();
+};
+
+// MARK: 评分UI
+enum PEP3BattlegroundRankUIRankType
+{
+	PEP3BattlegroundRankUIRankTypeRankA,
+	PEP3BattlegroundRankUIRankTypeRankB,
+	PEP3BattlegroundRankUIRankTypeRankC,
+	PEP3BattlegroundRankUIRankTypeRankD,
+	PEP3BattlegroundRankUIRankTypeRankE
+};
+
+class PEP3BattlegroundRankUI
+{
+private:
+	UIStatic* rankIcon; // 等级图标
+
+public:
+	PEP3BattlegroundRankUI();
+	~PEP3BattlegroundRankUI();
+
+	static PEP3BattlegroundRankUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(PEP3BattlegroundRankUIRankType rank);
+	void setVisibility(bool visibility);
 };
 
 #endif

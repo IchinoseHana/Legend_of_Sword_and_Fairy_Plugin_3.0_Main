@@ -50,6 +50,8 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 	RECT pRcUsingStatus = rect(leftMargin, 70, 32, 32);
 	spiritUsingStatus->Create(0, pRcUsingStatus, ui);
 	spiritUsingStatus->SetBk("UI\\spiritIdle.tga");
+
+	setVisibility(false);
 }
 
 void PEP3BattlegroundSpiritUI::update(int spiritNumber, bool isUsingSpirit)
@@ -129,6 +131,8 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 	battlegroundPropertyNumber->Create(0, pRCBatPropertyNumber, ui);
 	battlegroundPropertyNumber->SetFontColor(color);
 	battlegroundPropertyNumber->SetText("000");
+
+	setVisibility(false);
 }
 
 void PEP3BattlegroundStateUI::update(int resurrectionNumber, int stateIndex, int stateNumber, int propertyIndex, int propertyNumnber)
@@ -214,6 +218,8 @@ void PEP3BattlegroundChargeUI::create(UIWnd* ui)
 	battlegroundChargeNumber->Create(0, pRcChargeNumber, ui);
 	battlegroundChargeNumber->SetFontColor(color);
 	battlegroundChargeNumber->SetText("000");
+
+	setVisibility(false);
 }
 
 void PEP3BattlegroundChargeUI::update(int chargeNumber, int cooperationAttackNumber)
@@ -266,7 +272,6 @@ void PEP3BattlegroundEnvironmentUI::create(UIWnd* ui)
 		battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStateDefault.tga");
 	}
 
-	// 默认不显示，除非有值
 	setVisibility(false);
 }
 
@@ -298,14 +303,16 @@ void PEP3BattlegroundEnvironmentUI::setVisibility(bool visibility)
 }
 
 // MARK: 首领血条UI
-PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundBossHPBarUI* bossHPBarUIInstance = new PEP3BattlegroundBossHPBarUI();
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundBossHPBarUI* battlegroundBossHPBarUIInstance = new PEP3BattlegroundBossHPBarUI();
 PEP3BattlegroundBossHPBarUI* PEP3BattlegroundBossHPBarUI::sharedInstance()
 {
-	return bossHPBarUIInstance;
+	return battlegroundBossHPBarUIInstance;
 }
 
 PEP3BattlegroundBossHPBarUI::PEP3BattlegroundBossHPBarUI()
 {
+	visibility = false;
+
 	bossHPBar = new UIStatic[PEP3BattlegroundBossHPBarUIBarCount];
 	bossHPBarBackground = new UIStatic;
 }
@@ -332,7 +339,6 @@ void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 		bossHPBar[idx].SetBk(fileName);
 	}
 
-	// 默认不显示，除非有值
 	setVisibility(false);
 }
 
@@ -344,7 +350,7 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 		setVisibility(false);
 		return;
 	}
-	bossHPBarBackground->ShowWindow(true);
+	bossHPBarBackground->ShowWindow(visibility);
 
 	// 每一阶段的血量
 	double interval = totalHP / stageNumber;
@@ -361,7 +367,7 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	{
 		RECT pRcBar = rect(ClientWidth() / 2 - 253, 123, 506, 3);
 		bossHPBar[idx].SetRect(pRcBar);
-		bossHPBar[idx].ShowWindow(true);
+		bossHPBar[idx].ShowWindow(visibility);
 	}
 	// 对于当前阶段，按照剩余血量比例进行布局
 	RECT pRcCurBar = rect(ClientWidth() / 2 - 253, 123, 506 * curStageRatio, 3);
@@ -369,7 +375,7 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	if (idx < PEP3BattlegroundBossHPBarUIBarCount)
 	{
 		bossHPBar[idx].SetRect(pRcCurBar);
-		bossHPBar[idx].ShowWindow(true);
+		bossHPBar[idx].ShowWindow(visibility);
 	}
 	// 后续阶段不显示，包括已经消耗掉的和不存在的阶段
 	for (idx += 1; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
@@ -380,6 +386,8 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 
 void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
 {
+	this->visibility = visibility;
+
 	bossHPBarBackground->ShowWindow(visibility);
 	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
@@ -496,96 +504,97 @@ PEP3BattlegroundInformationBoardUI::~PEP3BattlegroundInformationBoardUI()
 void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 {
 	int idx;
+	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
 
 	// 背景
-	RECT pRcBack = rect(ClientWidth() - 1064, 40, 1024, 1024);
+	RECT pRcBack = rect(rightMargin - 1024, 40, 1024, 1024);
 	gbColorQuad textColor(87, 65, 20, 255);
 	informationBoardBackground->Create(0, pRcBack, ui);
 	informationBoardBackground->SetBk("UI\\combatinformation.tga");
 
 	// 主面板
 	RECT pRcElement;
-	pRcElement = rect(ClientWidth() - 712, 104, 258, 64);
+	pRcElement = rect(rightMargin - 672, 104, 258, 64);
 	enemyID->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 328, 104, 258, 64);
+	pRcElement = rect(rightMargin - 288, 104, 258, 64);
 	enemyName->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 168, 96, 64);
+	pRcElement = rect(rightMargin - 672, 168, 96, 64);
 	enemyType->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 168, 96, 64);
+	pRcElement = rect(rightMargin - 480, 168, 96, 64);
 	enemyLevel->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 328, 168, 96, 64);
+	pRcElement = rect(rightMargin - 288, 168, 96, 64);
 	enemyMoney->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 168, 96, 64);
+	pRcElement = rect(rightMargin - 96, 168, 96, 64);
 	enemyExperience->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 232, 96, 64);
+	pRcElement = rect(rightMargin - 672, 232, 96, 64);
 	enemyAttack->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 232, 96, 64);
+	pRcElement = rect(rightMargin - 480, 232, 96, 64);
 	enemyDefence->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 232, 232, 192, 64);
+	pRcElement = rect(rightMargin - 192, 232, 192, 64);
 	enemyHP->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
+	pRcElement = rect(rightMargin - 288, 261, 96, 6);
 	enemyHPBarBackground->Create(0, pRcElement, ui);
 	enemyHPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
-	pRcElement = rect(ClientWidth() - 328, 261, 96, 6);
+	pRcElement = rect(rightMargin - 288, 261, 96, 6);
 	enemyHPBar->Create(0, pRcElement, ui);
 	enemyHPBar->SetBk("UI\\HPBar\\combat_bossHP1.tga");
-	pRcElement = rect(ClientWidth() - 712, 296, 96, 64);
+	pRcElement = rect(rightMargin - 672, 296, 96, 64);
 	enemySpeed->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 296, 96, 64);
+	pRcElement = rect(rightMargin - 480, 296, 96, 64);
 	enemyLuck->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 232, 296, 192, 64);
+	pRcElement = rect(rightMargin - 192, 296, 192, 64);
 	enemyMP->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
+	pRcElement = rect(rightMargin - 288, 325, 96, 6);
 	enemyMPBarBackground->Create(0, pRcElement, ui);
 	enemyMPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
-	pRcElement = rect(ClientWidth() - 328, 325, 96, 6);
+	pRcElement = rect(rightMargin - 288, 325, 96, 6);
 	enemyMPBar->Create(0, pRcElement, ui);
 	enemyMPBar->SetBk("UI\\HPBar\\combat_bossHP4.tga");
-	pRcElement = rect(ClientWidth() - 712, 360, 96, 64);
+	pRcElement = rect(rightMargin - 672, 360, 96, 64);
 	enemyWater->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 360, 288, 64);
+	pRcElement = rect(rightMargin - 480, 360, 288, 64);
 	enemyNormalAttack->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 360, 96, 64);
+	pRcElement = rect(rightMargin - 96, 360, 96, 64);
 	enemyNormalAttackGPRecover->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 424, 96, 64);
+	pRcElement = rect(rightMargin - 672, 424, 96, 64);
 	enemyFire->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 424, 288, 64);
+	pRcElement = rect(rightMargin - 480, 424, 288, 64);
 	enemyDrop->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 424, 96, 64);
+	pRcElement = rect(rightMargin - 96, 424, 96, 64);
 	enemyDropAmount->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 488, 96, 64);
+	pRcElement = rect(rightMargin - 672, 488, 96, 64);
 	enemyWind->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 488, 288, 64);
+	pRcElement = rect(rightMargin - 480, 488, 288, 64);
 	enemyAdditionalDrop->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 488, 96, 64);
+	pRcElement = rect(rightMargin - 96, 488, 96, 64);
 	enemyAdditionalDropAmount->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 552, 96, 64);
+	pRcElement = rect(rightMargin - 672, 552, 96, 64);
 	enemyThunder->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 552, 288, 64);
+	pRcElement = rect(rightMargin - 480, 552, 288, 64);
 	enemySteal->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 552, 96, 64);
+	pRcElement = rect(rightMargin - 96, 552, 96, 64);
 	enemyStealCount->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 616, 96, 64);
+	pRcElement = rect(rightMargin - 672, 616, 96, 64);
 	enemyEarth->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 520, 616, 288, 64);
+	pRcElement = rect(rightMargin - 480, 616, 288, 64);
 	enemyInitialState->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 616, 96, 64);
+	pRcElement = rect(rightMargin - 96, 616, 96, 64);
 	enemySpecificDrop->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 680, 192, 64);
+	pRcElement = rect(rightMargin - 672, 680, 192, 64);
 	enemySpecificDrop->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 424, 680, 192, 64);
+	pRcElement = rect(rightMargin - 384, 680, 192, 64);
 	enemySpecificSkillName->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 680, 96, 64);
+	pRcElement = rect(rightMargin - 96, 680, 96, 64);
 	enemySpecificDropPercentage->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 712, 744, 192, 64);
+	pRcElement = rect(rightMargin - 672, 744, 192, 64);
 	enemyAdditionalSpecificDrop->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 424, 744, 192, 64);
+	pRcElement = rect(rightMargin - 384, 744, 192, 64);
 	enemyAdditionalSpecificSkillName->Create(0, pRcElement, ui);
-	pRcElement = rect(ClientWidth() - 136, 744, 96, 64);
+	pRcElement = rect(rightMargin - 96, 744, 96, 64);
 	enemyAdditionalSpecificDropPercentage->Create(0, pRcElement, ui);
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIActionCount; ++idx)
 	{
-		pRcElement = rect(ClientWidth() - 712, 808 + 64 * idx, 672, 64);
+		pRcElement = rect(rightMargin - 672, 808 + 64 * idx, 672, 64);
 		enemyAction[idx].Create(0, pRcElement, ui);
 	}
 
@@ -593,17 +602,17 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	RECT pRcStatusItem;
 	for (idx = 0; idx < PEP3BattlegroundInformationBoardUIStatusCount; ++idx)
 	{
-		pRcStatusItem = rect(ClientWidth() - 969, 40 + 106 * idx, 161, 53);
+		pRcStatusItem = rect(rightMargin - 929, 40 + 106 * idx, 161, 53);
 		enemyStatus[idx].Create(0, pRcStatusItem, ui);
 	}
 
-	// 默认隐藏
 	setVisibility(false);
 }
 
-void PEP3BattlegroundInformationBoardUI::update(int pageNumber, string information[], CCBRoleState *roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[])
+void PEP3BattlegroundInformationBoardUI::update(PEP3BattlegroundInformationBoardUIPageType pageType, string information[], CCBRoleState *roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[])
 {
 	int idx;
+	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
 
 	// 先更新数据库中的静态数据
     enemyID->SetText((char*)information[0].c_str(), true);
@@ -683,9 +692,9 @@ void PEP3BattlegroundInformationBoardUI::update(int pageNumber, string informati
 
 	// 处理生命槽和魔力槽
 	RECT pRcElement;
-	pRcElement = rect(ClientWidth() - 328, 261, roleState->GetRole(roleIndex)->nFullHP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nHP) / roleState->GetRole(roleIndex)->nFullHP), 6);
+	pRcElement = rect(rightMargin - 288, 261, roleState->GetRole(roleIndex)->nFullHP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nHP) / roleState->GetRole(roleIndex)->nFullHP), 6);
 	enemyHPBar->SetRect(pRcElement);
-	pRcElement = rect(ClientWidth() - 328, 325, roleState->GetRole(roleIndex)->nFullMP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nMP) / roleState->GetRole(roleIndex)->nFullMP), 6);
+	pRcElement = rect(rightMargin - 288, 325, roleState->GetRole(roleIndex)->nFullMP <= 0 ? 0 : 96 * ((double)(roleState->GetRole(roleIndex)->nMP) / roleState->GetRole(roleIndex)->nFullMP), 6);
 	enemyMPBar->SetRect(pRcElement);
 
 	// 处理状态
@@ -754,3 +763,58 @@ bool PEP3BattlegroundInformationBoardUI::getVisibility()
 	return visibility;
 }
 
+// MARK: 评分UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundRankUI* battlegroundRankUIInstance = new PEP3BattlegroundRankUI();
+PEP3BattlegroundRankUI* PEP3BattlegroundRankUI::sharedInstance()
+{
+	return battlegroundRankUIInstance;
+}
+
+PEP3BattlegroundRankUI::PEP3BattlegroundRankUI()
+{
+	rankIcon = new UIStatic;
+}
+
+PEP3BattlegroundRankUI::~PEP3BattlegroundRankUI()
+{
+	delete rankIcon;
+}
+
+void PEP3BattlegroundRankUI::create(UIWnd* ui)
+{
+	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
+	RECT pRcIcon = rect(rightMargin - 128, ClientHeight() - 144, 128, 128);
+	rankIcon->Create(0, pRcIcon, ui);
+	rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
+
+	setVisibility(false);
+}
+
+void PEP3BattlegroundRankUI::update(PEP3BattlegroundRankUIRankType rank)
+{
+	switch (rank)
+	{
+	case PEP3BattlegroundRankUIRankTypeRankA:
+		rankIcon->SetBk("UI\\Rank\\scorerankA.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankB:
+		rankIcon->SetBk("UI\\Rank\\scorerankB.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankC:
+		rankIcon->SetBk("UI\\Rank\\scorerankC.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankD:
+		rankIcon->SetBk("UI\\Rank\\scorerankD.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankE:
+		rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
+		break;
+	default:
+		break;
+	}
+}
+
+void PEP3BattlegroundRankUI::setVisibility(bool visibility)
+{
+	rankIcon->ShowWindow(visibility);
+}
