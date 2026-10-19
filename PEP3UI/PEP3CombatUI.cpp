@@ -46,7 +46,7 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 	spiritNumber->SetFontColor(color);
 	spiritNumber->SetText("0");
 
-	RECT pRcUsingStatus = rect(leftMargin, 70, 32, 32);
+	RECT pRcUsingStatus = rect(leftMargin, 72, 32, 32);
 	spiritUsingStatus->Create(0, pRcUsingStatus, ui);
 	spiritUsingStatus->SetBk("UI\\spirit\\spiritIdle.tga");
 
@@ -104,29 +104,29 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 	int leftMargin = calCombatUIHorizontalMargin();
 	gbColorQuad color(0, 255, 255, 255);
 
-	RECT pRCResIcon = rect(leftMargin + 53, 70, 32, 32);
+	RECT pRCResIcon = rect(leftMargin + 53, 72, 32, 32);
 	resurrectionIcon->Create(0, pRCResIcon, ui);
 	resurrectionIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundResurrection.tga");
 
-	RECT pRcResNumber = rect(leftMargin + 92, 70, 45, 32);
+	RECT pRcResNumber = rect(leftMargin + 92, 72, 45, 32);
 	resurrectionNumber->Create(0, pRcResNumber, ui);
 	resurrectionNumber->SetFontColor(color);
 	resurrectionNumber->SetText("0");
 
-	RECT pRCBatStateIcon = rect(leftMargin + 123, 70, 32, 32);
+	RECT pRCBatStateIcon = rect(leftMargin + 123, 72, 32, 32);
 	battlegroundStateIcon->Create(0, pRCBatStateIcon, ui);
 	battlegroundStateIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
 
-	RECT pRCBatStateNumber = rect(leftMargin + 161, 70, 45, 32);
+	RECT pRCBatStateNumber = rect(leftMargin + 161, 72, 45, 32);
 	battlegroundStateNumber->Create(0, pRCBatStateNumber, ui);
 	battlegroundStateNumber->SetFontColor(color);
 	battlegroundStateNumber->SetText("000");
 
-	RECT pRCBatPropertyIcon = rect(leftMargin + 206, 70, 32, 32);
+	RECT pRCBatPropertyIcon = rect(leftMargin + 206, 72, 32, 32);
 	battlegroundPropertyIcon->Create(0, pRCBatPropertyIcon, ui);
 	battlegroundPropertyIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
 
-	RECT pRCBatPropertyNumber = rect(leftMargin + 244, 70, 45, 32);
+	RECT pRCBatPropertyNumber = rect(leftMargin + 244, 72, 45, 32);
 	battlegroundPropertyNumber->Create(0, pRCBatPropertyNumber, ui);
 	battlegroundPropertyNumber->SetFontColor(color);
 	battlegroundPropertyNumber->SetText("000");
@@ -818,7 +818,7 @@ void PEP3BattlegroundRankUI::setVisibility(bool visibility)
 	rankIcon->ShowWindow(visibility);
 }
 
-// MARK: 评分UI
+// MARK: 技能说明UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundSkillInformationUI* battlegroundSkillInformationUIInstance = new PEP3BattlegroundSkillInformationUI();
 PEP3BattlegroundSkillInformationUI* PEP3BattlegroundSkillInformationUI::sharedInstance()
 {
@@ -847,14 +847,14 @@ void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
 	int deltaX = 1;
 	int deltaY = 0;
 
-	RECT pRcBackground = rect(leftMargin, 156, 512, 512);
+	RECT pRcBackground = rect(leftMargin, 193, 512, 512);
 	informationBackground->Create(0, pRcBackground, ui);
 	informationBackground->SetBk("UI\\SkillInformation\\skillInformation.tga");
-	RECT pRcUpper = rect(leftMargin + 32 + deltaX, 188 + deltaY, 224, 224);
+	RECT pRcUpper = rect(leftMargin + 32 + deltaX, 225 + deltaY, 224, 224);
 	upperText->Create(0, pRcUpper, ui);
 	upperText->SetFontColor(textColor);
 	upperText->SetText("");
-	RECT pRcLower = rect(leftMargin + 32 + deltaX, 412 + deltaY, 224, 144);
+	RECT pRcLower = rect(leftMargin + 32 + deltaX, 449 + deltaY, 224, 144);
 	lowerText->Create(0, pRcLower, ui);
 	lowerText->SetFontColor(textColor);
 	lowerText->SetText("");
@@ -873,4 +873,53 @@ void PEP3BattlegroundSkillInformationUI::setVisibility(bool visibility)
 	informationBackground->ShowWindow(visibility);
 	upperText->ShowWindow(visibility);
 	lowerText->ShowWindow(visibility);
+}
+
+// 武器技UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundWeaponSkillUI* battlegroundWeaponSkillUIInstance = new PEP3BattlegroundWeaponSkillUI();
+PEP3BattlegroundWeaponSkillUI* PEP3BattlegroundWeaponSkillUI::sharedInstance()
+{
+	return battlegroundWeaponSkillUIInstance;
+}
+
+PEP3BattlegroundWeaponSkillUI::PEP3BattlegroundWeaponSkillUI()
+{
+	skillBackground = new UIStatic;
+	skillName = new UIStatic;
+}
+
+PEP3BattlegroundWeaponSkillUI::~PEP3BattlegroundWeaponSkillUI()
+{
+	delete skillBackground;
+	delete skillName;
+}
+
+void PEP3BattlegroundWeaponSkillUI::create(UIWnd* ui)
+{
+	int leftMargin = calCombatUIHorizontalMargin();
+	gbColorQuad textColor(255, 255, 255, 255);
+
+	RECT pRcBackground = rect(leftMargin, 120, 256, 64);
+	skillBackground->Create(0, pRcBackground, ui);
+	skillBackground->SetBk("ui\\combat\\TricknameBack3.tga");
+
+	RECT pRcName = rect(leftMargin, 120, 235, 57);
+	skillName->Create(0, pRcName, ui);
+	skillName->SetFont(TRUE);
+	skillName->SetFontColor(textColor);
+
+	setVisibility(false);
+}
+
+void PEP3BattlegroundWeaponSkillUI::update(string name, bool forbid)
+{
+	skillName->SetText((char*)name.c_str(), TRUE);
+	gbColorQuad textColor = forbid ? gbColorQuad(128, 128, 128, 255) : gbColorQuad(255, 255, 255, 255);
+	skillName->SetFontColor(textColor);
+}
+
+void PEP3BattlegroundWeaponSkillUI::setVisibility(bool visibility)
+{
+	skillBackground->ShowWindow(visibility);
+	skillName->ShowWindow(visibility);
 }
