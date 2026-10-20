@@ -325,13 +325,13 @@ PEP3BattlegroundBossHPBarUI::~PEP3BattlegroundBossHPBarUI()
 void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 {
 	// 对于非纯色图片支持不佳，需要保证长度和宽度是2的整数次方，好在可以使用Alpha通道
-	RECT pRcBarBkg = rect(ClientWidth() / 2 - 256, 120, 512, 16);
+	RECT pRcBarBkg = rect(ClientWidth() / 2 - 256, 40, 512, 16);
 	bossHPBarBackground->Create(0, pRcBarBkg, ui);
 	bossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
 
 	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
-		RECT pRcBar = rect(ClientWidth() / 2 - 253, 123, 506, 3);;
+		RECT pRcBar = rect(ClientWidth() / 2 - 253, 43, 506, 3);
 		bossHPBar[idx].Create(0, pRcBar, ui);
 		char fileName[PEP3_MAX_FILEPATH_LENGTH];
 		sprintf(fileName, "UI\\HPBar\\combat_bossHP%d.tga", idx + 1);
@@ -343,7 +343,7 @@ void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 
 void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNumber)
 {
-	if (currentHP <= 0)
+	if (!visibility || currentHP <= 0)
 	{
 		// 剩余血量为0，不显示
 		setVisibility(false);
@@ -352,7 +352,7 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	bossHPBarBackground->ShowWindow(visibility);
 
 	// 每一阶段的血量
-	double interval = totalHP / stageNumber;
+	double interval = (double)totalHP / stageNumber;
 	// 剩余完整阶段数
 	int completeStage = currentHP / interval;
 	// 当前阶段剩余血量
@@ -364,12 +364,12 @@ void PEP3BattlegroundBossHPBarUI::update(int totalHP, int currentHP, int stageNu
 	// 对于完整的阶段，正常进行布局
 	for (idx = 0; idx < completeStage; ++idx)
 	{
-		RECT pRcBar = rect(ClientWidth() / 2 - 253, 123, 506, 3);
+		RECT pRcBar = rect(ClientWidth() / 2 - 253, 43, 506, 3);
 		bossHPBar[idx].SetRect(pRcBar);
 		bossHPBar[idx].ShowWindow(visibility);
 	}
 	// 对于当前阶段，按照剩余血量比例进行布局
-	RECT pRcCurBar = rect(ClientWidth() / 2 - 253, 123, 506 * curStageRatio, 3);
+	RECT pRcCurBar = rect(ClientWidth() / 2 - 253, 43, 506 * curStageRatio, 3);
 	// 上一轮循环退出后刚好位于下一个索引
 	if (idx < PEP3BattlegroundBossHPBarUIBarCount)
 	{
@@ -392,6 +392,217 @@ void PEP3BattlegroundBossHPBarUI::setVisibility(bool visibility)
 	{
 		bossHPBar[idx].ShowWindow(visibility);
 	}
+}
+
+void PEP3BattlegroundBossHPBarUI::setVisibilityIfNeeded(bool visibility)
+{
+	// 不直接设置属性，因为控件的显示与否还要受其他参数影响
+	this->visibility = visibility;
+}
+
+// MARK: 评分UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundRankUI* battlegroundRankUIInstance = new PEP3BattlegroundRankUI();
+PEP3BattlegroundRankUI* PEP3BattlegroundRankUI::sharedInstance()
+{
+	return battlegroundRankUIInstance;
+}
+
+PEP3BattlegroundRankUI::PEP3BattlegroundRankUI()
+{
+	rankIcon = new UIStatic;
+}
+
+PEP3BattlegroundRankUI::~PEP3BattlegroundRankUI()
+{
+	delete rankIcon;
+}
+
+void PEP3BattlegroundRankUI::create(UIWnd* ui)
+{
+	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
+	RECT pRcIcon = rect(rightMargin - 128, ClientHeight() - 144, 128, 128);
+	rankIcon->Create(0, pRcIcon, ui);
+	rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
+
+	setVisibility(false);
+}
+
+void PEP3BattlegroundRankUI::update(PEP3BattlegroundRankUIRankType rank)
+{
+	switch (rank)
+	{
+	case PEP3BattlegroundRankUIRankTypeRankA:
+		rankIcon->SetBk("UI\\Rank\\scorerankA.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankB:
+		rankIcon->SetBk("UI\\Rank\\scorerankB.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankC:
+		rankIcon->SetBk("UI\\Rank\\scorerankC.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankD:
+		rankIcon->SetBk("UI\\Rank\\scorerankD.tga");
+		break;
+	case PEP3BattlegroundRankUIRankTypeRankE:
+		rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
+		break;
+	default:
+		break;
+	}
+}
+
+void PEP3BattlegroundRankUI::setVisibility(bool visibility)
+{
+	rankIcon->ShowWindow(visibility);
+}
+
+// MARK: 技能说明UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundSkillInformationUI* battlegroundSkillInformationUIInstance = new PEP3BattlegroundSkillInformationUI();
+PEP3BattlegroundSkillInformationUI* PEP3BattlegroundSkillInformationUI::sharedInstance()
+{
+	return battlegroundSkillInformationUIInstance;
+}
+
+PEP3BattlegroundSkillInformationUI::PEP3BattlegroundSkillInformationUI()
+{
+	informationBackground = new UIStatic;
+	upperText = new UIStatic;
+	lowerText = new UIStatic;
+}
+
+PEP3BattlegroundSkillInformationUI::~PEP3BattlegroundSkillInformationUI()
+{
+	delete informationBackground;
+	delete upperText;
+	delete lowerText;
+}
+
+void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
+{
+	int leftMargin = calCombatUIHorizontalMargin();
+	gbColorQuad textColor(56, 25, 27, 255);
+	// 按照实际测试效果的偏移量
+	int deltaX = 1;
+	int deltaY = 0;
+
+	RECT pRcBackground = rect(leftMargin, 193, 512, 512);
+	informationBackground->Create(0, pRcBackground, ui);
+	informationBackground->SetBk("UI\\SkillInformation\\skillInformation.tga");
+
+	RECT pRcUpper = rect(leftMargin + 32 + deltaX, 225 + deltaY, 224, 224);
+	upperText->Create(0, pRcUpper, ui);
+	upperText->SetFontColor(textColor);
+	upperText->SetText("");
+
+	RECT pRcLower = rect(leftMargin + 32 + deltaX, 449 + deltaY, 224, 144);
+	lowerText->Create(0, pRcLower, ui);
+	lowerText->SetFontColor(textColor);
+	lowerText->SetText("");
+
+	setVisibility(false);
+}
+
+void PEP3BattlegroundSkillInformationUI::update(string upperText, string lowerText)
+{
+	this->upperText->SetText((char*)upperText.c_str());
+	this->lowerText->SetText((char*)lowerText.c_str());
+}
+
+void PEP3BattlegroundSkillInformationUI::setVisibility(bool visibility)
+{
+	informationBackground->ShowWindow(visibility);
+	upperText->ShowWindow(visibility);
+	lowerText->ShowWindow(visibility);
+}
+
+// MARK: 武器技UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundWeaponSkillUI* battlegroundWeaponSkillUIInstance = new PEP3BattlegroundWeaponSkillUI();
+PEP3BattlegroundWeaponSkillUI* PEP3BattlegroundWeaponSkillUI::sharedInstance()
+{
+	return battlegroundWeaponSkillUIInstance;
+}
+
+PEP3BattlegroundWeaponSkillUI::PEP3BattlegroundWeaponSkillUI()
+{
+	skillBackground = new UIStatic;
+	skillName = new UIStatic;
+}
+
+PEP3BattlegroundWeaponSkillUI::~PEP3BattlegroundWeaponSkillUI()
+{
+	delete skillBackground;
+	delete skillName;
+}
+
+void PEP3BattlegroundWeaponSkillUI::create(UIWnd* ui)
+{
+	int leftMargin = calCombatUIHorizontalMargin();
+	gbColorQuad textColor(255, 255, 255, 255);
+
+	RECT pRcBackground = rect(leftMargin, 120, 256, 64);
+	skillBackground->Create(0, pRcBackground, ui);
+	skillBackground->SetBk("ui\\combat\\TricknameBack3.tga");
+
+	RECT pRcName = rect(leftMargin, 120, 235, 57);
+	skillName->Create(0, pRcName, ui);
+	skillName->SetFont(TRUE);
+	skillName->SetFontColor(textColor);
+
+	setVisibility(false);
+}
+
+void PEP3BattlegroundWeaponSkillUI::update(string name, bool forbid)
+{
+	skillName->SetText((char*)name.c_str(), TRUE);
+	gbColorQuad textColor = forbid ? gbColorQuad(128, 128, 128, 255) : gbColorQuad(255, 255, 255, 255);
+	skillName->SetFontColor(textColor);
+}
+
+void PEP3BattlegroundWeaponSkillUI::setVisibility(bool visibility)
+{
+	skillBackground->ShowWindow(visibility);
+	skillName->ShowWindow(visibility);
+}
+
+// MARK: 附加信息UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundAdditionalInformationUI* battlegroundAdditionalInformationUIInstance = new PEP3BattlegroundAdditionalInformationUI();
+PEP3BattlegroundAdditionalInformationUI* PEP3BattlegroundAdditionalInformationUI::sharedInstance()
+{
+	return battlegroundAdditionalInformationUIInstance;
+}
+
+PEP3BattlegroundAdditionalInformationUI::PEP3BattlegroundAdditionalInformationUI()
+{
+	text = new PEP3UIStaticAlignment;
+}
+
+PEP3BattlegroundAdditionalInformationUI::~PEP3BattlegroundAdditionalInformationUI()
+{
+	delete text;
+}
+
+void PEP3BattlegroundAdditionalInformationUI::create(UIWnd* ui)
+{
+	gbColorQuad color(0, 255, 255, 255);
+	// 按照实际测试效果的偏移量
+	int deltaY = -8;
+
+	RECT pRcText = rect(ClientWidth() / 2 - 300, 65 + deltaY, 600, 48);
+	text->Create(0, pRcText, ui);
+	text->SetFontColor(color);
+	text->SetFont(true);
+	text->SetText("");
+	text->setAlignment(PEP3UIStaticAlignmentTypeHorizontalCenterVerticalUp);
+}
+
+void PEP3BattlegroundAdditionalInformationUI::update(string name)
+{
+	text->SetText((char*)name.c_str());
+}
+
+void PEP3BattlegroundAdditionalInformationUI::setVisibility(bool visibility)
+{
+	text->ShowWindow(visibility);
 }
 
 // MARK: 信息面板UI
@@ -608,13 +819,13 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	setVisibility(false);
 }
 
-void PEP3BattlegroundInformationBoardUI::update(PEP3BattlegroundInformationBoardUIPageType pageType, string information[], CCBRoleState *roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[])
+void PEP3BattlegroundInformationBoardUI::update(PEP3BattlegroundInformationBoardUIPageType pageType, string information[], CCBRoleState* roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[])
 {
 	int idx;
 	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
 
 	// 先更新数据库中的静态数据
-    enemyID->SetText((char*)information[0].c_str(), true);
+	enemyID->SetText((char*)information[0].c_str(), true);
 	enemyName->SetText((char*)information[1].c_str(), true);
 	enemyType->SetText((char*)information[2].c_str(), true);
 	enemyLevel->SetText((char*)information[3].c_str(), true);
@@ -762,164 +973,57 @@ bool PEP3BattlegroundInformationBoardUI::getVisibility()
 	return visibility;
 }
 
-// MARK: 评分UI
-PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundRankUI* battlegroundRankUIInstance = new PEP3BattlegroundRankUI();
-PEP3BattlegroundRankUI* PEP3BattlegroundRankUI::sharedInstance()
+// MARK: 转盘UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundWheelUI* battlegroundWheelUIInstance = new PEP3BattlegroundWheelUI();
+PEP3BattlegroundWheelUI* PEP3BattlegroundWheelUI::sharedInstance()
 {
-	return battlegroundRankUIInstance;
+	return battlegroundWheelUIInstance;
 }
 
-PEP3BattlegroundRankUI::PEP3BattlegroundRankUI()
+PEP3BattlegroundWheelUI::PEP3BattlegroundWheelUI()
 {
-	rankIcon = new UIStatic;
+	isRotating = false;
+
+	wheelBackground = new UIStaticEXA;
+	wheelPointer = new UIStatic;
 }
 
-PEP3BattlegroundRankUI::~PEP3BattlegroundRankUI()
+PEP3BattlegroundWheelUI::~PEP3BattlegroundWheelUI()
 {
-	delete rankIcon;
+	delete wheelBackground;
+	delete wheelPointer;
 }
 
-void PEP3BattlegroundRankUI::create(UIWnd* ui)
+void PEP3BattlegroundWheelUI::create(UIWnd* ui)
 {
-	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
-	RECT pRcIcon = rect(rightMargin - 128, ClientHeight() - 144, 128, 128);
-	rankIcon->Create(0, pRcIcon, ui);
-	rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
+	RECT pRcBackground = rect(ClientWidth() / 2 - 255, ClientHeight() / 2 - 255, 512, 512);
+	wheelBackground->Create(0, pRcBackground, ui);
+	wheelBackground->SetBk("UI\\assistant\\magicwheel0.tga");
+	wheelBackground->SetCenterPointInRect(0, 0);
+	wheelBackground->SetRotMode(2);
+	wheelBackground->SetRotDir(1);
+	wheelBackground->SetRotSpeed(0.5);
+
+	RECT pRcPointer = rect(ClientWidth() / 2 - 15, ClientHeight() / 2 - 248, 32, 256);
+	wheelPointer->Create(0, pRcPointer, ui);
+	wheelPointer->SetBk("UI\\mahounotanepointer.tga");
 
 	setVisibility(false);
 }
 
-void PEP3BattlegroundRankUI::update(PEP3BattlegroundRankUIRankType rank)
+void PEP3BattlegroundWheelUI::update(string name, bool forbid)
 {
-	switch (rank)
-	{
-	case PEP3BattlegroundRankUIRankTypeRankA:
-		rankIcon->SetBk("UI\\Rank\\scorerankA.tga");
-		break;
-	case PEP3BattlegroundRankUIRankTypeRankB:
-		rankIcon->SetBk("UI\\Rank\\scorerankB.tga");
-		break;
-	case PEP3BattlegroundRankUIRankTypeRankC:
-		rankIcon->SetBk("UI\\Rank\\scorerankC.tga");
-		break;
-	case PEP3BattlegroundRankUIRankTypeRankD:
-		rankIcon->SetBk("UI\\Rank\\scorerankD.tga");
-		break;
-	case PEP3BattlegroundRankUIRankTypeRankE:
-		rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
-		break;
-	default:
-		break;
-	}
+	//// 正在旋转，不允许重新开始
+	//if (rotatingStage != PEP3BattlegroundWheelUIRotatingStageIdle)
+	//{
+	//	return;
+	//}
+
+
 }
 
-void PEP3BattlegroundRankUI::setVisibility(bool visibility)
+void PEP3BattlegroundWheelUI::setVisibility(bool visibility)
 {
-	rankIcon->ShowWindow(visibility);
-}
-
-// MARK: 技能说明UI
-PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundSkillInformationUI* battlegroundSkillInformationUIInstance = new PEP3BattlegroundSkillInformationUI();
-PEP3BattlegroundSkillInformationUI* PEP3BattlegroundSkillInformationUI::sharedInstance()
-{
-	return battlegroundSkillInformationUIInstance;
-}
-
-PEP3BattlegroundSkillInformationUI::PEP3BattlegroundSkillInformationUI()
-{
-	informationBackground = new UIStatic;
-	upperText = new UIStatic;
-	lowerText = new UIStatic;
-}
-
-PEP3BattlegroundSkillInformationUI::~PEP3BattlegroundSkillInformationUI()
-{
-	delete informationBackground;
-	delete upperText;
-	delete lowerText;
-}
-
-void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
-{
-	int leftMargin = calCombatUIHorizontalMargin();
-	gbColorQuad textColor(56, 25, 27, 255);
-	// 按照实际测试效果的偏移量
-	int deltaX = 1;
-	int deltaY = 0;
-
-	RECT pRcBackground = rect(leftMargin, 193, 512, 512);
-	informationBackground->Create(0, pRcBackground, ui);
-	informationBackground->SetBk("UI\\SkillInformation\\skillInformation.tga");
-	RECT pRcUpper = rect(leftMargin + 32 + deltaX, 225 + deltaY, 224, 224);
-	upperText->Create(0, pRcUpper, ui);
-	upperText->SetFontColor(textColor);
-	upperText->SetText("");
-	RECT pRcLower = rect(leftMargin + 32 + deltaX, 449 + deltaY, 224, 144);
-	lowerText->Create(0, pRcLower, ui);
-	lowerText->SetFontColor(textColor);
-	lowerText->SetText("");
-
-	setVisibility(false);
-}
-
-void PEP3BattlegroundSkillInformationUI::update(string upperText, string lowerText)
-{
-	this->upperText->SetText((char*)upperText.c_str());
-	this->lowerText->SetText((char*)lowerText.c_str());
-}
-
-void PEP3BattlegroundSkillInformationUI::setVisibility(bool visibility)
-{
-	informationBackground->ShowWindow(visibility);
-	upperText->ShowWindow(visibility);
-	lowerText->ShowWindow(visibility);
-}
-
-// 武器技UI
-PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundWeaponSkillUI* battlegroundWeaponSkillUIInstance = new PEP3BattlegroundWeaponSkillUI();
-PEP3BattlegroundWeaponSkillUI* PEP3BattlegroundWeaponSkillUI::sharedInstance()
-{
-	return battlegroundWeaponSkillUIInstance;
-}
-
-PEP3BattlegroundWeaponSkillUI::PEP3BattlegroundWeaponSkillUI()
-{
-	skillBackground = new UIStatic;
-	skillName = new UIStatic;
-}
-
-PEP3BattlegroundWeaponSkillUI::~PEP3BattlegroundWeaponSkillUI()
-{
-	delete skillBackground;
-	delete skillName;
-}
-
-void PEP3BattlegroundWeaponSkillUI::create(UIWnd* ui)
-{
-	int leftMargin = calCombatUIHorizontalMargin();
-	gbColorQuad textColor(255, 255, 255, 255);
-
-	RECT pRcBackground = rect(leftMargin, 120, 256, 64);
-	skillBackground->Create(0, pRcBackground, ui);
-	skillBackground->SetBk("ui\\combat\\TricknameBack3.tga");
-
-	RECT pRcName = rect(leftMargin, 120, 235, 57);
-	skillName->Create(0, pRcName, ui);
-	skillName->SetFont(TRUE);
-	skillName->SetFontColor(textColor);
-
-	setVisibility(false);
-}
-
-void PEP3BattlegroundWeaponSkillUI::update(string name, bool forbid)
-{
-	skillName->SetText((char*)name.c_str(), TRUE);
-	gbColorQuad textColor = forbid ? gbColorQuad(128, 128, 128, 255) : gbColorQuad(255, 255, 255, 255);
-	skillName->SetFontColor(textColor);
-}
-
-void PEP3BattlegroundWeaponSkillUI::setVisibility(bool visibility)
-{
-	skillBackground->ShowWindow(visibility);
-	skillName->ShowWindow(visibility);
+	wheelBackground->ShowWindow(visibility);
+	wheelPointer->ShowWindow(visibility);
 }

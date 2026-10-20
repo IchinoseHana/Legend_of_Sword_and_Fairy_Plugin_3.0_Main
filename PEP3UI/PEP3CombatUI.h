@@ -4,9 +4,12 @@
 #pragma once
 
 #include "..\..\pal3\ui\uistatic.h"
+#include "..\..\pal3\ui\UIStaticEX.h"
+#include "..\ClassExtension\PEP3UIStaticExtension.h"
 
 using std::string;
 
+// MARK: - 通用UI
 // MARK: 仙灵、武灵UI
 class PEP3BattlegroundSpiritUI
 {
@@ -101,6 +104,85 @@ public:
 	void create(UIWnd* ui);
 	void update(int totalHP, int currentHP, int stageNumber);
 	void setVisibility(bool visibility);
+	void setVisibilityIfNeeded(bool visibility);
+};
+
+// MARK: 评分UI
+enum PEP3BattlegroundRankUIRankType
+{
+	PEP3BattlegroundRankUIRankTypeRankA,
+	PEP3BattlegroundRankUIRankTypeRankB,
+	PEP3BattlegroundRankUIRankTypeRankC,
+	PEP3BattlegroundRankUIRankTypeRankD,
+	PEP3BattlegroundRankUIRankTypeRankE
+};
+
+class PEP3BattlegroundRankUI
+{
+private:
+	UIStatic* rankIcon; // 等级图标
+
+public:
+	PEP3BattlegroundRankUI();
+	~PEP3BattlegroundRankUI();
+
+	static PEP3BattlegroundRankUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(PEP3BattlegroundRankUIRankType rank);
+	void setVisibility(bool visibility);
+};
+
+// MARK: 技能说明UI
+class PEP3BattlegroundSkillInformationUI
+{
+private:
+	UIStatic* informationBackground; // 背景
+	UIStatic* upperText; // 上半部分描述
+	UIStatic* lowerText; // 下半部分描述
+
+
+public:
+	PEP3BattlegroundSkillInformationUI();
+	~PEP3BattlegroundSkillInformationUI();
+
+	static PEP3BattlegroundSkillInformationUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(string upperText, string lowerText);
+	void setVisibility(bool visibility);
+};
+
+// MARK: 武器技UI
+class PEP3BattlegroundWeaponSkillUI
+{
+private:
+	UIStatic* skillBackground; // 背景
+	UIStatic* skillName; // 技能名称
+
+public:
+	PEP3BattlegroundWeaponSkillUI();
+	~PEP3BattlegroundWeaponSkillUI();
+
+	static PEP3BattlegroundWeaponSkillUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(string name, bool forbid);
+	void setVisibility(bool visibility);
+};
+
+// MARK: 附加信息UI
+class PEP3BattlegroundAdditionalInformationUI
+{
+private:
+	// TODO: Aya 对话框
+	PEP3UIStaticAlignment* text; // 文本
+
+public:
+	PEP3BattlegroundAdditionalInformationUI();
+	~PEP3BattlegroundAdditionalInformationUI();
+
+	static PEP3BattlegroundAdditionalInformationUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(string text);
+	void setVisibility(bool visibility);
 };
 
 // MARK: 信息面板UI
@@ -185,62 +267,26 @@ public:
 	bool getVisibility();
 };
 
-// MARK: 评分UI
-enum PEP3BattlegroundRankUIRankType
+// MARK: - 非通用UI
+// MARK: 转盘UI
+class PEP3BattlegroundWheelUI
 {
-	PEP3BattlegroundRankUIRankTypeRankA,
-	PEP3BattlegroundRankUIRankTypeRankB,
-	PEP3BattlegroundRankUIRankTypeRankC,
-	PEP3BattlegroundRankUIRankTypeRankD,
-	PEP3BattlegroundRankUIRankTypeRankE
-};
+	typedef void (*rotatingFinishFunc)(int);
 
-class PEP3BattlegroundRankUI
-{
 private:
-	UIStatic* rankIcon; // 等级图标
+	// Initial variables
+	int isRotating; // 是否正在旋转
+
+	UIStaticEXA* wheelBackground; // 转盘背景
+	UIStatic* wheelPointer; // 转盘指针
 
 public:
-	PEP3BattlegroundRankUI();
-	~PEP3BattlegroundRankUI();
+	rotatingFinishFunc finishFunc; // 旋转完成后的回调
 
-	static PEP3BattlegroundRankUI* sharedInstance();
-	void create(UIWnd* ui);
-	void update(PEP3BattlegroundRankUIRankType rank);
-	void setVisibility(bool visibility);
-};
+	PEP3BattlegroundWheelUI();
+	~PEP3BattlegroundWheelUI();
 
-// MARK: 技能说明UI
-class PEP3BattlegroundSkillInformationUI
-{
-private:
-	UIStatic* informationBackground; // 背景
-	UIStatic* upperText; // 上半部分描述
-	UIStatic* lowerText; // 下半部分描述
-
-
-public:
-	PEP3BattlegroundSkillInformationUI();
-	~PEP3BattlegroundSkillInformationUI();
-
-	static PEP3BattlegroundSkillInformationUI* sharedInstance();
-	void create(UIWnd* ui);
-	void update(string upperText, string lowerText);
-	void setVisibility(bool visibility);
-};
-
-// MARK: 武器技UI
-class PEP3BattlegroundWeaponSkillUI
-{
-private:
-	UIStatic* skillBackground; // 背景
-	UIStatic* skillName; // 技能名称
-
-public:
-	PEP3BattlegroundWeaponSkillUI();
-	~PEP3BattlegroundWeaponSkillUI();
-
-	static PEP3BattlegroundWeaponSkillUI* sharedInstance();
+	static PEP3BattlegroundWheelUI* sharedInstance();
 	void create(UIWnd* ui);
 	void update(string name, bool forbid);
 	void setVisibility(bool visibility);

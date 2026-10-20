@@ -5,7 +5,7 @@
 
 #include "..\..\pal3\ui\uistatic.h"
 
-// 指定枚举值主要是为了兼容原版UIStatic的参数设定
+// 指定枚举值主要是为了兼容原版UIStatic的参数设定。注意非左对齐的方式都不要超过一行，且文字不要超出RECT范围
 enum PEP3UIStaticAlignmentType
 {
 	PEP3UIStaticAlignmentTypeHorizontalLeftVerticalUp = 0, // 左上
