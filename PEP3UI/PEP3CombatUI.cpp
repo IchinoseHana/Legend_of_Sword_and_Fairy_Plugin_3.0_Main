@@ -7,6 +7,32 @@
 #include "..\Utility\PEP3UIUtil.h"
 #include "..\Utility\PEP3Define.h"
 
+#define PEP3CombatUIImageFilePathSkillBarDefault "UI\\SkillBar\\skillbar0.tga"
+#define PEP3CombatUIImageFilePathSkillBar "UI\\SkillBar\\skillbar%d.tga"
+#define PEP3CombatUIImageFilePathSpiritIdle "UI\\spirit\\spiritIdle.tga"
+#define PEP3CombatUIImageFilePathSpiritUse "UI\\spirit\\spiritUse.tga"
+#define PEP3CombatUIImageFilePathBattlegroundResurrection "UI\\battlegroundStatePublic\\battlegroundResurrection.tga"
+#define PEP3CombatUIImageFilePathBattlegroundCoorperationAttack "UI\\ChargeInfo\\battlegroundCoorperationAttack.tga"
+#define PEP3CombatUIImageFilePathBattlegroundCharge "UI\\ChargeInfo\\battlegroundCharge.tga"
+#define PEP3CombatUIImageFilePathBattlegroundStateDefault "UI\\battlegroundStatePublic\\battlegroundStateDefault.tga"
+#define PEP3CombatUIImageFilePathBattlegroundState "UI\\BattlegroundState\\battlejyoutai%d.tga"
+#define PEP3CombatUIImageFilePathBattlegroundProperty "UI\\BattlegroundProperty\\battlezokusei%d.tga"
+#define PEP3CombatUIImageFilePathBattlegroundEnvironment "UI\\BattlegroundEnvironment\\battlekannkyou%d.tga"
+#define PEP3CombatUIImageFilePathBossHPBarBackground "UI\\HPBar\\combat_bossHPBK.tga"
+#define PEP3CombatUIImageFilePathBossHPBarGray "UI\\HPBar\\combat_bossHP0.tga"
+#define PEP3CombatUIImageFilePathBossHPBarRed "UI\\HPBar\\combat_bossHP1.tga"
+#define PEP3CombatUIImageFilePathBossHPBarPurple "UI\\HPBar\\combat_bossHP4.tga"
+#define PEP3CombatUIImageFilePathBossHPBar "UI\\HPBar\\combat_bossHP%d.tga"
+#define PEP3CombatUIImageFilePathRankA "UI\\Rank\\scorerankA.tga"
+#define PEP3CombatUIImageFilePathRankB "UI\\Rank\\scorerankB.tga"
+#define PEP3CombatUIImageFilePathRankC "UI\\Rank\\scorerankC.tga"
+#define PEP3CombatUIImageFilePathRankD "UI\\Rank\\scorerankD.tga"
+#define PEP3CombatUIImageFilePathRankE "UI\\Rank\\scorerankE.tga"
+#define PEP3CombatUIImageFilePathSkillInformation "UI\\SkillInformation\\skillInformation.tga"
+#define PEP3CombatUIImageFilePathWeaponSkill "UI\\combat\\TricknameBack3.tga"
+#define PEP3CombatUIImageFilePathInformationBoard "UI\\combatinformation.tga"
+
+
 using spcPEP3UIUtil::calCombatUIHorizontalMargin;
 using spcPEP3UIUtil::calCombatUIVerticalScaledValue;
 using spcPEP3UIUtil::rect;
@@ -38,7 +64,7 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 
 	RECT pRcSlot = rect(leftMargin, 40, 256, 16);
 	spiritSlot->Create(0, pRcSlot, ui);
-	spiritSlot->SetBk("UI\\SkillBar\\skillbar0.tga");
+	spiritSlot->SetBk(PEP3CombatUIImageFilePathSkillBarDefault);
 
 	RECT pRcNumber = rect(leftMargin + 260, 32, 45, 45);
 	spiritNumber->Create(0, pRcNumber, ui);
@@ -48,7 +74,7 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 
 	RECT pRcUsingStatus = rect(leftMargin, 72, 32, 32);
 	spiritUsingStatus->Create(0, pRcUsingStatus, ui);
-	spiritUsingStatus->SetBk("UI\\spirit\\spiritIdle.tga");
+	spiritUsingStatus->SetBk(PEP3CombatUIImageFilePathSpiritIdle);
 
 	setVisibility(false);
 }
@@ -56,14 +82,14 @@ void PEP3BattlegroundSpiritUI::create(UIWnd *ui)
 void PEP3BattlegroundSpiritUI::update(int spiritNumber, bool isUsingSpirit)
 {
 	char fileName[PEP3_MAX_FILEPATH_LENGTH] = { 0 };
-	sprintf(fileName, "UI\\SkillBar\\skillbar%d.tga", spiritNumber);
+	sprintf(fileName, PEP3CombatUIImageFilePathSkillBar, spiritNumber);
 	spiritSlot->SetBk(fileName);
 
 	char numberText[3] = { 0 };
 	sprintf(numberText, "%d", abs(spiritNumber));
 	this->spiritNumber->SetText(numberText);
 
-	spiritUsingStatus->SetBk(isUsingSpirit ? "UI\\spirit\\spiritUse.tga" : "UI\\spirit\\spiritIdle.tga");
+	spiritUsingStatus->SetBk(isUsingSpirit ? PEP3CombatUIImageFilePathSpiritUse : PEP3CombatUIImageFilePathSpiritIdle);
 }
 
 void PEP3BattlegroundSpiritUI::setVisibility(bool visibility)
@@ -106,7 +132,7 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 
 	RECT pRCResIcon = rect(leftMargin + 53, 72, 32, 32);
 	resurrectionIcon->Create(0, pRCResIcon, ui);
-	resurrectionIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundResurrection.tga");
+	resurrectionIcon->SetBk(PEP3CombatUIImageFilePathBattlegroundResurrection);
 
 	RECT pRcResNumber = rect(leftMargin + 92, 72, 45, 32);
 	resurrectionNumber->Create(0, pRcResNumber, ui);
@@ -115,7 +141,7 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 
 	RECT pRCBatStateIcon = rect(leftMargin + 123, 72, 32, 32);
 	battlegroundStateIcon->Create(0, pRCBatStateIcon, ui);
-	battlegroundStateIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
+	battlegroundStateIcon->SetBk(PEP3CombatUIImageFilePathBattlegroundStateDefault);
 
 	RECT pRCBatStateNumber = rect(leftMargin + 161, 72, 45, 32);
 	battlegroundStateNumber->Create(0, pRCBatStateNumber, ui);
@@ -124,7 +150,7 @@ void PEP3BattlegroundStateUI::create(UIWnd* ui)
 
 	RECT pRCBatPropertyIcon = rect(leftMargin + 206, 72, 32, 32);
 	battlegroundPropertyIcon->Create(0, pRCBatPropertyIcon, ui);
-	battlegroundPropertyIcon->SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
+	battlegroundPropertyIcon->SetBk(PEP3CombatUIImageFilePathBattlegroundStateDefault);
 
 	RECT pRCBatPropertyNumber = rect(leftMargin + 244, 72, 45, 32);
 	battlegroundPropertyNumber->Create(0, pRCBatPropertyNumber, ui);
@@ -142,16 +168,16 @@ void PEP3BattlegroundStateUI::update(int resurrectionNumber, int stateIndex, int
 	sprintf(numberText, "%d", abs(resurrectionNumber));
 	this->resurrectionNumber->SetText(numberText);
 	
-	sprintf(fileName, "UI\\BattlegroundState\\battlejyoutai%d.tga", stateIndex);
-	battlegroundStateIcon->SetBk(stateIndex <= 0 ? "UI\\battlegroundStatePublic\\battlegroundStateDefault.tga" : fileName);
+	sprintf(fileName, PEP3CombatUIImageFilePathBattlegroundState, stateIndex);
+	battlegroundStateIcon->SetBk(stateIndex <= 0 ? PEP3CombatUIImageFilePathBattlegroundStateDefault : fileName);
 
 	memset(numberText, '\0', sizeof(numberText));
 	sprintf(numberText, "%03d", abs(stateNumber));
 	battlegroundStateNumber->SetText(numberText);
 	
 	memset(fileName, '\0', sizeof(fileName));
-	sprintf(fileName, "UI\\BattlegroundProperty\\battlezokusei%d.tga", propertyIndex);
-	battlegroundPropertyIcon->SetBk(propertyIndex <= 0 ? "UI\\battlegroundStatePublic\\battlegroundStateDefault.tga" : fileName);
+	sprintf(fileName, PEP3CombatUIImageFilePathBattlegroundProperty, propertyIndex);
+	battlegroundPropertyIcon->SetBk(propertyIndex <= 0 ? PEP3CombatUIImageFilePathBattlegroundStateDefault : fileName);
 	
 	memset(numberText, '\0', sizeof(numberText));
 	sprintf(numberText, "%03d", abs(propertyNumnber));
@@ -202,7 +228,7 @@ void PEP3BattlegroundChargeUI::create(UIWnd* ui)
 	// 先处理合击，再处理暗器装填
 	RECT pRcCoAttackIcon = rect(rightMargin - 100, upperBound, 32, 32);
 	battlegroundCoorperationAttackIcon->Create(0, pRcCoAttackIcon, ui);
-	battlegroundCoorperationAttackIcon->SetBk("UI\\ChargeInfo\\battlegroundCoorperationAttack.tga");
+	battlegroundCoorperationAttackIcon->SetBk(PEP3CombatUIImageFilePathBattlegroundCoorperationAttack);
 
 	RECT pRcCoAttackNumber = rect(pRcCoAttackIcon.left + 46, upperBound, 45, 32);
 	battlegroundCoorperationAttackNumber->Create(0, pRcCoAttackNumber, ui);
@@ -211,7 +237,7 @@ void PEP3BattlegroundChargeUI::create(UIWnd* ui)
 
 	RECT pRcChargeIcon = rect(pRcCoAttackNumber.left - 145, upperBound, 32, 32);
 	battlegroundChargeIcon->Create(0, pRcChargeIcon, ui);
-	battlegroundChargeIcon->SetBk("UI\\ChargeInfo\\battlegroundCharge.tga");
+	battlegroundChargeIcon->SetBk(PEP3CombatUIImageFilePathBattlegroundCharge);
 
 	RECT pRcChargeNumber = rect(pRcChargeIcon.left + 46, upperBound, 45, 32);
 	battlegroundChargeNumber->Create(0, pRcChargeNumber, ui);
@@ -268,7 +294,7 @@ void PEP3BattlegroundEnvironmentUI::create(UIWnd* ui)
 	{
 		RECT pRcIcon = rect(rightMargin - 52 - (idx * 48), upperBound, 32, 32);
 		battlegroundEnvironmentIcon[idx].Create(0, pRcIcon, ui);
-		battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
+		battlegroundEnvironmentIcon[idx].SetBk(PEP3CombatUIImageFilePathBattlegroundStateDefault);
 	}
 
 	setVisibility(false);
@@ -281,13 +307,13 @@ void PEP3BattlegroundEnvironmentUI::update(int environmentIndex[], int environme
 		if (environmentIndex[idx] != 0 && environmentNumber[idx] != 0)
 		{
 			char fileName[PEP3_MAX_FILEPATH_LENGTH];
-			sprintf(fileName, "UI\\BattlegroundEnvironment\\battlekannkyou%d.tga", environmentIndex[idx]);
+			sprintf(fileName, PEP3CombatUIImageFilePathBattlegroundEnvironment, environmentIndex[idx]);
 			battlegroundEnvironmentIcon[idx].SetBk(fileName);
 			battlegroundEnvironmentIcon[idx].ShowWindow(true);
 		}
 		else
 		{
-			battlegroundEnvironmentIcon[idx].SetBk("UI\\battlegroundStatePublic\\battlegroundStateDefault.tga");
+			battlegroundEnvironmentIcon[idx].SetBk(PEP3CombatUIImageFilePathBattlegroundStateDefault);
 			battlegroundEnvironmentIcon[idx].ShowWindow(false);
 		}
 	}
@@ -327,14 +353,14 @@ void PEP3BattlegroundBossHPBarUI::create(UIWnd* ui)
 	// 对于非纯色图片支持不佳，需要保证长度和宽度是2的整数次方，好在可以使用Alpha通道
 	RECT pRcBarBkg = rect(ClientWidth() / 2 - 256, 40, 512, 16);
 	bossHPBarBackground->Create(0, pRcBarBkg, ui);
-	bossHPBarBackground->SetBk("UI\\HPBar\\combat_bossHPBK.tga");
+	bossHPBarBackground->SetBk(PEP3CombatUIImageFilePathBossHPBarBackground);
 
 	for (int idx = 0; idx < PEP3BattlegroundBossHPBarUIBarCount; ++idx)
 	{
 		RECT pRcBar = rect(ClientWidth() / 2 - 253, 43, 506, 3);
 		bossHPBar[idx].Create(0, pRcBar, ui);
 		char fileName[PEP3_MAX_FILEPATH_LENGTH];
-		sprintf(fileName, "UI\\HPBar\\combat_bossHP%d.tga", idx + 1);
+		sprintf(fileName, PEP3CombatUIImageFilePathBossHPBar, idx + 1);
 		bossHPBar[idx].SetBk(fileName);
 	}
 
@@ -422,7 +448,7 @@ void PEP3BattlegroundRankUI::create(UIWnd* ui)
 	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
 	RECT pRcIcon = rect(rightMargin - 128, ClientHeight() - 144, 128, 128);
 	rankIcon->Create(0, pRcIcon, ui);
-	rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
+	rankIcon->SetBk(PEP3CombatUIImageFilePathRankE);
 
 	setVisibility(false);
 }
@@ -432,19 +458,19 @@ void PEP3BattlegroundRankUI::update(PEP3BattlegroundRankUIRankType rank)
 	switch (rank)
 	{
 	case PEP3BattlegroundRankUIRankTypeRankA:
-		rankIcon->SetBk("UI\\Rank\\scorerankA.tga");
+		rankIcon->SetBk(PEP3CombatUIImageFilePathRankA);
 		break;
 	case PEP3BattlegroundRankUIRankTypeRankB:
-		rankIcon->SetBk("UI\\Rank\\scorerankB.tga");
+		rankIcon->SetBk(PEP3CombatUIImageFilePathRankB);
 		break;
 	case PEP3BattlegroundRankUIRankTypeRankC:
-		rankIcon->SetBk("UI\\Rank\\scorerankC.tga");
+		rankIcon->SetBk(PEP3CombatUIImageFilePathRankC);
 		break;
 	case PEP3BattlegroundRankUIRankTypeRankD:
-		rankIcon->SetBk("UI\\Rank\\scorerankD.tga");
+		rankIcon->SetBk(PEP3CombatUIImageFilePathRankD);
 		break;
 	case PEP3BattlegroundRankUIRankTypeRankE:
-		rankIcon->SetBk("UI\\Rank\\scorerankE.tga");
+		rankIcon->SetBk(PEP3CombatUIImageFilePathRankE);
 		break;
 	default:
 		break;
@@ -487,7 +513,7 @@ void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
 
 	RECT pRcBackground = rect(leftMargin, 193, 512, 512);
 	informationBackground->Create(0, pRcBackground, ui);
-	informationBackground->SetBk("UI\\SkillInformation\\skillInformation.tga");
+	informationBackground->SetBk(PEP3CombatUIImageFilePathSkillInformation);
 
 	RECT pRcUpper = rect(leftMargin + 32 + deltaX, 225 + deltaY, 224, 224);
 	upperText->Create(0, pRcUpper, ui);
@@ -541,7 +567,7 @@ void PEP3BattlegroundWeaponSkillUI::create(UIWnd* ui)
 
 	RECT pRcBackground = rect(leftMargin, 120, 256, 64);
 	skillBackground->Create(0, pRcBackground, ui);
-	skillBackground->SetBk("ui\\combat\\TricknameBack3.tga");
+	skillBackground->SetBk(PEP3CombatUIImageFilePathWeaponSkill);
 
 	RECT pRcName = rect(leftMargin, 120, 235, 57);
 	skillName->Create(0, pRcName, ui);
@@ -720,7 +746,7 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	RECT pRcBack = rect(rightMargin - 1024, 40, 1024, 1024);
 	gbColorQuad textColor(87, 65, 20, 255);
 	informationBoardBackground->Create(0, pRcBack, ui);
-	informationBoardBackground->SetBk("UI\\combatinformation.tga");
+	informationBoardBackground->SetBk(PEP3CombatUIImageFilePathInformationBoard);
 
 	// 主面板
 	RECT pRcElement;
@@ -744,10 +770,10 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	enemyHP->Create(0, pRcElement, ui);
 	pRcElement = rect(rightMargin - 288, 261, 96, 6);
 	enemyHPBarBackground->Create(0, pRcElement, ui);
-	enemyHPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
+	enemyHPBarBackground->SetBk(PEP3CombatUIImageFilePathBossHPBarGray);
 	pRcElement = rect(rightMargin - 288, 261, 96, 6);
 	enemyHPBar->Create(0, pRcElement, ui);
-	enemyHPBar->SetBk("UI\\HPBar\\combat_bossHP1.tga");
+	enemyHPBar->SetBk(PEP3CombatUIImageFilePathBossHPBarRed);
 	pRcElement = rect(rightMargin - 672, 296, 96, 64);
 	enemySpeed->Create(0, pRcElement, ui);
 	pRcElement = rect(rightMargin - 480, 296, 96, 64);
@@ -756,10 +782,10 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	enemyMP->Create(0, pRcElement, ui);
 	pRcElement = rect(rightMargin - 288, 325, 96, 6);
 	enemyMPBarBackground->Create(0, pRcElement, ui);
-	enemyMPBarBackground->SetBk("UI\\HPBar\\combat_bossHP0.tga");
+	enemyMPBarBackground->SetBk(PEP3CombatUIImageFilePathBossHPBarGray);
 	pRcElement = rect(rightMargin - 288, 325, 96, 6);
 	enemyMPBar->Create(0, pRcElement, ui);
-	enemyMPBar->SetBk("UI\\HPBar\\combat_bossHP4.tga");
+	enemyMPBar->SetBk(PEP3CombatUIImageFilePathBossHPBarPurple);
 	pRcElement = rect(rightMargin - 672, 360, 96, 64);
 	enemyWater->Create(0, pRcElement, ui);
 	pRcElement = rect(rightMargin - 480, 360, 288, 64);
