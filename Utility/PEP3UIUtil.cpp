@@ -12,10 +12,15 @@ namespace spcPEP3UIUtil
 		return (ClientWidth() - ClientHeight() / 3 * 4) / 2;
 	}
 
-	int calCombatUIVerticalScaledValue(int rawValue)
+	int calUIVerticalScaledValue(int rawValue)
 	{
 		// 按照系统默认的1024 * 768分辨率来进行缩放
 		return rawValue * ClientHeight() / 768;
+	}
+
+	double getUIVerticalScaledRatio()
+	{
+		return (double)ClientHeight() / 768;
 	}
 
 	RECT rect(int left, int top, int width, int height)

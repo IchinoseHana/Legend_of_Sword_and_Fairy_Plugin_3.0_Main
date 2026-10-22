@@ -139,6 +139,7 @@ private:
 	UIStatic* informationBackground; // 背景
 	UIStatic* upperText; // 上半部分描述
 	UIStatic* lowerText; // 下半部分描述
+	UIStatic* additionalText; // 附加描述
 
 
 public:
@@ -148,6 +149,7 @@ public:
 	static PEP3BattlegroundSkillInformationUI* sharedInstance();
 	void create(UIWnd* ui);
 	void update(string upperText, string lowerText);
+	void update(string upperText, string lowerText, string additionalText);
 	void setVisibility(bool visibility);
 };
 

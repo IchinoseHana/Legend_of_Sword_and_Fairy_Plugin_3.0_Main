@@ -29,12 +29,13 @@
 #define PEP3CombatUIImageFilePathRankD "ui\\combat\\PEP3Rank\\scorerankD.tga"
 #define PEP3CombatUIImageFilePathRankE "ui\\combat\\PEP3Rank\\scorerankE.tga"
 #define PEP3CombatUIImageFilePathSkillInformation "ui\\combat\\PEP3SkillInformation\\skillInformation.tga"
+#define PEP3CombatUIImageFilePathAdditionalInformation "ui\\combat\\PEP3SkillInformation\\additionalInformation.tga"
 #define PEP3CombatUIImageFilePathWeaponSkill "ui\\combat\\PEP3SkillInformation\\TricknameBack3.tga"
 #define PEP3CombatUIImageFilePathInformationBoard "ui\\combat\\PEP3InformationBoard\\combatinformation.tga"
 
 
 using spcPEP3UIUtil::calCombatUIHorizontalMargin;
-using spcPEP3UIUtil::calCombatUIVerticalScaledValue;
+using spcPEP3UIUtil::calUIVerticalScaledValue;
 using spcPEP3UIUtil::rect;
 
 // MARK: 仙灵、武灵UI
@@ -220,8 +221,8 @@ PEP3BattlegroundChargeUI::~PEP3BattlegroundChargeUI()
 void PEP3BattlegroundChargeUI::create(UIWnd* ui)
 {
 	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
-	// 1024 * 768屏幕下，自定义界面上界为70(即行动条下方适合布局的起始点)
-	int upperBound = calCombatUIVerticalScaledValue(70);
+	// 1024 * 768屏幕下，自定义界面上界为70(高分辨率屏幕下会存在一点误差)
+	int upperBound = calUIVerticalScaledValue(70);
 	gbColorQuad color(0, 255, 255, 255);
 	char fileName[PEP3_MAX_FILEPATH_LENGTH] = { 0 };
 
@@ -288,7 +289,7 @@ void PEP3BattlegroundEnvironmentUI::create(UIWnd* ui)
 {
 	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
 	// 除了自定义布局上界，还要考虑暗器装填和合击占据的位置
-	int upperBound = calCombatUIVerticalScaledValue(70) + 46;
+	int upperBound = calUIVerticalScaledValue(70) + 46;
 
 	for (int idx = 0; idx < PEP3BattlegroundEnvironmentUIIconCount; ++idx)
 	{
@@ -494,6 +495,7 @@ PEP3BattlegroundSkillInformationUI::PEP3BattlegroundSkillInformationUI()
 	informationBackground = new UIStatic;
 	upperText = new UIStatic;
 	lowerText = new UIStatic;
+	additionalText = new UIStatic;
 }
 
 PEP3BattlegroundSkillInformationUI::~PEP3BattlegroundSkillInformationUI()
@@ -501,6 +503,7 @@ PEP3BattlegroundSkillInformationUI::~PEP3BattlegroundSkillInformationUI()
 	delete informationBackground;
 	delete upperText;
 	delete lowerText;
+	delete additionalText;
 }
 
 void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
@@ -525,6 +528,12 @@ void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
 	lowerText->SetFontColor(textColor);
 	lowerText->SetText("");
 
+	RECT pRcAdditional = rect(leftMargin + 336 + deltaX, 225 + deltaY, 144, 144);
+	additionalText->Create(0, pRcAdditional, ui);
+	additionalText->SetFontColor(textColor);
+	additionalText->SetText("");
+
+
 	setVisibility(false);
 }
 
@@ -532,6 +541,14 @@ void PEP3BattlegroundSkillInformationUI::update(string upperText, string lowerTe
 {
 	this->upperText->SetText((char*)upperText.c_str());
 	this->lowerText->SetText((char*)lowerText.c_str());
+	this->additionalText->SetText("");
+}
+
+void PEP3BattlegroundSkillInformationUI::update(string upperText, string lowerText, string additionalText)
+{
+	this->upperText->SetText((char*)upperText.c_str());
+	this->lowerText->SetText((char*)lowerText.c_str());
+	this->additionalText->SetText((char*)additionalText.c_str());
 }
 
 void PEP3BattlegroundSkillInformationUI::setVisibility(bool visibility)
@@ -539,6 +556,7 @@ void PEP3BattlegroundSkillInformationUI::setVisibility(bool visibility)
 	informationBackground->ShowWindow(visibility);
 	upperText->ShowWindow(visibility);
 	lowerText->ShowWindow(visibility);
+	additionalText->ShowWindow(visibility);
 }
 
 // MARK: 武器技UI
