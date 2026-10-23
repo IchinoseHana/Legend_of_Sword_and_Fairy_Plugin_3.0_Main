@@ -31,6 +31,7 @@
 #define PEP3CombatUIImageFilePathSkillInformation "ui\\combat\\PEP3SkillInformation\\skillInformation.tga"
 #define PEP3CombatUIImageFilePathAdditionalInformation "ui\\combat\\PEP3SkillInformation\\additionalInformation.tga"
 #define PEP3CombatUIImageFilePathWeaponSkill "ui\\combat\\PEP3SkillInformation\\TricknameBack3.tga"
+#define PEP3CombatUIImageFilePathChat "ui\\combat\\PEP3Chat\\battlebosschat.tga"
 #define PEP3CombatUIImageFilePathInformationBoard "ui\\combat\\PEP3InformationBoard\\combatinformation.tga"
 
 
@@ -591,6 +592,7 @@ void PEP3BattlegroundWeaponSkillUI::create(UIWnd* ui)
 	skillName->Create(0, pRcName, ui);
 	skillName->SetFont(TRUE);
 	skillName->SetFontColor(textColor);
+	skillName->SetText("");
 
 	setVisibility(false);
 }
@@ -647,6 +649,55 @@ void PEP3BattlegroundAdditionalInformationUI::update(string name)
 void PEP3BattlegroundAdditionalInformationUI::setVisibility(bool visibility)
 {
 	text->ShowWindow(visibility);
+}
+
+// MARK: 对话UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundChatUI* battlegroundChatUIInstance = new PEP3BattlegroundChatUI();
+PEP3BattlegroundChatUI* PEP3BattlegroundChatUI::sharedInstance()
+{
+	return battlegroundChatUIInstance;
+}
+
+PEP3BattlegroundChatUI::PEP3BattlegroundChatUI()
+{
+	chatBackground = new UIStatic;
+	chatText = new UIStatic;
+}
+
+PEP3BattlegroundChatUI::~PEP3BattlegroundChatUI()
+{
+	delete chatBackground;
+	delete chatText;
+}
+
+void PEP3BattlegroundChatUI::create(UIWnd* ui)
+{
+	gbColorQuad color(56, 25, 27, 255);
+	// 按照实际测试效果的偏移量
+	int deltaX = 1;
+
+	RECT pRcBackground = rect(ClientWidth() / 2 - 256, 99, 512, 128);
+	chatBackground->Create(0, pRcBackground, ui);
+	chatBackground->SetBk(PEP3CombatUIImageFilePathChat);
+
+	RECT pRcText = rect(ClientWidth() / 2 - 240 + deltaX, 115, 480, 96);
+	chatText->Create(0, pRcText, ui);
+	chatText->SetFontColor(color);
+	chatText->SetFont(true);
+	chatText->SetText("");
+
+	setVisibility(false);
+}
+
+void PEP3BattlegroundChatUI::update(string text)
+{
+	chatText->SetText((char*)text.c_str());
+}
+
+void PEP3BattlegroundChatUI::setVisibility(bool visibility)
+{
+	chatBackground->ShowWindow(visibility);
+	chatText->ShowWindow(visibility);
 }
 
 // MARK: 信息面板UI

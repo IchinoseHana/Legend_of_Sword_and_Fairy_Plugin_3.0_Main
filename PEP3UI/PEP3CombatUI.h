@@ -174,7 +174,6 @@ public:
 class PEP3BattlegroundAdditionalInformationUI
 {
 private:
-	// TODO: Aya 对话框
 	PEP3UIStaticAlignment* text; // 文本
 
 public:
@@ -182,6 +181,23 @@ public:
 	~PEP3BattlegroundAdditionalInformationUI();
 
 	static PEP3BattlegroundAdditionalInformationUI* sharedInstance();
+	void create(UIWnd* ui);
+	void update(string text);
+	void setVisibility(bool visibility);
+};
+
+// MARK: 对话UI
+class PEP3BattlegroundChatUI
+{
+private:
+	UIStatic* chatBackground; // 背景
+	UIStatic* chatText; // 文本
+
+public:
+	PEP3BattlegroundChatUI();
+	~PEP3BattlegroundChatUI();
+
+	static PEP3BattlegroundChatUI* sharedInstance();
 	void create(UIWnd* ui);
 	void update(string text);
 	void setVisibility(bool visibility);
