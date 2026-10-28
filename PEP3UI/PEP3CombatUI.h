@@ -5,12 +5,13 @@
 
 #include "..\..\pal3\ui\uistatic.h"
 #include "..\..\pal3\ui\UIStaticEX.h"
-#include "..\ClassExtension\PEP3UIStaticExtension.h"
+#include "..\ClassExtension\PEP3UIStaticAlignment.h"
 
 using std::string;
 
-// MARK: - 通用UI
-// MARK: 仙灵、武灵UI
+// - 通用UI
+
+// 仙灵、武灵UI
 class PEP3BattlegroundSpiritUI
 {
 private:
@@ -28,7 +29,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 战场状态、战场属性UI
+// 战场状态、战场属性UI
 class PEP3BattlegroundStateUI
 {
 private:
@@ -49,7 +50,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 暗器装填、合击UI
+// 暗器装填、合击UI
 class PEP3BattlegroundChargeUI
 {
 private:
@@ -68,7 +69,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 战场环境UI
+// 战场环境UI
 static const int PEP3BattlegroundEnvironmentUIIconCount = 3;
 class PEP3BattlegroundEnvironmentUI
 {
@@ -85,7 +86,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 首领血条UI
+// 首领血条UI
 static const int PEP3BattlegroundBossHPBarUIBarCount = 5;
 class PEP3BattlegroundBossHPBarUI
 {
@@ -107,7 +108,7 @@ public:
 	void setVisibilityIfNeeded(bool visibility);
 };
 
-// MARK: 评分UI
+// 评分UI
 enum PEP3BattlegroundRankUIRankType
 {
 	PEP3BattlegroundRankUIRankTypeRankA,
@@ -132,7 +133,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 技能说明UI
+// 技能说明UI
 class PEP3BattlegroundSkillInformationUI
 {
 private:
@@ -153,7 +154,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 武器技UI
+// 武器技UI
 class PEP3BattlegroundWeaponSkillUI
 {
 private:
@@ -170,7 +171,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 附加信息UI
+// 附加信息UI
 class PEP3BattlegroundAdditionalInformationUI
 {
 private:
@@ -186,7 +187,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 对话UI
+// 对话UI
 class PEP3BattlegroundChatUI
 {
 private:
@@ -203,7 +204,7 @@ public:
 	void setVisibility(bool visibility);
 };
 
-// MARK: 信息面板UI
+// 信息面板UI
 class CCBRoleState;
 
 enum PEP3BattlegroundInformationBoardUIPageType
@@ -285,8 +286,9 @@ public:
 	bool getVisibility();
 };
 
-// MARK: - 非通用UI
-// MARK: 转盘UI
+// - 非通用UI
+
+// 转盘UI
 class PEP3BattlegroundWheelUI
 {
 	typedef void (*rotatingFinishFunc)(int);
@@ -295,7 +297,7 @@ private:
 	// Initial variables
 	int isRotating; // 是否正在旋转
 
-	UIStaticEXA* wheelBackground; // 转盘背景
+	UIStatic* wheelBackground; // 转盘背景
 	UIStatic* wheelPointer; // 转盘指针
 
 public:

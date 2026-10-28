@@ -18,9 +18,9 @@ namespace spcPEP3UIUtil
 		return rawValue * ClientHeight() / 768;
 	}
 
-	double getUIVerticalScaledRatio()
+	double getScreenRatio()
 	{
-		return (double)ClientHeight() / 768;
+		return (double)ClientWidth() / ClientHeight();
 	}
 
 	RECT rect(int left, int top, int width, int height)

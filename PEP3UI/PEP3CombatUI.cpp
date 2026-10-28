@@ -33,13 +33,16 @@
 #define PEP3CombatUIImageFilePathWeaponSkill "ui\\combat\\PEP3SkillInformation\\TricknameBack3.tga"
 #define PEP3CombatUIImageFilePathChat "ui\\combat\\PEP3Chat\\battlebosschat.tga"
 #define PEP3CombatUIImageFilePathInformationBoard "ui\\combat\\PEP3InformationBoard\\combatinformation.tga"
+#define PEP3CombatUIImageFilePathWheelPointer "ui\\combat\\PEP3Wheel\\mahounotanepointer.tga"
+#define PEP3CombatUIImageFilePathWheelDefault "ui\\combat\\PEP3Wheel\\magicwheel0.tga"
+#define PEP3CombatUIImageFilePathWheel "ui\\combat\\PEP3Wheel\\magicwheel%d.tga"
 
 
 using spcPEP3UIUtil::calCombatUIHorizontalMargin;
 using spcPEP3UIUtil::calUIVerticalScaledValue;
 using spcPEP3UIUtil::rect;
 
-// MARK: 仙灵、武灵UI
+// 仙灵、武灵UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundSpiritUI* battlegroundSpiritUIInstance = new PEP3BattlegroundSpiritUI();
 PEP3BattlegroundSpiritUI* PEP3BattlegroundSpiritUI::sharedInstance()
 {
@@ -100,7 +103,7 @@ void PEP3BattlegroundSpiritUI::setVisibility(bool visibility)
 	spiritNumber->ShowWindow(visibility);
 }
 
-// MARK: 战场状态、战场属性UI
+// 战场状态、战场属性UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundStateUI* battlegroundStateUIInstance = new PEP3BattlegroundStateUI();
 PEP3BattlegroundStateUI* PEP3BattlegroundStateUI::sharedInstance()
 {
@@ -196,7 +199,7 @@ void PEP3BattlegroundStateUI::setVisibility(bool visibility)
 	battlegroundPropertyNumber->ShowWindow(visibility);
 }
 
-// MARK: 暗器装填、合击UI
+// 暗器装填、合击UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundChargeUI* battlegroundChargeUIInstance = new PEP3BattlegroundChargeUI();
 PEP3BattlegroundChargeUI* PEP3BattlegroundChargeUI::sharedInstance()
 {
@@ -269,7 +272,7 @@ void PEP3BattlegroundChargeUI::setVisibility(bool visibility)
 	battlegroundCoorperationAttackNumber->ShowWindow(visibility);
 }
 
-// MARK: 战场环境UI
+// 战场环境UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundEnvironmentUI* battlegroundEnvironmentUIInstance = new PEP3BattlegroundEnvironmentUI();
 PEP3BattlegroundEnvironmentUI* PEP3BattlegroundEnvironmentUI::sharedInstance()
 {
@@ -329,7 +332,7 @@ void PEP3BattlegroundEnvironmentUI::setVisibility(bool visibility)
 	}
 }
 
-// MARK: 首领血条UI
+// 首领血条UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundBossHPBarUI* battlegroundBossHPBarUIInstance = new PEP3BattlegroundBossHPBarUI();
 PEP3BattlegroundBossHPBarUI* PEP3BattlegroundBossHPBarUI::sharedInstance()
 {
@@ -428,7 +431,7 @@ void PEP3BattlegroundBossHPBarUI::setVisibilityIfNeeded(bool visibility)
 	this->visibility = visibility;
 }
 
-// MARK: 评分UI
+// 评分UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundRankUI* battlegroundRankUIInstance = new PEP3BattlegroundRankUI();
 PEP3BattlegroundRankUI* PEP3BattlegroundRankUI::sharedInstance()
 {
@@ -484,7 +487,7 @@ void PEP3BattlegroundRankUI::setVisibility(bool visibility)
 	rankIcon->ShowWindow(visibility);
 }
 
-// MARK: 技能说明UI
+// 技能说明UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundSkillInformationUI* battlegroundSkillInformationUIInstance = new PEP3BattlegroundSkillInformationUI();
 PEP3BattlegroundSkillInformationUI* PEP3BattlegroundSkillInformationUI::sharedInstance()
 {
@@ -560,7 +563,7 @@ void PEP3BattlegroundSkillInformationUI::setVisibility(bool visibility)
 	additionalText->ShowWindow(visibility);
 }
 
-// MARK: 武器技UI
+// 武器技UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundWeaponSkillUI* battlegroundWeaponSkillUIInstance = new PEP3BattlegroundWeaponSkillUI();
 PEP3BattlegroundWeaponSkillUI* PEP3BattlegroundWeaponSkillUI::sharedInstance()
 {
@@ -610,7 +613,7 @@ void PEP3BattlegroundWeaponSkillUI::setVisibility(bool visibility)
 	skillName->ShowWindow(visibility);
 }
 
-// MARK: 附加信息UI
+// 附加信息UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundAdditionalInformationUI* battlegroundAdditionalInformationUIInstance = new PEP3BattlegroundAdditionalInformationUI();
 PEP3BattlegroundAdditionalInformationUI* PEP3BattlegroundAdditionalInformationUI::sharedInstance()
 {
@@ -651,7 +654,7 @@ void PEP3BattlegroundAdditionalInformationUI::setVisibility(bool visibility)
 	text->ShowWindow(visibility);
 }
 
-// MARK: 对话UI
+// 对话UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundChatUI* battlegroundChatUIInstance = new PEP3BattlegroundChatUI();
 PEP3BattlegroundChatUI* PEP3BattlegroundChatUI::sharedInstance()
 {
@@ -700,7 +703,7 @@ void PEP3BattlegroundChatUI::setVisibility(bool visibility)
 	chatText->ShowWindow(visibility);
 }
 
-// MARK: 信息面板UI
+// 信息面板UI
 void PEP3BattlegroundInformationBoardUITextElement::Create(UINT id, const RECT& rect, UIWnd* pfather)
 {
 	gbColorQuad textColor(87, 65, 20, 255);
@@ -1068,7 +1071,7 @@ bool PEP3BattlegroundInformationBoardUI::getVisibility()
 	return visibility;
 }
 
-// MARK: 转盘UI
+// 转盘UI
 PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundWheelUI* battlegroundWheelUIInstance = new PEP3BattlegroundWheelUI();
 PEP3BattlegroundWheelUI* PEP3BattlegroundWheelUI::sharedInstance()
 {
@@ -1079,7 +1082,7 @@ PEP3BattlegroundWheelUI::PEP3BattlegroundWheelUI()
 {
 	isRotating = false;
 
-	wheelBackground = new UIStaticEXA;
+	wheelBackground = new UIStatic;
 	wheelPointer = new UIStatic;
 }
 
@@ -1091,19 +1094,16 @@ PEP3BattlegroundWheelUI::~PEP3BattlegroundWheelUI()
 
 void PEP3BattlegroundWheelUI::create(UIWnd* ui)
 {
-	RECT pRcBackground = rect(ClientWidth() / 2 - 255, ClientHeight() / 2 - 255, 512, 512);
+	RECT pRcBackground = rect(ClientWidth() / 2 - 256, ClientHeight() / 2 - 256, 512, 512);
 	wheelBackground->Create(0, pRcBackground, ui);
-	wheelBackground->SetBk("UI\\assistant\\magicwheel0.tga");
-	wheelBackground->SetCenterPointInRect(0, 0);
-	wheelBackground->SetRotMode(2);
-	wheelBackground->SetRotDir(1);
-	wheelBackground->SetRotSpeed(0.5);
+	wheelBackground->SetBk(PEP3CombatUIImageFilePathWheelDefault);
+	wheelBackground->SetSizeRatio(2, 2);
 
 	RECT pRcPointer = rect(ClientWidth() / 2 - 15, ClientHeight() / 2 - 248, 32, 256);
 	wheelPointer->Create(0, pRcPointer, ui);
-	wheelPointer->SetBk("UI\\mahounotanepointer.tga");
+	wheelPointer->SetBk(PEP3CombatUIImageFilePathWheelPointer);
 
-	setVisibility(false);
+	setVisibility(true);
 }
 
 void PEP3BattlegroundWheelUI::update(string name, bool forbid)

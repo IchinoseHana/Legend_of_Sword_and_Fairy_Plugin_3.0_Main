@@ -1,5 +1,5 @@
-#ifndef _PEP3UISTATICEXTENSION_H_
-#define _PEP3UISTATICEXTENSION_H_
+#ifndef _PEP3UIStaticAlignment_H_
+#define _PEP3UIStaticAlignment_H_
 
 #pragma once
 
@@ -18,6 +18,8 @@ enum PEP3UIStaticAlignmentType
 	PEP3UIStaticAlignmentTypeHorizontalRightVerticalCenter = 8, // 右中
 	PEP3UIStaticAlignmentTypeHorizontalRightVerticalDown = 2 // 右下
 };
+
+// 支持多种对齐方式的UIStatic控件
 class PEP3UIStaticAlignment : public UIStatic
 {
 public:

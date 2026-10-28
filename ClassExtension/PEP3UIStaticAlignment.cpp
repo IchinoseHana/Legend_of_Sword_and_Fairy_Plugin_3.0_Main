@@ -1,7 +1,6 @@
-#include "PEP3UIUtil.h"
 #include "stdafx.h"
 
-#include "PEP3UIStaticExtension.h"
+#include "PEP3UIStaticAlignment.h"
 
 void PEP3UIStaticAlignment::setAlignment(PEP3UIStaticAlignmentType alignment)
 {
