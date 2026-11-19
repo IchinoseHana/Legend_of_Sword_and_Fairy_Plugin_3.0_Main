@@ -6,6 +6,7 @@
 #include "..\..\pal3\ui\uistatic.h"
 #include "..\..\pal3\ui\UIStaticEX.h"
 #include "..\ClassExtension\PEP3UIStaticAlignment.h"
+#include <hash_map>
 
 using std::string;
 
@@ -149,8 +150,8 @@ public:
 
 	static PEP3BattlegroundSkillInformationUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(string upperText, string lowerText);
-	void update(string upperText, string lowerText, string additionalText);
+	void update(const string& upperText, const string& lowerText);
+	void update(const string& upperText, const string& lowerText, const string& additionalText);
 	void setVisibility(bool visibility);
 };
 
@@ -167,7 +168,7 @@ public:
 
 	static PEP3BattlegroundWeaponSkillUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(string name, bool forbid);
+	void update(const string& name, bool forbid);
 	void setVisibility(bool visibility);
 };
 
@@ -183,7 +184,7 @@ public:
 
 	static PEP3BattlegroundAdditionalInformationUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(string text);
+	void update(const string& text);
 	void setVisibility(bool visibility);
 };
 
@@ -200,7 +201,7 @@ public:
 
 	static PEP3BattlegroundChatUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(string text);
+	void update(const string& text);
 	void setVisibility(bool visibility);
 };
 
@@ -281,7 +282,7 @@ public:
 
 	static PEP3BattlegroundInformationBoardUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(PEP3BattlegroundInformationBoardUIPageType pageType, string information[], CCBRoleState* roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[]);
+	void update(PEP3BattlegroundInformationBoardUIPageType pageType, const string information[], CCBRoleState* roleState, int roleIndex, const string& customizedHPText, const string& customizedMPText, string statusName[]);
 	void setVisibility(bool visibility);
 	bool getVisibility();
 };
@@ -289,16 +290,26 @@ public:
 // - 非通用UI
 
 // 转盘UI
+struct PEP3BattlegroundWheelUIRotatingSection
+{
+	int speed; // 旋转速度，单位：度/单位时间
+	int duration; // 旋转时间，与外部对update的调用绑定
+};
 class PEP3BattlegroundWheelUI
 {
 	typedef void (*rotatingFinishFunc)(int);
 
 private:
 	// Initial variables
-	int isRotating; // 是否正在旋转
+	int currentCount; // 当前旋转流程计数
+	int currentSection; // 当前旋转阶段
+	int currentAngle; // 当前角度
 
 	UIStatic* wheelBackground; // 转盘背景
 	UIStatic* wheelPointer; // 转盘指针
+	PEP3BattlegroundWheelUIRotatingSection* rotatingSection; // 旋转流程定义
+	int sectionCount;
+	bool clockwise; // 是否顺时针
 
 public:
 	rotatingFinishFunc finishFunc; // 旋转完成后的回调
@@ -308,7 +319,8 @@ public:
 
 	static PEP3BattlegroundWheelUI* sharedInstance();
 	void create(UIWnd* ui);
-	void update(string name, bool forbid);
+	void beginRotating(int initAngle, PEP3BattlegroundWheelUIRotatingSection rotatingSection[], int sectionCount, bool clockwise);
+	void update();
 	void setVisibility(bool visibility);
 };
 

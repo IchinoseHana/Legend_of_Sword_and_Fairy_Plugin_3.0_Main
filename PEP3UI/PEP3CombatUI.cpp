@@ -343,6 +343,7 @@ PEP3BattlegroundBossHPBarUI::PEP3BattlegroundBossHPBarUI()
 {
 	visibility = false;
 
+	for 
 	bossHPBar = new UIStatic[PEP3BattlegroundBossHPBarUIBarCount];
 	bossHPBarBackground = new UIStatic;
 }
@@ -541,14 +542,14 @@ void PEP3BattlegroundSkillInformationUI::create(UIWnd* ui)
 	setVisibility(false);
 }
 
-void PEP3BattlegroundSkillInformationUI::update(string upperText, string lowerText)
+void PEP3BattlegroundSkillInformationUI::update(const string& upperText, const string& lowerText)
 {
 	this->upperText->SetText((char*)upperText.c_str());
 	this->lowerText->SetText((char*)lowerText.c_str());
 	this->additionalText->SetText("");
 }
 
-void PEP3BattlegroundSkillInformationUI::update(string upperText, string lowerText, string additionalText)
+void PEP3BattlegroundSkillInformationUI::update(const string& upperText, const string& lowerText, const string& additionalText)
 {
 	this->upperText->SetText((char*)upperText.c_str());
 	this->lowerText->SetText((char*)lowerText.c_str());
@@ -600,7 +601,7 @@ void PEP3BattlegroundWeaponSkillUI::create(UIWnd* ui)
 	setVisibility(false);
 }
 
-void PEP3BattlegroundWeaponSkillUI::update(string name, bool forbid)
+void PEP3BattlegroundWeaponSkillUI::update(const string& name, bool forbid)
 {
 	skillName->SetText((char*)name.c_str(), TRUE);
 	gbColorQuad textColor = forbid ? gbColorQuad(128, 128, 128, 255) : gbColorQuad(255, 255, 255, 255);
@@ -644,9 +645,9 @@ void PEP3BattlegroundAdditionalInformationUI::create(UIWnd* ui)
 	text->setAlignment(PEP3UIStaticAlignmentTypeHorizontalCenterVerticalUp);
 }
 
-void PEP3BattlegroundAdditionalInformationUI::update(string name)
+void PEP3BattlegroundAdditionalInformationUI::update(const string& text)
 {
-	text->SetText((char*)name.c_str());
+	this->text->SetText((char*)text.c_str());
 }
 
 void PEP3BattlegroundAdditionalInformationUI::setVisibility(bool visibility)
@@ -692,7 +693,7 @@ void PEP3BattlegroundChatUI::create(UIWnd* ui)
 	setVisibility(false);
 }
 
-void PEP3BattlegroundChatUI::update(string text)
+void PEP3BattlegroundChatUI::update(const string& text)
 {
 	chatText->SetText((char*)text.c_str());
 }
@@ -917,7 +918,7 @@ void PEP3BattlegroundInformationBoardUI::create(UIWnd* ui)
 	setVisibility(false);
 }
 
-void PEP3BattlegroundInformationBoardUI::update(PEP3BattlegroundInformationBoardUIPageType pageType, string information[], CCBRoleState* roleState, int roleIndex, string customizedHPText, string customizedMPText, string statusName[])
+void PEP3BattlegroundInformationBoardUI::update(PEP3BattlegroundInformationBoardUIPageType pageType, const string information[], CCBRoleState* roleState, int roleIndex, const string& customizedHPText, const string& customizedMPText, string statusName[])
 {
 	int idx;
 	int rightMargin = ClientWidth() - calCombatUIHorizontalMargin();
@@ -1078,12 +1079,16 @@ PEP3BattlegroundWheelUI* PEP3BattlegroundWheelUI::sharedInstance()
 	return battlegroundWheelUIInstance;
 }
 
-PEP3BattlegroundWheelUI::PEP3BattlegroundWheelUI()
+PEP3BattlegroundWheelUI()
 {
-	isRotating = false;
+	currentCount = 0;
+	currentSection = 0;
+	currentAngle = 0;
 
 	wheelBackground = new UIStatic;
-	wheelPointer = new UIStatic;
+	wheelPointer = new UIStatic;	
+	sectionCount = 0;
+	clockwise = false
 }
 
 PEP3BattlegroundWheelUI::~PEP3BattlegroundWheelUI()
@@ -1102,19 +1107,47 @@ void PEP3BattlegroundWheelUI::create(UIWnd* ui)
 	RECT pRcPointer = rect(ClientWidth() / 2 - 15, ClientHeight() / 2 - 248, 32, 256);
 	wheelPointer->Create(0, pRcPointer, ui);
 	wheelPointer->SetBk(PEP3CombatUIImageFilePathWheelPointer);
-
-	setVisibility(true);
 }
 
-void PEP3BattlegroundWheelUI::update(string name, bool forbid)
+void PEP3BattlegroundWheelUI::beginRotating(int initAngle, PEP3BattlegroundWheelUIRotatingSection rotatingSection[], int sectionCount, bool clockwise)
 {
-	//// 正在旋转，不允许重新开始
-	//if (rotatingStage != PEP3BattlegroundWheelUIRotatingStageIdle)
-	//{
-	//	return;
-	//}
+	setVisibility(true);
 
+	this->angle = angle;
+	this->rotatingSection = rotatingSection;
+	this->sectionCount = sectionCount;
+	this->clockwise = false;
 
+	currentCount = 0;
+	currentSection = 0;
+}
+
+bool PEP3BattlegroundWheelUI::update()
+{
+	// 当前阶段执行完毕，进入下一阶段
+	if (currentCount >= rotatingSection[currentSection].duration)
+	{
+		currentCount = 0;
+		++currentSection;
+	}
+
+	// 所有阶段执行完毕，结束
+	if (currentSection >= sectionCount)
+	{
+		setVisibility(false);
+		return true;
+	}
+
+	// 将当前角度进行增加
+	currentAngle += closewise ? rotatingSection[currentSection].speed : -rotatingSection[currentSection].speed;
+
+	if (currentAngle >= 360) currentAngle -= 360;
+	if (currentAngle < 0) currentAngle += 360;
+
+	char fileName[PEP3_MAX_FILEPATH_LENGTH] = { 0 };
+	// 图片只有180张，需要进行映射
+	sprintf(fileName, PEP3CombatUIImageFilePathWheel, changeangle &~ 1);
+	m_MagicWheel.SetBk(fileName);
 }
 
 void PEP3BattlegroundWheelUI::setVisibility(bool visibility)
