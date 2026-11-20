@@ -18,11 +18,11 @@
 #define PEP3CombatUIImageFilePathBattlegroundState "ui\\combat\\PEP3BattlegroundState\\battlejyoutai%d.tga"
 #define PEP3CombatUIImageFilePathBattlegroundProperty "ui\\combat\\PEP3BattlegroundProperty\\battlezokusei%d.tga"
 #define PEP3CombatUIImageFilePathBattlegroundEnvironment "ui\\combat\\PEP3BattlegroundEnvironment\\battlekannkyou%d.tga"
-#define PEP3CombatUIImageFilePathBossHPBarBackground "ui\\combat\\PEP3HBBar\\combat_bossHPBK.tga"
-#define PEP3CombatUIImageFilePathBossHPBarGray "ui\\combat\\PEP3HBBar\\combat_bossHP0.tga"
-#define PEP3CombatUIImageFilePathBossHPBarRed "ui\\combat\\PEP3HBBar\\combat_bossHP1.tga"
-#define PEP3CombatUIImageFilePathBossHPBarPurple "ui\\combat\\PEP3HBBar\\combat_bossHP4.tga"
-#define PEP3CombatUIImageFilePathBossHPBar "ui\\combat\\PEP3HBBar\\combat_bossHP%d.tga"
+#define PEP3CombatUIImageFilePathBossHPBarBackground "ui\\combat\\PEP3HPBar\\combat_bossHPBK.tga"
+#define PEP3CombatUIImageFilePathBossHPBarGray "ui\\combat\\PEP3HPBar\\combat_bossHP0.tga"
+#define PEP3CombatUIImageFilePathBossHPBarRed "ui\\combat\\PEP3HPBar\\combat_bossHP1.tga"
+#define PEP3CombatUIImageFilePathBossHPBarPurple "ui\\combat\\PEP3HPBar\\combat_bossHP4.tga"
+#define PEP3CombatUIImageFilePathBossHPBar "ui\\combat\\PEP3HPBar\\combat_bossHP%d.tga"
 #define PEP3CombatUIImageFilePathRankA "ui\\combat\\PEP3Rank\\scorerankA.tga"
 #define PEP3CombatUIImageFilePathRankB "ui\\combat\\PEP3Rank\\scorerankB.tga"
 #define PEP3CombatUIImageFilePathRankC "ui\\combat\\PEP3Rank\\scorerankC.tga"
@@ -33,10 +33,6 @@
 #define PEP3CombatUIImageFilePathWeaponSkill "ui\\combat\\PEP3SkillInformation\\TricknameBack3.tga"
 #define PEP3CombatUIImageFilePathChat "ui\\combat\\PEP3Chat\\battlebosschat.tga"
 #define PEP3CombatUIImageFilePathInformationBoard "ui\\combat\\PEP3InformationBoard\\combatinformation.tga"
-#define PEP3CombatUIImageFilePathWheelPointer "ui\\combat\\PEP3Wheel\\mahounotanepointer.tga"
-#define PEP3CombatUIImageFilePathWheelDefault "ui\\combat\\PEP3Wheel\\magicwheel0.tga"
-#define PEP3CombatUIImageFilePathWheel "ui\\combat\\PEP3Wheel\\magicwheel%d.tga"
-
 
 using spcPEP3UIUtil::calCombatUIHorizontalMargin;
 using spcPEP3UIUtil::calUIVerticalScaledValue;
@@ -343,7 +339,6 @@ PEP3BattlegroundBossHPBarUI::PEP3BattlegroundBossHPBarUI()
 {
 	visibility = false;
 
-	for 
 	bossHPBar = new UIStatic[PEP3BattlegroundBossHPBarUIBarCount];
 	bossHPBarBackground = new UIStatic;
 }
@@ -1070,88 +1065,4 @@ void PEP3BattlegroundInformationBoardUI::setVisibility(bool visibility)
 bool PEP3BattlegroundInformationBoardUI::getVisibility()
 {
 	return visibility;
-}
-
-// 转盘UI
-PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundWheelUI* battlegroundWheelUIInstance = new PEP3BattlegroundWheelUI();
-PEP3BattlegroundWheelUI* PEP3BattlegroundWheelUI::sharedInstance()
-{
-	return battlegroundWheelUIInstance;
-}
-
-PEP3BattlegroundWheelUI()
-{
-	currentCount = 0;
-	currentSection = 0;
-	currentAngle = 0;
-
-	wheelBackground = new UIStatic;
-	wheelPointer = new UIStatic;	
-	sectionCount = 0;
-	clockwise = false
-}
-
-PEP3BattlegroundWheelUI::~PEP3BattlegroundWheelUI()
-{
-	delete wheelBackground;
-	delete wheelPointer;
-}
-
-void PEP3BattlegroundWheelUI::create(UIWnd* ui)
-{
-	RECT pRcBackground = rect(ClientWidth() / 2 - 256, ClientHeight() / 2 - 256, 512, 512);
-	wheelBackground->Create(0, pRcBackground, ui);
-	wheelBackground->SetBk(PEP3CombatUIImageFilePathWheelDefault);
-	wheelBackground->SetSizeRatio(2, 2);
-
-	RECT pRcPointer = rect(ClientWidth() / 2 - 15, ClientHeight() / 2 - 248, 32, 256);
-	wheelPointer->Create(0, pRcPointer, ui);
-	wheelPointer->SetBk(PEP3CombatUIImageFilePathWheelPointer);
-}
-
-void PEP3BattlegroundWheelUI::beginRotating(int initAngle, PEP3BattlegroundWheelUIRotatingSection rotatingSection[], int sectionCount, bool clockwise)
-{
-	setVisibility(true);
-
-	this->angle = angle;
-	this->rotatingSection = rotatingSection;
-	this->sectionCount = sectionCount;
-	this->clockwise = false;
-
-	currentCount = 0;
-	currentSection = 0;
-}
-
-bool PEP3BattlegroundWheelUI::update()
-{
-	// 当前阶段执行完毕，进入下一阶段
-	if (currentCount >= rotatingSection[currentSection].duration)
-	{
-		currentCount = 0;
-		++currentSection;
-	}
-
-	// 所有阶段执行完毕，结束
-	if (currentSection >= sectionCount)
-	{
-		setVisibility(false);
-		return true;
-	}
-
-	// 将当前角度进行增加
-	currentAngle += closewise ? rotatingSection[currentSection].speed : -rotatingSection[currentSection].speed;
-
-	if (currentAngle >= 360) currentAngle -= 360;
-	if (currentAngle < 0) currentAngle += 360;
-
-	char fileName[PEP3_MAX_FILEPATH_LENGTH] = { 0 };
-	// 图片只有180张，需要进行映射
-	sprintf(fileName, PEP3CombatUIImageFilePathWheel, changeangle &~ 1);
-	m_MagicWheel.SetBk(fileName);
-}
-
-void PEP3BattlegroundWheelUI::setVisibility(bool visibility)
-{
-	wheelBackground->ShowWindow(visibility);
-	wheelPointer->ShowWindow(visibility);
 }

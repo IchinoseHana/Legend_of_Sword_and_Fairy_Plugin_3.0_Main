@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include <vector>
-
-using std::vector;
-
 namespace spcPEP3UIUtil
 {
 	// 计算战斗界面两边空白区域的宽度。
@@ -20,12 +16,6 @@ namespace spcPEP3UIUtil
 
 	// 生成一个RECT对象。
 	RECT rect(int left, int top, int width, int height);
-}
-
-namespace spcPEP3CoadingUtil
-{
-	// 将数组转化为vector。
-	  std::vector<int>(envIdx, envIdx + sizeof(envIdx) / sizeof(envIdx[0])),
 }
 
 #endif

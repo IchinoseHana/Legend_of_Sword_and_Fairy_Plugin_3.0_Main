@@ -4,13 +4,11 @@
 #pragma once
 
 #include "..\..\pal3\ui\uistatic.h"
-#include "..\..\pal3\ui\UIStaticEX.h"
 #include "..\ClassExtension\PEP3UIStaticAlignment.h"
-#include <hash_map>
 
 using std::string;
 
-// - 通用UI
+// - 通用战场UI
 
 // 仙灵、武灵UI
 class PEP3BattlegroundSpiritUI
@@ -285,43 +283,6 @@ public:
 	void update(PEP3BattlegroundInformationBoardUIPageType pageType, const string information[], CCBRoleState* roleState, int roleIndex, const string& customizedHPText, const string& customizedMPText, string statusName[]);
 	void setVisibility(bool visibility);
 	bool getVisibility();
-};
-
-// - 非通用UI
-
-// 转盘UI
-struct PEP3BattlegroundWheelUIRotatingSection
-{
-	int speed; // 旋转速度，单位：度/单位时间
-	int duration; // 旋转时间，与外部对update的调用绑定
-};
-class PEP3BattlegroundWheelUI
-{
-	typedef void (*rotatingFinishFunc)(int);
-
-private:
-	// Initial variables
-	int currentCount; // 当前旋转流程计数
-	int currentSection; // 当前旋转阶段
-	int currentAngle; // 当前角度
-
-	UIStatic* wheelBackground; // 转盘背景
-	UIStatic* wheelPointer; // 转盘指针
-	PEP3BattlegroundWheelUIRotatingSection* rotatingSection; // 旋转流程定义
-	int sectionCount;
-	bool clockwise; // 是否顺时针
-
-public:
-	rotatingFinishFunc finishFunc; // 旋转完成后的回调
-
-	PEP3BattlegroundWheelUI();
-	~PEP3BattlegroundWheelUI();
-
-	static PEP3BattlegroundWheelUI* sharedInstance();
-	void create(UIWnd* ui);
-	void beginRotating(int initAngle, PEP3BattlegroundWheelUIRotatingSection rotatingSection[], int sectionCount, bool clockwise);
-	void update();
-	void setVisibility(bool visibility);
 };
 
 #endif
