@@ -9,6 +9,7 @@
 #define PEP3CombatUIImageFilePathWheelPointer "ui\\combat\\PEP3Wheel\\mahounotanepointer.tga"
 #define PEP3CombatUIImageFilePathWheelDefault "ui\\combat\\PEP3Wheel\\magicwheel0.tga"
 #define PEP3CombatUIImageFilePathWheel "ui\\combat\\PEP3Wheel\\magicwheel%d.tga"
+#define PEP3CombatUIImageFilePathPotionCrafting "ui\\combat\\PEP3PotionCrafting\\battletia.tga"
 
 using spcPEP3UIUtil::calCombatUIHorizontalMargin;
 using spcPEP3UIUtil::calUIVerticalScaledValue;
@@ -121,4 +122,33 @@ void PEP3BattlegroundWheelUI::setVisibility(bool visibility)
 {
 	wheelBackground->ShowWindow(visibility);
 	wheelPointer->ShowWindow(visibility);
+}
+
+// Ò©Ë®Á¶ÖÆUI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundPotionCraftingUI* battlegroundPotionCraftingUIInstance = new PEP3BattlegroundPotionCraftingUI();
+PEP3BattlegroundPotionCraftingUI* PEP3BattlegroundPotionCraftingUI::sharedInstance()
+{
+	return battlegroundPotionCraftingUIInstance;
+}
+
+PEP3BattlegroundPotionCraftingUI::PEP3BattlegroundPotionCraftingUI()
+{
+	background = new UIStatic;
+}
+
+PEP3BattlegroundPotionCraftingUI::~PEP3BattlegroundPotionCraftingUI()
+{
+	delete background;
+}
+
+void PEP3BattlegroundPotionCraftingUI::create(UIWnd* ui)
+{
+	RECT pRcBackground = rect((ClientWidth() - 1024) / 2, (ClientHeight() - 512) / 2, 1024, 512);
+	background->Create(0, pRcBackground, ui);
+	background->SetBk(PEP3CombatUIImageFilePathPotionCrafting);
+}
+
+void PEP3BattlegroundPotionCraftingUI::setVisibility(bool visibility)
+{
+	background->ShowWindow(visibility);
 }

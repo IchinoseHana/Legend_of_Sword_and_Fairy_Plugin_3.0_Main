@@ -46,4 +46,19 @@ public:
 	void setVisibility(bool visibility);
 };
 
+// Ò©Ë®Á¶ÖÆUI
+class PEP3BattlegroundPotionCraftingUI
+{
+private:
+	UIStatic* background; // ±³¾°
+
+public:
+	PEP3BattlegroundPotionCraftingUI();
+	~PEP3BattlegroundPotionCraftingUI();
+
+	static PEP3BattlegroundPotionCraftingUI* sharedInstance();
+	void create(UIWnd* ui);
+	void setVisibility(bool visibility);
+};
+
 #endif
