@@ -10,6 +10,8 @@
 #define PEP3CombatUIImageFilePathWheelDefault "ui\\combat\\PEP3Wheel\\magicwheel0.tga"
 #define PEP3CombatUIImageFilePathWheel "ui\\combat\\PEP3Wheel\\magicwheel%d.tga"
 #define PEP3CombatUIImageFilePathPotionCrafting "ui\\combat\\PEP3PotionCrafting\\battletia.tga"
+#define PEP3CombatUIImageFilePathLogoDefault "ui\\combat\\PEP3Logo\\battlelogo1.tga"
+#define PEP3CombatUIImageFilePathLogo "ui\\combat\\PEP3Logo\\battlelogo%d.tga"
 
 using spcPEP3UIUtil::calCombatUIHorizontalMargin;
 using spcPEP3UIUtil::calUIVerticalScaledValue;
@@ -32,6 +34,7 @@ PEP3BattlegroundWheelUI::PEP3BattlegroundWheelUI()
 	wheelBackground = new UIStatic;
 	wheelPointer = new UIStatic;
 	clockwise = false;
+	imageUpdatingInterval = 0;
 
 	currentAngle = 0;
 }
@@ -93,6 +96,7 @@ bool PEP3BattlegroundWheelUI::update(double deltatime)
 	if (currentSection >= rotatingSection.size())
 	{
 		setVisibility(false);
+
 		isRotating = false;
 		return true;
 	}
@@ -108,8 +112,14 @@ bool PEP3BattlegroundWheelUI::update(double deltatime)
 		currentAngle += clockwise ? rotatingSection[currentSection].speed : -rotatingSection[currentSection].speed;
 	}
 
-	if (currentAngle >= 360) currentAngle -= 360;
-	if (currentAngle < 0) currentAngle += 360;
+	if (currentAngle >= 360)
+	{
+		currentAngle -= 360;
+	}
+	if (currentAngle < 0)
+	{
+		currentAngle += 360;
+	}
 
 	char fileName[PEP3_MAX_FILEPATH_LENGTH] = { 0 };
 	sprintf(fileName, PEP3CombatUIImageFilePathWheel, currentAngle);
@@ -152,3 +162,115 @@ void PEP3BattlegroundPotionCraftingUI::setVisibility(bool visibility)
 {
 	background->ShowWindow(visibility);
 }
+
+// 标识UI
+PAL3HOOK_VERIFIED_DATAVAR static PEP3BattlegroundLogoUI* battlegroundLogoUIInstance = new PEP3BattlegroundLogoUI();
+PEP3BattlegroundLogoUI* PEP3BattlegroundLogoUI::sharedInstance()
+{
+	return battlegroundLogoUIInstance;
+}
+
+PEP3BattlegroundLogoUI::PEP3BattlegroundLogoUI()
+{
+	logo = new UIStatic;
+	speed = 0;
+	stayDuration = 0.0;
+	imageUpdatingInterval = 0;
+
+	currentDuration = 0.0;
+	currentStayDuration = 0.0;
+	elapsedTime = 0.0;
+	isMoving = false;
+}
+
+PEP3BattlegroundLogoUI::~PEP3BattlegroundLogoUI()
+{
+	delete logo;
+}
+
+void PEP3BattlegroundLogoUI::create(UIWnd* ui)
+{
+	RECT pRcLogo = rect(0, -256, 512, 256);
+	logo->Create(0, pRcLogo, ui);
+	logo->SetBk(PEP3CombatUIImageFilePathLogoDefault);
+}
+
+void PEP3BattlegroundLogoUI::updateLogoIndex(int index)
+{
+	char fileName[PEP3_MAX_FILEPATH_LENGTH] = { 0 };
+	sprintf(fileName, PEP3CombatUIImageFilePathLogo, index);
+	logo->SetBk(fileName);
+}
+
+void PEP3BattlegroundLogoUI::beginMoving(int speed, double stayDuration, double imageUpdatingInterval)
+{
+	setVisibility(true);
+
+	this->speed = speed;
+	this->stayDuration = stayDuration;
+	this->imageUpdatingInterval = imageUpdatingInterval;
+
+	currentDuration = 0.0;
+	currentStayDuration = 0.0;
+	elapsedTime = 0.0;
+	isMoving = true;
+
+	RECT pRcLogo = rect(0, -256, 512, 256);
+	logo->SetRect(pRcLogo);
+}
+
+bool PEP3BattlegroundLogoUI::update(double deltatime)
+{
+	if (!isMoving)
+	{
+		return false;
+	}
+
+	// 将当前计数进行增加
+	currentDuration += deltatime;
+
+	// 决定是否更新图片
+	bool needUpdate = false;
+	elapsedTime += deltatime;
+	if (elapsedTime >= imageUpdatingInterval)
+	{
+		elapsedTime -= imageUpdatingInterval;
+		needUpdate = true;
+	}
+
+	if (needUpdate)
+	{
+		if (logo->GetWindowRect().top < 0 && currentStayDuration <= 0)
+		{
+			// 第一阶段：向下运动，-256 -> 0
+			// 注意GetWindowRect()的底层实现比较反直觉，需要加上自身坐标
+			logo->MoveWindow(0, logo->GetWindowRect().top + speed);
+		}
+		else
+		{
+			// 第二阶段：停留
+			currentStayDuration += deltatime;
+			if (currentStayDuration >= stayDuration)
+			{
+				// 第三阶段：向上运动，0 -> -256
+				logo->MoveWindow(0, logo->GetWindowRect().top - speed);
+				if (logo->GetWindowRect().top <= -256)
+				{
+					// 运动结束
+					setVisibility(true);
+
+					isMoving = false;
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+void PEP3BattlegroundLogoUI::setVisibility(bool visibility)
+{
+	logo->ShowWindow(visibility);
+}
+

@@ -14,7 +14,7 @@ using std::vector;
 // 转盘UI
 struct PEP3BattlegroundWheelUIRotatingSection
 {
-	int speed; // 旋转速度，单位：度/0.1秒
+	int speed; // 旋转速度，单位：度/更新时间间隔
 	double duration; // 旋转时间，与外部对update的调用绑定
 };
 class PEP3BattlegroundWheelUI
@@ -25,12 +25,12 @@ private:
 	int currentSection; // 当前旋转阶段
 	double elapsedTime; // 经过时间，用于计算是否需要更新图片
 	bool isRotating; // 是否正在旋转
-	vector<PEP3BattlegroundWheelUIRotatingSection> rotatingSection; // 旋转流程定义数组
 
 	UIStatic* wheelBackground; // 转盘背景
 	UIStatic* wheelPointer; // 转盘指针
 	bool clockwise; // 是否顺时针
-	double imageUpdatingInterval; // 图片更新时间间隔
+	double imageUpdatingInterval; // 图片更新时间间隔，单位：秒
+	vector<PEP3BattlegroundWheelUIRotatingSection> rotatingSection; // 旋转流程定义数组
 
 public:
 	int currentAngle; // 当前角度
@@ -58,6 +58,33 @@ public:
 
 	static PEP3BattlegroundPotionCraftingUI* sharedInstance();
 	void create(UIWnd* ui);
+	void setVisibility(bool visibility);
+};
+
+// 标识UI
+class PEP3BattlegroundLogoUI
+{
+private:
+	// Initial variables
+	double currentDuration; // 当前运动时间计数
+	double currentStayDuration; // 当前停留时间
+	double elapsedTime; // 经过时间，用于计算是否需要更新图片
+	bool isMoving; // 是否正在运动
+
+	UIStatic* logo; // 标识
+	int speed; // 向下和向上的运动速度，单位：像素/帧。请使用256能够整除的数值，以保证运动结束后位置正确
+	double stayDuration; // 停留时间，单位：秒
+	double imageUpdatingInterval; // 图片更新时间间隔，单位：秒
+
+public:
+	PEP3BattlegroundLogoUI();
+	~PEP3BattlegroundLogoUI();
+
+	static PEP3BattlegroundLogoUI* sharedInstance();
+	void create(UIWnd* ui);
+	void updateLogoIndex(int index);
+	void beginMoving(int speed, double stayDuration, double imageUpdatingInterval);
+	bool update(double deltatime); // 需要外部自行更新。返回true表示运动完成，false表示仍在运动
 	void setVisibility(bool visibility);
 };
 
