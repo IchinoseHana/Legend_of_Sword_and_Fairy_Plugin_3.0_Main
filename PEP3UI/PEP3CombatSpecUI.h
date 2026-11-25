@@ -17,6 +17,7 @@ struct PEP3BattlegroundWheelUIRotatingSection
 	int speed; // 旋转速度，单位：度/更新时间间隔
 	double duration; // 旋转时间，与外部对update的调用绑定
 };
+
 class PEP3BattlegroundWheelUI
 {
 private:

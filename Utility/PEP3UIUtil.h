@@ -16,6 +16,9 @@ namespace spcPEP3UIUtil
 
 	// 生成一个RECT对象。
 	RECT rect(int left, int top, int width, int height);
+
+	// 将屏幕坐标转化为客户端坐标。
+	bool screenPtToClientPt(POINT& pt);
 }
 
 #endif

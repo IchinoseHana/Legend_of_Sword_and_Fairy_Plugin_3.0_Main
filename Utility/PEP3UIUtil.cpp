@@ -32,4 +32,20 @@ namespace spcPEP3UIUtil
 		r.bottom = top + height;
 		return r;
 	}
+
+	bool screenPtToClientPt(POINT &pt)
+	{
+		HWND hWnd = HWND(PAL3::s_drvinfo.hgfxwnd);
+		if (!::IsWindow(hWnd))
+		{
+			return false;
+		}
+
+		if (!::ScreenToClient(hWnd, &pt))
+		{
+			return false;
+		}
+
+		return true;
+	}
 }

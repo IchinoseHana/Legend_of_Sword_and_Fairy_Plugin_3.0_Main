@@ -57,6 +57,8 @@ void PEP3BattlegroundWheelUI::create(UIWnd* ui, vector<PEP3BattlegroundWheelUIRo
 	wheelPointer->SetBk(PEP3CombatUIImageFilePathWheelPointer);
 
 	this->rotatingSection = rotatingSection;
+
+	setVisibility(false);
 }
 
 void PEP3BattlegroundWheelUI::updateRotatingSection(vector<PEP3BattlegroundWheelUIRotatingSection> rotatingSection)
@@ -156,6 +158,8 @@ void PEP3BattlegroundPotionCraftingUI::create(UIWnd* ui)
 	RECT pRcBackground = rect((ClientWidth() - 1024) / 2, (ClientHeight() - 512) / 2, 1024, 512);
 	background->Create(0, pRcBackground, ui);
 	background->SetBk(PEP3CombatUIImageFilePathPotionCrafting);
+
+	setVisibility(false);
 }
 
 void PEP3BattlegroundPotionCraftingUI::setVisibility(bool visibility)
@@ -193,6 +197,8 @@ void PEP3BattlegroundLogoUI::create(UIWnd* ui)
 	RECT pRcLogo = rect(0, -256, 512, 256);
 	logo->Create(0, pRcLogo, ui);
 	logo->SetBk(PEP3CombatUIImageFilePathLogoDefault);
+
+	setVisibility(false);
 }
 
 void PEP3BattlegroundLogoUI::updateLogoIndex(int index)

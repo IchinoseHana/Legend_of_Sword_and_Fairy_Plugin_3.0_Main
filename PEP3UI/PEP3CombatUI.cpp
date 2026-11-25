@@ -638,6 +638,8 @@ void PEP3BattlegroundAdditionalInformationUI::create(UIWnd* ui)
 	text->SetFont(true);
 	text->SetText("");
 	text->setAlignment(PEP3UIStaticAlignmentTypeHorizontalCenterVerticalUp);
+
+	setVisibility(false);
 }
 
 void PEP3BattlegroundAdditionalInformationUI::update(const string& text)
